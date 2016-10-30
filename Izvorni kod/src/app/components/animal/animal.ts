@@ -20,6 +20,6 @@ export class AnimalComponent {
     animals;
 
     constructor(animalService : AnimalService){
-        this.animals = animalService.getAnimals();
+        this.animals = animalService.getAll();
     }
 }

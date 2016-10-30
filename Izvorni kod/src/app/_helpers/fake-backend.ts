@@ -72,7 +72,7 @@ export let fakeBackendProvider = {
                 }
 
                 // create user
-                if (connection.request.url.endsWith('/api/users') && connection.request.method === RequestMethod.Post) {
+                if (connection.request.url.endsWith('/api/users/create') && connection.request.method === RequestMethod.Post) {
                     // get new user object from post body
                     let newUser = JSON.parse(connection.request.getBody());
 
@@ -92,12 +92,13 @@ export let fakeBackendProvider = {
                 }
 
                 // delete user
-                if (connection.request.url.match(/\/api\/users\/\d+$/) && connection.request.method === RequestMethod.Delete) {
+                if (connection.request.url.match('/api/users/delete') && connection.request.method === RequestMethod.Post) {
                     // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
+                    console.log(connection.request.headers);
                     if (connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
                         // find user by id in users array
-                        let urlParts = connection.request.url.split('/');
-                        let id = parseInt(urlParts[urlParts.length - 1]);
+                        let id = parseInt(connection.request.getBody());
+                        console.log(id);
                         for (let i = 0; i < users.length; i++) {
                             let user = users[i];
                             if (user.id === id) {
