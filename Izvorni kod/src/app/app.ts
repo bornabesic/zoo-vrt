@@ -1,21 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-
-import {AuthenticationService} from './services/authentication.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  template: `
-    <div class="container">
-        <router-outlet></router-outlet>
-    </div>
-    `,
-    providers: [AuthenticationService]
+  templateUrl: './app.html'
 })
-export class AppComponent {
-
-    constructor(private _service:AuthenticationService){}
-
-    logout() {
-        this._service.logout();
-    }
-}
+export class AppComponent {}

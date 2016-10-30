@@ -1,22 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthenticationService } from '../../services/authentication.service';
+import { AlertService, AuthenticationService } from '../../_services/index';
 
 @Component({
-    selector: 'profile',
-    templateUrl: './login.html',
-    styleUrls: [ './login.css' ]
+    templateUrl: 'login.html'
 })
 
 export class Login implements OnInit {
     model: any = {};
     loading = false;
-    error = '';
 
     constructor(
         private router: Router,
-        private authenticationService: AuthenticationService) { }
+        private authenticationService: AuthenticationService,
+        private alertService: AlertService) { }
 
     ngOnInit() {
         // reset login status
@@ -26,13 +24,13 @@ export class Login implements OnInit {
     login() {
         this.loading = true;
         this.authenticationService.login(this.model.username, this.model.password)
-            .subscribe(result => {
-                if (result === true) {
+            .subscribe(
+                data => {
                     this.router.navigate(['/']);
-                } else {
-                    this.error = 'Username or password is incorrect';
+                },
+                error => {
+                    this.alertService.error(error);
                     this.loading = false;
-                }
-            });
+                });
     }
 }
