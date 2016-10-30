@@ -7,6 +7,7 @@ import { NgModule } from '@angular/core';
 import { fakeBackendProvider } from './_helpers/fake-backend';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { BaseRequestOptions } from '@angular/http';
+import { MaterialModule } from '@angular/material';
 
 import { AppComponent } from './app';
 import { routing } from './app.routing';
@@ -18,7 +19,6 @@ import { Alert } from './_directives/index';
 import { Home }  from './components/home';
 import { Login } from './components/login';
 import { Register } from './components/register';
-
 
 @NgModule({
     declarations: [
@@ -32,7 +32,8 @@ import { Register } from './components/register';
         BrowserModule,
         FormsModule,
         HttpModule,
-        routing
+        routing,
+        MaterialModule.forRoot()
     ],
     providers: [
         AlertService,
