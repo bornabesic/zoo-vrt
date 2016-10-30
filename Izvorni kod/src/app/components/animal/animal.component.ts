@@ -1,7 +1,8 @@
-import {Component} from 'angular2/core';
-import {AnimalService} from '../services/animal.service';
+import {Component} from '@angular/core';
+import {AnimalService} from '../../services/animal.service';
 
 @Component({
+    moduleId: module.id,
     selector: 'animals',
     template: `
         <h2>Animal</h2>
