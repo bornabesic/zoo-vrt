@@ -1,0 +1,36 @@
+<html>
+<head>
+	<meta charset="utf8">
+	<script src="jquery-3.1.1.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+	function registriraj(){
+		
+		var _username = $('#username').val();
+		var _password = $('#password').val();
+		var _first_last_name = $('#first_last_name').val();
+		var _email = $('#email').val();
+		var _city = $('#city').val();
+		var _year_of_birth = $('#year_of_birth').val();
+
+		$.post( "Database.php?action=register", { username: _username, password: _password, first_last_name: _first_last_name, email: _email, city: _city, year_of_birth: _year_of_birth }, function( data ) {
+  				if(data.error){
+  					alert(data.error);
+  				}
+  				else alert(data.username);
+		}, "JSON");
+	}
+</script>
+
+<form onsubmit="registriraj(); return false;" novalidate>
+<input id="username" name="username" type="text" size="32" placeholder="Korisničko ime"/><br />
+<input id="password" name="password" type="password" size="32" placeholder="Lozinka"/><br />
+<input id="first_last_name" name="first_last_name" type="text" size="32" placeholder="Ime i prezime"/><br />
+<input id="email" name="email" type="email" size="32" placeholder="E-mail adresa"/><br />
+<input id="city" name="city" type="text" size="32" placeholder="Mjesto stanovanja"/><br />
+<input id="year_of_birth" name="year_of_birth" type="text" size="32" placeholder="Godina rođenja"/><br />
+<input type="submit" value="Registriraj se"/><br />
+</form>
+</body>
+</html>
