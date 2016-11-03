@@ -12,12 +12,10 @@
 
 		public function __construct(){
 			$this->db = mysqli_connect('localhost', DB_USERNAME, DB_PASSWORD);
-			if(!$this->db){
-				return json_encode(
+			if(!$this->db) echo json_encode(
 							array( "error" => $this->db->error )
 						);
-			}
-			//$this->db->set_charset('utf8');
+			$this->db->set_charset('utf8');
 		}
 
 		public function register_user($username, $password, $first_last_name, $year_of_birth, $city, $email, $role){
@@ -25,11 +23,11 @@
 			$hasher = new PasswordHash(8, false);
 			$password_hash = $hasher->HashPassword($password);
 
+			// REGISTER USER
 			$registration_query = "INSERT INTO " . DB_NAME . ".users (`user_id`, `username`, `password_hash`, `first_last_name`, `year_of_birth`, `city`, `email`, `role`) VALUES ('', ?, ?, ?, ?, ?, ?, ?);";
-			//echo $registration_query;
 			$registration_statement = $this->db->prepare($registration_query);
 			if($registration_statement){
-				$registration_statement->bind_param("sssssss", $username, $password_hash, $first_last_name, $year_of_birth, $city, $email, $role);
+				$registration_statement->bind_param("sssissi", $username, $password_hash, $first_last_name, $year_of_birth, $city, $email, $role);
 		     	$registration_statement->execute();
 			}
 			else {
@@ -38,7 +36,40 @@
 						);
 			}
 
-			$registration_result = $registration_statement->get_result();
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			switch($registration_statement->affected_rows){
+				case -1:
+					return json_encode(array(
+						"error" => $this->db->error 
+					));
+					break;
+				case 0:
+					return json_encode(array(
+						"error" => "User could not be registered." 
+					));
+					break;
+			};
+
+			// GET USER'S ID
+
+			$user_id_query = "SELECT * FROM " . DB_NAME . ".users WHERE users.username=?;";
+			$user_id_statement = $this->db->prepare($user_id_query);
+			if($user_id_statement){
+				$user_id_statement->bind_param("s", $username);
+		     	$user_id_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
+
+			$user_id_result = $user_id_statement->get_result();
 
 			if($this->db->errno!=0){
 				return json_encode(array(
@@ -46,7 +77,10 @@
 				));
 			}
 
+			$row = $user_id_result->fetch_assoc();
+
 			return json_encode(array(
+				"user_id" => $row['user_id'],
 				"username" => $username,
 				"first_last_name" => $first_last_name,
 				"year_of_birth" => $year_of_birth,
@@ -56,19 +90,175 @@
 		}
 
 		function delete_user($user_id){
+			// DELETE USER WITH GIVEN ID
+			$delete_query="DELETE FROM ". DB_NAME . ".users WHERE user_id=?;";
+			$delete_statement=$this->db->prepare($delete_query);
+			if($delete_statement){
+				$delete_statement->bind_param("i", $user_id);
+		     	$delete_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
 
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			switch($delete_statement->affected_rows){
+				case -1:
+					return json_encode(array(
+						"error" => $this->db->error 
+					));
+					break;
+				case 0:
+					return json_encode(array(
+						"error" => "User with the given ID could not be deleted." 
+					));
+					break;
+			};
+
+			return json_encode(array(
+				"user_id" => $user_id
+			));
 		}
 
 		function add_class($name){
+			//ADD CLASS
+			$add_class_query = "INSERT INTO " . DB_NAME . ".classes (`name`) VALUES (?);";
+			$add_class_statement = $this->db->prepare($add_class_query);
+			if($add_class_statement){
+				$add_class_statement->bind_param("s", $name);
+		     	$add_class_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
 
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			// GET CLASS ID
+			$class_id_query = "SELECT * FROM " . DB_NAME . ".classes WHERE name=?;";
+			$class_id_statement = $this->db->prepare($class_id_query);
+			if($class_id_statement){
+				$class_id_statement->bind_param("s", $name);
+		     	$class_id_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			$class_id_result = $class_id_statement->get_result();
+			$row = $class_id_result->fetch_assoc();
+
+			return json_encode(array(
+				"class_id" => $row['class_id'],
+				"name" => $name
+			));
 		}
 
 		function remove_class($class_id){
+			// REMOVE CLASS WITH GIVEN ID
+			$delete_query="DELETE FROM ". DB_NAME . ".classes WHERE class_id=?;";
+			$delete_statement=$this->db->prepare($delete_query);
+			if($delete_statement){
+				$delete_statement->bind_param("i", $class_id);
+		     	$delete_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
 
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			switch($delete_statement->affected_rows){
+				case -1:
+					return json_encode(array(
+						"error" => $this->db->error 
+					));
+					break;
+				case 0:
+					return json_encode(array(
+						"error" => "Class with the given ID could not be deleted." 
+					));
+					break;
+			};
+
+			return json_encode(array(
+				"class_id" => $class_id
+			));
 		}
 
 		function add_order($name){
+			//ADD ORDER
+			$add_order_query = "INSERT INTO " . DB_NAME . ".orders (`name`) VALUES (?);";
+			$add_order_statement = $this->db->prepare($add_order_query);
+			if($add_order_statement){
+				$add_order_statement->bind_param("s", $name);
+		     	$add_order_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
 
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			// GET ORDER ID
+			$order_id_query = "SELECT * FROM " . DB_NAME . ".orders WHERE name=?;";
+			$order_id_statement = $this->db->prepare($order_id_query);
+			if($order_id_statement){
+				$order_id_statement->bind_param("s", $name);
+		     	$order_id_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			$order_id_result = $order_id_statement->get_result();
+			$row = $order_id_result->fetch_assoc();
+
+			return json_encode(array(
+				"order_id" => $row['order_id'],
+				"name" => $name
+			));
 		}
 
 		function remove_order($order_id){
@@ -116,6 +306,21 @@
 
 	$database = new Database();
 
-	//echo $database->register_user($_GET['username'], $_GET['password'], $_GET['first_last_name'], $_GET['year_of_birth'], $_GET['city'], $_GET['email'], 1);
-	echo $database->register_user($_POST['username'], $_POST['password'], $_POST['first_last_name'], $_POST['year_of_birth'], $_POST['city'], $_POST['email'], 1);
+	if($_POST['action']==="register_user"){
+		//echo $database->register_user($_GET['username'], $_GET['password'], $_GET['first_last_name'], $_GET['year_of_birth'], $_GET['city'], $_GET['email'], 1);
+		echo $database->register_user($_POST['username'], $_POST['password'], $_POST['first_last_name'], $_POST['year_of_birth'], $_POST['city'], $_POST['email'], 1);
+	}
+	else if($_POST['action']==="delete_user"){
+		echo $database->delete_user($_POST['user_id']);
+	}
+	else if($_POST['action']==="add_class"){
+		echo $database->add_class($_POST['name']);
+	}
+	else if($_POST['action']==="remove_class"){
+		echo $database->remove_class($_POST['class_id']);
+	}
+	else if($_POST['action']==="add_order"){
+		echo $database->add_order($_POST['name']);
+	}
+
 ?>

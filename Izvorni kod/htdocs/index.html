@@ -14,15 +14,58 @@
 		var _city = $('#city').val();
 		var _year_of_birth = $('#year_of_birth').val();
 
-		$.post( "Database.php?action=register", { username: _username, password: _password, first_last_name: _first_last_name, email: _email, city: _city, year_of_birth: _year_of_birth }, function( data ) {
+		$.post( "Database.php", { username: _username, password: _password, first_last_name: _first_last_name, email: _email, city: _city, year_of_birth: _year_of_birth, action:"register_user" }, function( data ) {
   				if(data.error){
   					alert(data.error);
   				}
-  				else alert(data.username);
+  				else alert(JSON.stringify(data));
 		}, "JSON");
 	}
-</script>
 
+	function izbrisi_korisnika(){
+		var _user_id = $('#user_id_delete').val();
+		$.post( "Database.php", { user_id: parseInt(_user_id), action:"delete_user" }, function( data ) {
+  				if(data.error){
+  					alert(data.error);
+  				}
+  				else alert(JSON.stringify(data));
+		}, "JSON");
+	}
+
+	function dodaj_klasu(){
+		var _class_name = $('#class_name').val();
+		$.post( "Database.php", { name: _class_name , action:"add_class" }, function( data ) {
+  				if(data.error){
+  					alert(data.error);
+  				}
+  				else alert(JSON.stringify(data));
+		}, "JSON");
+	}
+
+	function izbrisi_klasu(){
+		var _class_id = $('#class_id_delete').val();
+		$.post( "Database.php", { class_id: parseInt(_class_id), action:"remove_class" }, function( data ) {
+  				if(data.error){
+  					alert(data.error);
+  				}
+  				else alert(JSON.stringify(data));
+		}, "JSON");
+	}
+
+	function dodaj_red(){
+		var _order_name = $('#order_name').val();
+		$.post( "Database.php", { name: _order_name , action:"add_order" }, function( data ) {
+  				if(data.error){
+  					alert(data.error);
+  				}
+  				else alert(JSON.stringify(data));
+		}, "JSON");
+	}
+
+</script>
+<a href="Database.php">Check Syntax</a>
+<br><br>
+register_user
 <form onsubmit="registriraj(); return false;" novalidate>
 <input id="username" name="username" type="text" size="32" placeholder="Korisničko ime"/><br />
 <input id="password" name="password" type="password" size="32" placeholder="Lozinka"/><br />
@@ -31,6 +74,34 @@
 <input id="city" name="city" type="text" size="32" placeholder="Mjesto stanovanja"/><br />
 <input id="year_of_birth" name="year_of_birth" type="text" size="32" placeholder="Godina rođenja"/><br />
 <input type="submit" value="Registriraj se"/><br />
+</form>
+<br>
+<br>
+delete_user
+<form onsubmit="izbrisi_korisnika(); return false;" novalidate>
+<input id="user_id_delete" name="user_id" type="number" size="32" placeholder="User ID"/><br />
+<input type="submit" value="Izbriši"/><br />
+</form>
+<br>
+<br>
+add_class
+<form onsubmit="dodaj_klasu(); return false;" novalidate>
+<input id="class_name" name="class_name" type="text" size="32" placeholder="Class Name"/><br />
+<input type="submit" value="Dodaj"/><br />
+</form>
+<br>
+<br>
+remove_class
+<form onsubmit="izbrisi_klasu(); return false;" novalidate>
+<input id="class_id_delete" name="class_id" type="number" size="32" placeholder="Class ID"/><br />
+<input type="submit" value="Izbriši"/><br />
+</form>
+<br>
+<br>
+add_order
+<form onsubmit="dodaj_red(); return false;" novalidate>
+<input id="order_name" name="order_name" type="text" size="32" placeholder="Order Name"/><br />
+<input type="submit" value="Dodaj"/><br />
 </form>
 </body>
 </html>
