@@ -261,24 +261,249 @@
 			));
 		}
 
+		//ak{
 		function remove_order($order_id){
+			//remove order with given id
+			$delete_query = "DELETE FROM " . DB_NAME . ".orders WHERE order_id=?;";
+			$delete_statement = $this->db->prepare($delete_query);
+			if($delete_statement){
+				$delete_statement->bind_param("i", $class_id);
+				$delete_statement->execute();
+			}else{
+				return json_encode(
+					array( "error" => $this->db->error )
+				);
+			}
 
+			if($this->db->errno != 0){
+				return json_encode(array(
+					"error" => $this->db->error
+				));
+			}
+
+			switch ($delete_statement->affected_rows) {
+				case -1:
+					return json_encode(array(
+						"error" => $this->db->error
+					));
+					break;
+				case 0:
+					return json_encode(array(
+						"error" => "Order with the given ID could not be deleted."
+					));
+					break;
+			};
+			return json_encode(array(
+				"order_id" => $order_id;
+			));
 		}
 
 		function add_family($name){
+			$add_family_query = "INSERT INTO " .DB_NAME . ".families (`name`) VALUES (?);";
+			$add_family_statement = $this->db->prepare($add_family_query);
+			if($add_family_statement){
+				$add_family_statement->bind_param("s", $name);
+				$add_family_statement->execute();
+			}else{
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
 
+			if($this->db->errno != 0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			switch($registration_statement->affected_rows){
+				case -1:
+					return json_encode(array(
+						"error" => $this->db->error 
+					));
+					break;
+				case 0:
+					return json_encode(array(
+						"error" => "Could not add family." 
+					));
+					break;
+			};
+
+			//get fam ID
+			$family_id_query = "SELECT * FROM " . DB_NAME . "families WHERE name=?;";
+			$family_id_statement = $this->db->prepare($family_id_query);
+			if($family_id_statement){
+				$family_id_statement->bind_param("s", $name);
+				$family_id_statement->execute();
+			}else{
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			if(this->db->errno != 0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			$family_id_result = $family_id_statement->get_result();
+			$row  =$family_id_result->fetch_assoc();
+
+			return json_encode(array(
+					"order_id" => $row['order_id'],
+					"name" => $name 
+				));
 		}
 
 		function remove_family($family_id){
+			//remove family with given ID
+			$delete_query = "DELETE FROM " . DB_NAME . ".families WHERE family_id=?;";
+			$delete_statement = $this->db->prepare($delete_query);
+			if($delete_statement){
+				$delete_statement->bind_param("i", $family_id);
+				$delete_statement->execute();
+			}else{
+				return json_encode(
+					array( "error" => $this->db->error )
+				);
+			}
 
+			if($this->db->errno != 0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			switch ($delete_statement->affected_rows) {
+				case -1:
+					return json_encode(array(
+						"error" => $this->db->error 
+					));
+					break;
+				case 0:
+					return json_encode(array(
+						"error" => $this->db->error 
+					));
+					break;
+			};
+			return json_encode(array(
+				"family_id" => $family_id;
+			));
 		}
 
 		function add_species($name, $class_id, $order_id, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution){
+			$add_species_query = "INSERT INTO " . DB_NAME . ".species ( `species_id`, `name`, `class_id`, `order_id`, `family_id`, `size`,  `nutrition`, `predators`, `lifetime`, `habitat`, `lifestyle`, `reproduction`, `distribution`) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+			$add_species_statement = $this->db->prepare($add_species_query);
+			if($add_species_statement){
+				$add_species_statement->bind_param("siiissssssss", $name, $class_id, $order_id, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution);
+				$add_species_statement->execute();
+			}else{
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
 
+			if($this->db->errno != 0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			switch($add_species_statement->affected_rows){
+				case -1:
+					return json_encode(array(
+						"error" => $this->db->error 
+					));
+					break;
+				case 0:
+					return json_encode(array(
+						"error" => "Could not add species." 
+					));
+					break;
+			};
+
+			//get species ID
+			$species_id_query = "SELECT * FROM " . DB_NAME . ".species WHERE name=?;";
+			$species_id_statement = $this->db->prepare($species_id_query);
+			if($species_id_statement){
+				$species_id_statement->bind_param("s", $name);
+		     	$species_id_statement->execute();
+			}
+			else {
+				return json_encode(array(
+					"error" => $this->db->error
+				));
+			}
+
+			$species_id_result = $species_id_statement->get_result();
+
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			$row = $species_id_result->fetch_assoc();
+
+			return json_encode(array(
+				"species_id" => $row['species_id'],
+				"name" => $name,
+				"class_id" => $class_id,
+				"order_id" => $order_id,
+				"family_id" => $family_id,
+				"size" => $size,
+				"nutrition" => $nutrition,
+				"predators" => $predators,
+				"lifetime" => $lifetime,
+				"habitat" => $habitat,
+				"lifestyle" => $lifestyle,
+				"reproduction" => $reproduction,
+				"distribution" => $distribution
+			));
 		}
+		
 
 		function remove_species($species_id){
+			//remove species with given ID
+			$delete_species_query = "DELETE FROM " . DB_NAME . ".species WHERE species_id=?;";
+			$delete_species_statement = $this->db->prepare($delete_species_query);
+			if($delete_species_statement){
+				$delete_species_statement->bind_param("i", $species_id);
+				$delete_species_statement->execute();
+			}else{
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
 
+			if($this->db->errno != 0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			switch ($delete_species_statement->affected_rows) {
+				case -1:
+					return json_encode(array(
+						"error" => $this->db->error 
+					));
+					break;
+				case 0:
+					return json_encode(array(
+						"error" => $this->db->error 
+					));
+					break;
+			};
+			return json_encode(array(
+				"species_id" => $species_id;
+			));
 		}
 
 		function add_mammal($species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts){
@@ -322,5 +547,7 @@
 	else if($_POST['action']==="add_order"){
 		echo $database->add_order($_POST['name']);
 	}
+
+	
 
 ?>
