@@ -511,15 +511,98 @@
 		}
 
 		function remove_mammal($animal_id){
+			//REMOVE MAMMAL WITH GIVEN ID
+			$delete_query="DELETE FROM ". DB_NAME . ".mammal_animals WHERE animal_id=?;";
+			$delete_statement=$this->db->prepare($delete_query);
+			if($delete_statement){
+				$delete_statement->bind_param("i", $animal_id);
+		     	$delete_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
 
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			switch($delete_statement->affected_rows){
+				case -1:
+					return json_encode(array(
+						"error" => $this->db->error 
+					));
+					break;
+				case 0:
+					return json_encode(array(
+						"error" => "Animal with the given ID could not be deleted." 
+					));
+					break;
+			};
+
+			return json_encode(array(
+				"animal_id" => $animal_id
+			));
 		}
 
 		function register_visit($user_id, $species_id){
+			//REGISTER USER`S VISIT TO SPECIES
+			$visit_query="INSERT INTO ". DB_NAME . ".visits (`user_id`, `species_id`) VALUES (?,?);";
+			$visit_statement = $this->db->prepare($visit_query);
+			if($visit_statement){
+				$visit_statement->bind_param("ii", $user_id, $species_id);
+		     	$visit_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
 
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			return json_encode(array(
+				"user_id" => $user_id,
+				"species_id" => $species_id
+			));
 		}
 
 		function get_visit_count($species_id){
+			//GET COUNT OF SPECIES' VISITS
+			$count_query="SELECT COUNT(user_id) as count FROM " . DB_NAME . ".visits WHERE species_id=?;";
+			$count_statement = $this->db->prepare($count_query);
+			if($count_statement){
+				$count_statement->bind_param("i", $species_id);
+		     	$count_statement->execute();
+			}
+			else{
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
+			
 
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			$count_result = $count_statement->get_result();
+			$row = $count_result->fetch_assoc();
+
+
+			return json_encode(array(
+				"count" => $row['count'],
+				"species_id" => $species_id
+			));
 		}
 
 		function recommend_species($current_species_id){
