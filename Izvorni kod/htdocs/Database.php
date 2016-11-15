@@ -1,17 +1,17 @@
 <?php
 	
-	//echo json_encode(array( "error" => "Kuki"));
-
 	define("DB_USERNAME", "zoo_vrt");
 	define("DB_PASSWORD", "rzjesmece");
 	define("DB_NAME", "zoo_vrt");
+	define("DB_SERVER", "localhost");
+	define("NUM_RECOMMENDATIONS", 3);
 
 	class Database {
 
 		private $db;
 
 		public function __construct(){
-			$this->db = mysqli_connect('localhost', DB_USERNAME, DB_PASSWORD);
+			$this->db = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD);
 			if(!$this->db) echo json_encode(
 							array( "error" => $this->db->error )
 						);
@@ -294,7 +294,7 @@
 					break;
 			};
 			return json_encode(array(
-				"order_id" => $order_id;
+				"order_id" => $order_id
 			));
 		}
 
@@ -347,7 +347,7 @@
 				));
 			}
 
-			if(this->db->errno != 0){
+			if($this->db->errno != 0){
 				return json_encode(array(
 					"error" => $this->db->error 
 				));
@@ -394,12 +394,12 @@
 					break;
 			};
 			return json_encode(array(
-				"family_id" => $family_id;
+				"family_id" => $family_id
 			));
 		}
 
 		function add_species($name, $class_id, $order_id, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution){
-			$add_species_query = "INSERT INTO " . DB_NAME . ".species ( `species_id`, `name`, `class_id`, `order_id`, `family_id`, `size`,  `nutrition`, `predators`, `lifetime`, `habitat`, `lifestyle`, `reproduction`, `distribution`) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+			$add_species_query = "INSERT INTO " . DB_NAME . ".species ( `species_id`, `name`, `class_id`, `order_id`, `family_id`, `size`,  `nutrition`, `predators`, `lifetime`, `habitat`, `lifestyle`, `reproduction`, `distribution`) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 			$add_species_statement = $this->db->prepare($add_species_query);
 			if($add_species_statement){
 				$add_species_statement->bind_param("siiissssssss", $name, $class_id, $order_id, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution);
@@ -502,11 +502,62 @@
 					break;
 			};
 			return json_encode(array(
-				"species_id" => $species_id;
+				"species_id" => $species_id
 			));
 		}
 
 		function add_mammal($species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts){
+			//ADD MAMMAL
+			$add_mammal_query = "INSERT INTO " . DB_NAME . ".mammal_animals (`species_id`, `name`, `age`, `sex`, `birth_location`, `arrival_date`, `photo_path`, `interesting_facts`) VALUES (?,?,?,?,?,?,?,?);";
+			$add_mammal_statement = $this->db->prepare($add_mammal_query);
+			if($add_mammal_statement){
+				$add_mammal_statement->bind_param("isiissss", $species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts);
+		     	$add_mammal_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			// GET ANIMAL ID
+			$animal_id_query = "SELECT * FROM " . DB_NAME . ".mammal_animals WHERE name=?;";
+			$animal_id_statement = $this->db->prepare($animal_id_query);
+			if($animal_id_statement){
+				$animal_id_statement->bind_param("s", $name);
+		     	$animal_id_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			$animal_id_result = $animal_id_statement->get_result();
+			$row = $animal_id_result->fetch_assoc();
+
+			return json_encode(array(
+				"animal_id" => $row['animal_id'],
+				"species_id" => $species_id,
+				"name" => $name,
+				"age" => $age,
+				"sex" => $sex,
+				"birth_location" => $birth_location,
+				"arrival_date" => $arrival_date,
+				"photo_path" => $photo_path,
+				"interesting_facts" => $interesting_facts
+			));
 
 		}
 
@@ -605,8 +656,52 @@
 			));
 		}
 
-		function recommend_species($current_species_id){
+		function recommend_species($current_species_id, $user_id){
+			$recommend_query = "SELECT species_id FROM " . DB_NAME . ".species WHERE species_id NOT IN (SELECT species_id FROM " . DB_NAME . ".visits WHERE user_id= ? ) AND species_id != ? LIMIT " . NUM_RECOMMENDATIONS . ";";
+			$recommend_statement = $this->db->prepare($recommend_query);
+			if($recommend_statement){
+				$recommend_statement->bind_param("ii", $user_id, $current_species_id);
+				$recommend_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
 
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+			$recommend_result = $recommend_statement->get_result();
+			$rows = array();
+			
+			while($r = $recommend_result->fetch_assoc()){
+				$rows[] = $r['species_id'];		
+			}
+
+			if(count($rows) < NUM_RECOMMENDATIONS){
+				$fill_missing_query = "SELECT species_id FROM " . DB_NAME . ".species WHERE species_id != ? LIMIT ?;";
+				$fill_missing_statement = $this->db->prepare($fill_missing_query);
+				if($fill_missing_statement){
+					$num_missing = NUM_RECOMMENDATIONS-count($rows);
+					$fill_missing_statement->bind_param("ii", $current_species_id, $num_missing);
+					$fill_missing_statement->execute();
+				}
+				else {return json_encode(array( "error" => $this->db->error ));
+				}
+
+				if($this->db->errno!=0){return json_encode(array("error" => $this->db->error));
+				}
+				
+				$fill_missing_result = $fill_missing_statement->get_result();
+			
+				while($r = $fill_missing_result->fetch_assoc()){
+					$rows[] = $r['species_id'];		
+				}
+			}
+			return json_encode($rows);
 		}
 
 	}
@@ -630,7 +725,26 @@
 	else if($_POST['action']==="add_order"){
 		echo $database->add_order($_POST['name']);
 	}
+	
 
+
+	else if($_POST['action']==="add_mammal"){
+		echo $database->add_mammal($_POST['species_id'], $_POST['name'], $_POST['age'], $_POST['sex'], $_POST['birth_location'], $_POST['arrival_date'], $_POST['photo_path'], $_POST['interesting_facts']);
+		//echo $database->add_mammal($_GET['species_id'], $_GET['name'], $_GET['age'], $_GET['sex'], $_GET['birth_location'], $_GET['arrival_date'], $_GET['photo_path'], $_GET['interesting_facts']);
+	}
+	else if($_POST['action']==="remove_mammal"){
+		echo $database->remove_mammal($_POST['animal_id']);
+	}
+	else if($_POST['action']==="register_visit"){
+		echo $database->register_visit($_POST['user_id'], $_POST['species_id']);
+	}
+	else if($_POST['action']==="get_visit_count"){
+		echo $database->get_visit_count($_POST['species_id']);
+	}
+	else if($_POST['action']==="recommend_species"){
+		//echo $database->recommend_species($_GET['current_species_id'], $_GET['user_id']);
+		echo $database->recommend_species($_POST['current_species_id'], $_POST['user_id']);
+	}
 	
 
 ?>
