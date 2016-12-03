@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html ng-app="ZOOVrtAdmin">
+<head>
+	<meta charset="UTF-8"> 
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<style type="text/css">
+
+		body{
+			padding: 5px;
+		}
+
+	</style>
+
+	<script type="text/javascript" src="/jquery.js"></script>
+	<!--<script type="text/javascript" src="jquery-ui/jquery-ui.js"></script>-->
+
+	<script type="text/javascript" src="/angular.js"></script>
+	<script type="text/javascript" src="/angular-ui-router.js"></script>
+
+	<script type="text/javascript" src="/admin/app.js"></script>
+	<script type="text/javascript" src="/services.js"></script>
+	<script type="text/javascript" src="/admin/controllers/panel.controller.js"></script>
+	<script type="text/javascript" src="/admin/controllers/users.controller.js"></script>
+	<script type="text/javascript" src="/admin/controllers/species.controller.js"></script>
+	<script type="text/javascript" src="/admin/controllers/statistics.controller.js"></script>
+	<script type="text/javascript" src="/admin/controllers/login.controller.js"></script>
+
+	<script type="text/javascript" src="/admin/controllers/classes.controller.js"></script>
+	<script type="text/javascript" src="/admin/controllers/orders.controller.js"></script>
+	<script type="text/javascript" src="/admin/controllers/families.controller.js"></script>
+</head>
+
+<body>
+	<h1>ZOO Vrt Admin Panel</h1>
+	<div ui-view="adminMain"></div>
+
+	
+</body>
+
+
+</html>

@@ -1,0 +1,30 @@
+app.controller("LoginController", function($scope, $http){
+
+	//Variables
+
+	$scope.loginInfo = {
+		username: undefined,
+		password: undefined
+	};
+
+	//Functions
+	$scope.registerUser = function(){
+
+		var data = {
+			username: $scope.loginInfo.username,
+			password: $scope.loginInfo.password
+		};
+
+		console.log(data.username);
+		console.log(data.password);
+
+		$http.post("Database.php", data).success(function(response){
+			console.log("SUCCESS: " + response);
+		}).error(function(error){
+			console.error("ERROR: " + error);
+		});
+	}
+
+	//Init
+
+});

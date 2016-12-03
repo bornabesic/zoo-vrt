@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<div id="menu_bar">
+<a class="btn btn-primary" href="#/users">Korisnici</a>
+<a class="btn btn-primary" href="#/classes">Razredi</a>
+<a class="btn btn-primary" href="#/orders">Redovi</a>
+<a class="btn btn-primary" href="#/families">Porodice</a>
+<a class="btn btn-primary" href="#/species">Životinjske vrste</a>
+<a class="btn btn-danger" href="#/guards">Čuvari</a>
+<a class="btn btn-danger" href="#/animals">Jedinke</a>
+<a class="btn btn-primary" href="#/statistics">Statistika</a>
+<a class="btn btn-primary" ng-click="logout()" style="float: right;">Odjava</a>
+<div style="float: right; padding-right: 10px;"><b>Admin: {{username}}</b></div>
+</div>
+<br/>
+<div ui-view="adminPanel"></div>

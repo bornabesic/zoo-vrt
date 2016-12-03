@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="ZOOVrt">
+<head>
+	<title>ZOO Vrt</title>
+	<meta charset="UTF-8">
+	<link rel="shortcut icon" type="image/png" href="/img/favicon.png"/>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="/zoo_vrt.css"/>
+	<style type="text/css">
+
+		html, body, #main-ui-view{
+			height: 100%;
+			color: white;
+			margin: 0;
+		}
+
+	</style>
+
+	<script type="text/javascript" src="/jquery.js"></script>
+
+	<script type="text/javascript" src="/angular.js"></script>
+	<script type="text/javascript" src="/angular-ui-router.js"></script>
+
+	<script type="text/javascript" src="/zoo_vrt/app.js"></script>
+	<script type="text/javascript" src="/services.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/login.controller.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/web.controller.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/map.controller.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/explore.controller.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/adopted.controller.js"></script>
+	
+</head>
+
+<body>
+	<div id="main-ui-view" ui-view="main"></div>
+</body>
+</html>

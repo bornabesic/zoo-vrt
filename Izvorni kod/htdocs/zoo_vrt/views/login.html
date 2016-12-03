@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<style type="text/css">
+
+html, body{
+			background-image:
+			url("/img/login1.jpg");
+
+			background-size: cover;
+		}
+
+input{
+	max-width: 300px;
+}
+#logo{
+	text-align:center;
+}
+#form{
+	color:#FFF;
+	text-align:center;
+	width: 700px ;
+}
+#registration{
+	display:none;
+}
+
+.green:focus {
+    border-color: green;
+}
+a:link {
+	color: #FFF;
+}
+a:visited {
+	color: #FFF;
+}
+a:hover {
+	color: #FFF;
+}
+#registration_info{
+	font-size:12pt;
+	text-align: right;
+	padding: 5px;
+	margin: 0 auto;
+	background: linear-gradient(gray, #4B4B4B);
+}
+
+.center{
+	margin-left: auto ;
+	margin-right: auto ;
+	width: 300px;
+}
+
+</style>
+
+<body>
+<div id="registration_info">
+	Nemate korisnički račun? <a id="registration_link" class="btn btn-primary btn-xs" ng-click="showRegistration()">Registrirajte se.</a> | <a class="btn btn-primary btn-xs" href="/admin/#/">Admin Panel <span class="glyphicon glyphicon-arrow-right"/></a>
+</div><br/>
+<div id="logo"><img src="/img/logo.png" width="544" height="360" /></div>
+<br/><br/>
+<div id="form" class="center">
+<form id="iform" ng-submit="formSubmitted()">
+	<div class="center">
+	<input class="form-control green" id="un" ng-model="username" type="text" placeholder="Korisničko ime"/>
+	<input class="form-control green" ng-model="password" type="password" placeholder="Lozinka"/>
+	<div id="registration">
+		<input class="form-control green" ng-model="first_last_name" type="text" placeholder="Ime i prezime"/>
+		<input class="form-control green" ng-model="email" type="email" placeholder="E-mail adresa"/>
+		<input class="form-control green" ng-model="city" type="text" placeholder="Mjesto stanovanja"/>
+		<input class="form-control green" ng-model="year_of_birth" type="text" placeholder="Godina rođenja"/>
+	</div><br/>
+	<input class="btn btn-primary" id="submit_button" type="submit" form="iform" value="Prijavi se"/>
+	<div>
+</form>
+</div>
+
+
+</body>

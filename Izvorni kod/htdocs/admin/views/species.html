@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+	<div class="col-md-4">
+			<h4><u>Registracija životinjske vrste:</u></h4>
+			<div class="col-md-11">
+<form id="form_registration" ng-submit="registerSpecies()">
+Ime: <input type="text" class="form-control" ng-model="new_species.name" required/></br>
+<div class="row">
+	<div class="col-md-4">
+Razred:</br>
+<select ng-model="new_species.class_id"  ng-change="refreshOrdersByParentClass()">
+  <option ng-repeat="klass in classes track by $index" ng-value="klass.class_id">{{klass.name}}</option>
+</select>
+</div>
+	<div class="col-md-4">
+Red:</br>
+<select ng-model="new_species.order_id" ng-change="refreshFamiliesByParentOrder()">
+  <option ng-repeat="order in orders track by $index" ng-value="order.order_id">{{order.name}}</option>
+</select>
+</div>
+	<div class="col-md-4">
+Porodica:</br>
+<select ng-model="new_species.family_id">
+  <option ng-repeat="family in families track by $index" ng-value="family.family_id">{{family.name}}</option>
+</select>
+</div>
+</div><br/>
+Veličina:<textarea class="form-control" ng-model="new_species.size"/></br>
+Prehrana:<textarea class="form-control" ng-model="new_species.nutrition"/></br>
+Grabežljivci:<textarea class="form-control"  ng-model="new_species.predators"/></br>
+Životni vijek:<textarea class="form-control" ng-model="new_species.lifetime"/></br>
+Stanište:<textarea class="form-control" ng-model="new_species.habitat"/></br>
+<input class="btn btn-success btn-xs" type="submit" value="Registracija"/></br></br>
+</form>
+</div>
+</div>
+
+<div class="col-md-4">
+	<br/></br>
+	<div class="col-md-11">
+	Način života:<textarea class="form-control" ng-model="new_species.lifestyle"/></br>
+Razmnožavanje:<textarea class="form-control" ng-model="new_species.reproduction"/></br>
+Rasprostranjenost:<textarea class="form-control" ng-model="new_species.distribution"/></br>
+	Lokacija nastambe: (klikni na mapu)<br/>
+	<canvas id="karta" width="500" height="354"/>
+</div>
+</div>
+
+<div class="col-md-4">
+<h4><u>Životinjske vrste:</u></h4>
+<ul>
+    <div class="row" ng-repeat="specie in species track by $index">
+  <li>
+    <b>{{specie.name}}</b>
+    <a class="btn btn-default btn-xs" href="" ng-click="toggleEditSpecies(specie)">Uredi</a>
+    <a class="btn btn-danger btn-xs" href="" ng-click="deleteSpecies(specie)">Izbriši</a><br/>
+
+    <form id="form_{{specie.species_id}}" ng-submit="updateSpecie(specie)" style="display: none;">
+        <hr>
+    	Ime: <input type="text" ng-model="specie.name" class="form-control" required/></br>
+		Razred:</br>
+		<select ng-model="specie.class_id" ng-change="refreshOrdersByParentClass()">
+		  <option ng-repeat="klass in classes track by $index" ng-value="klass.class_id">{{klass.name}}</option>
+		</select></br></br>
+		Red:</br>
+		<select ng-model="specie.order_id"  ng-change="refreshFamiliesByParentOrder()">
+		  <option ng-repeat="order in orders track by $index" ng-value="order.order_id">{{order.name}}</option>
+		</select></br></br>
+		Porodica:</br>
+		<select ng-model="specie.family_id"> 
+		  <option ng-repeat="family in families track by $index" ng-value="family.family_id">{{family.name}}</option>
+		</select></br></br>
+		Veličina:<textarea class="form-control" ng-model="specie.size"/></br>
+		Prehrana:<textarea class="form-control" ng-model="specie.nutrition"/></br>
+		Grabežljivci:<textarea class="form-control" ng-model="specie.predators"/></br>
+		Životni vijek:<textarea class="form-control" ng-model="specie.lifetime"/></br>
+		Stanište:<textarea class="form-control" ng-model="specie.habitat"/></br>
+		Način života:<textarea class="form-control" ng-model="specie.lifestyle"/></br>
+		Razmnožavanje:<textarea class="form-control" ng-model="specie.reproduction"/></br>
+		Rasprostranjenost:<textarea class="form-control" ng-model="specie.distribution"/></br>
+    	<input class="btn btn-success btn-xs" type="submit" value="Potvrdi"/>
+    	<a class="btn btn-default btn-xs" ng-click="toggleEditSpecies(specie)">Odustani</a>
+    	    	<hr>
+    	</form>
+
+  </li>
+</div>
+
+</ul>
+</div>
