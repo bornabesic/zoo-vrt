@@ -1,0 +1,38 @@
+.toolbar-style{
+    background: green;
+}
+
+.title{
+   font-size: 40px;
+   color: white;
+}
+.user-font{
+   color: white;
+}
+
+.left-btn{
+    margin-right: 5px;
+}
+
+.tableLayout{
+  display: table; 
+   border-collapse: separate;
+   border-spacing: 5px;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.Panel1 {
+    display: table-cell;
+    padding: 5px;
+}
+
+.Panel2 {
+    display: table-cell;
+  text-align: center;
+}
+
+.edit-btn{
+    width: 70%;
+    margin: 10px;
+}
