@@ -1,4 +1,4 @@
-app.controller("MapController", function($scope, $state){
+app.controller("MapController", function($scope, $state, MapService){
 
 	//Variables
 	var canvas = document.getElementById("karta");
@@ -15,13 +15,13 @@ app.controller("MapController", function($scope, $state){
 	var img = new Image;
 	img.src = "/img/karta.png";
 
-	/* TEST */
+	/* TEST
 	var dot={
 		x: 300,
 		y: 200
-	}
+	}*/
 
-	dot=null
+	var dot=MapService.dot
 
 	//Functions
 	function draw(scale, translatePos){
@@ -29,7 +29,7 @@ app.controller("MapController", function($scope, $state){
 		context.drawImage(img,translatePos.x,translatePos.y, img.width*scale, img.height*scale);
 
 		//crtanje oznake
-		if(dot){
+		if(dot.x!=null && dot.y!=null){
 			var radius = 10*scale;
 			context.strokeStyle = "#df4b26";
 			context.lineJoin = "round";
@@ -61,7 +61,7 @@ app.controller("MapController", function($scope, $state){
 
 			//centriraj mapu na tocku
 			var translatePos={}
-			if(dot){
+			if(dot.x!=null && dot.y!=null){
 				translatePos.x= canvas.width/2-dot.x
 				translatePos.y=canvas.height/2-dot.y
 			}

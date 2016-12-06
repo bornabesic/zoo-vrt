@@ -1,2 +1,35 @@
 <!DOCTYPE html>
-<p> ... pretraživanje životinja ... </p>
+<style type="text/css">
+
+	.height-box {
+		display: flex;
+
+		flex-flow: column;
+		height: 100%;
+	}
+
+	.height-box .search{
+		flex: 0 1 auto;
+
+		height: 20px;
+		margin: 0 auto;
+		margin-bottom: 50px;
+		width: 60%;
+	}
+	.height-box .results{
+		flex: 1 1 auto;
+
+		overflow-y : auto;
+	}
+
+
+</style>
+<div class="height-box">
+	<div class="search" class="input-group">
+		<input type="text" class="form-control input-lg" placeholder="Unesi ime životinje..." ng-model="search_species" ng-change="filterSpecies()"/>
+	</div>
+	<div class="results">
+		<a href="#/species/{{species.species_id}}" ng-repeat="species in result track by $index">{{species.name}}</p>
+
+	</div>
+</div>

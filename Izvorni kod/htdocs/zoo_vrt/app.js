@@ -10,7 +10,7 @@ app.config(function($stateProvider, $locationProvider){
 
 	var web = {
 		controller: "WebController",
-		templateUrl: "/zoo_vrt/views/web_new.html"
+		templateUrl: "/zoo_vrt/views/web.html"
 	}
 
 	var map = {
@@ -26,6 +26,11 @@ app.config(function($stateProvider, $locationProvider){
 	var adopted = {
 		controller: "AdoptedController",
 		templateUrl: "/zoo_vrt/views/adopted.html"
+	}
+
+	var species = {
+		controller: "SpeciesController",
+		templateUrl: "/zoo_vrt/views/species.html"
 	}
 
 	// ================================== ROUTING ==================================
@@ -60,6 +65,15 @@ app.config(function($stateProvider, $locationProvider){
 			"main": web,
 			"map@adopted": map,
 			"content@adopted": adopted
+		}
+	});
+
+	$stateProvider.state("species", {
+		url: "/species/:species_id",
+		views: {
+			"main": web,
+			"map@species": map,
+			"content@species": species
 		}
 	});
 })

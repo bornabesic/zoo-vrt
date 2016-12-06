@@ -395,6 +395,8 @@ app.service('HierarchyService', function() {
 })
 
 app.service('SpeciesService', function(){
+	var species=[];
+
 	this.registerSpecies = function(species){
 		post_data={
 			"name": species.name,
@@ -458,11 +460,35 @@ app.service('SpeciesService', function(){
   					alert("Nažalost, došlo je do greške pri dohvatu popisa životinjskih vrsti.");
   					console.log(data.error)
   				}
+  				else{
+  					species=data;
+  				}
 		}, "JSON");
 
 		return post_obj;
 	}
+
 	this.getSpeciesByParentFamily = function(parent_family_id){
 		
+	}
+
+	this.getSpeciesById = function(species_id){
+		for(var i=0; i<species.length; i++){
+			if(species[i].species_id==species_id)
+				return species[i]
+		}
+		return null;
+	}
+
+})
+
+app.service('MapService', function(){
+	var dot = {
+		x: null,
+		y: null
+	}
+
+	return{
+		dot: dot
 	}
 })

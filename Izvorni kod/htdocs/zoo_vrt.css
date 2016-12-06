@@ -7,3 +7,7 @@
     background-color: #00b300 !important;
 	border-color: black;
 }
+
+a, a:active, a:visited{
+	color: white !important;
+}

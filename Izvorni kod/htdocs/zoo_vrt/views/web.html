@@ -1,2 +1,89 @@
 <!DOCTYPE html>
-<p>web</p>
+
+	<style type="text/css">
+		html, body{
+			background-image:
+			url("/img/login2.jpg");
+
+			background-size: cover;
+		}
+
+		#map{
+			color: black;
+			background-color: white;
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 30%;
+			height: 250px;
+			background-image: url("/img/ricepaper.png");
+		}
+
+		#navigation{
+			display: inline-block;
+			vertical-align: bottom;
+			margin: 10px;
+
+
+		}
+
+		#user_info{
+			position: absolute;
+			top: 0;
+			right: 30%;
+			margin: 10px;
+		}
+
+		.box{
+
+			display: flex;
+
+			flex-flow: column;
+			height: 100%;
+		}
+
+		.box .header{
+			flex: 0 1 auto;
+
+			/*background-color: rgba(50, 37, 28, 1);*/
+			background-image: url("/img/wood_texture.jpg");
+
+			width: 100%;
+			height: 250px;
+		}
+
+		.box .content{
+			flex: 1 1 auto;
+
+			background-image: url("/img/back_body.png");
+			width: 70%;
+			/*height: 100%;*/
+			margin: 0 auto;
+
+			font-weight: bold;
+
+			padding: 30px;
+			text-align: center;
+
+		}
+		
+		</style>
+
+	<body>
+		<div class="box">
+			<div class="header">
+				<a href="#/explore"><img src="/img/logo.png" height="250" style="padding-left:50px;"/></a>
+				<div id="map" ui-view="map"/>
+				<div id="navigation">
+					<a href="#/explore" class="btn btn-primary" ng-click="scrollToContent()"><span class="glyphicon glyphicon-home"/> Životinjske vrste</a>
+					<a href="#/adopted" class="btn btn-primary"><span class="glyphicon glyphicon-th-list"/> Posvojene životinje</a>
+				</div>
+				<div id="user_info">
+					<label style="margin-left: 10px; margin-right: 10px;">Dobrodošao/la, {{username}}!</label>
+					<a href="" class="btn btn-primary" ng-click="logout()"><span class="glyphicon glyphicon-off"/> Odjava</a>
+				</div>
+			</div>
+			<div class="content" ui-view="content">
+			</div>
+		</div>
+	</body>

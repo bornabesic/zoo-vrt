@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<style type="text/css">
+	#left-column{
+		height: 100%;
+		width: 30%;
+		float: left;
+		background-color: red;
+	}
+	#main-info{
+		height: 100%;
+		width: 70%;
+		float: right;
+		background-color: green;
+	}
+</style>
+
+<div id="left-column">
+Ovdje idu slika i ispod nje gumb za posvajanje ako je vrsta sisavac
+</div>
+<div id="main-info">
+	Ime: {{species.name}}<br/>
+	Veličina: {{species.size}}<br/>
+	Prehrana: {{species.nutrition}}<br/>
+	Grabežljivci: {{species.predators}}<br/>
+	Životni vijek: {{species.lifetime}}<br/>
+	Stanište: {{species.habitat}}<br/>
+	Način života: {{species.lifestyle}}<br/>
+	Razmnožavanje: {{species.reproduction}}<br/>
+	Rasprostranjenost: {{species.distribution}}<br/>
+</div>

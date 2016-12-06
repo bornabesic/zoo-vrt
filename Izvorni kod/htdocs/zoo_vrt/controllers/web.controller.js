@@ -10,6 +10,12 @@ app.controller("WebController", function($scope, $state, AuthService){
 		$state.go("login");
 	}
 
+	$scope.scrollToContent = function(){
+		    $('html, body').animate({
+			scrollTop: $(".content").offset().top
+			}, 1000);
+	}
+
 	//Init
 	if(!AuthService.loggedIn() || ls['role']&1==0){
 		$state.go("login")
