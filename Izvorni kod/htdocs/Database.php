@@ -958,6 +958,59 @@
 
 		}
 
+		function get_animals($species_id){
+			$query = "SELECT * FROM " . DB_NAME . ".mammal_animals WHERE species_id=?";
+			$statement = $this->db->prepare($query);
+			if($statement){
+				$statement->bind_param("i", $species_id);
+				$statement->execute();
+			}else{
+				return json_encode(array("error" => $this->db->error));
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array("error" => $this->db->error));
+			}
+			$result = $statement->get_result();
+			$animals = array();
+			while($row = $result->fetch_assoc()){
+				array_push($animals, array(
+					"animal_id" => $row['animal_id'],
+					"species_id" => $species_id,
+					"name" => $row['name'],
+					"age" => $row['age'],
+					"sex" => $row['sex'],
+					"birth_location" => $row['birth_location'],
+					"arrival_date" => $row['arrival_date'],
+					"photo_path" => $row['photo_path'],
+					"interesting_facts" => $row['interesting_facts']
+				));
+			}
+			return json_encode($animals);
+		}
+
+		function get_mammal($animal_id){
+			$query = "SELECT * FROM " . DB_NAME . ".mammal_animals WHERE animal_id=?";
+			$statement = $this->db->prepare($query);
+			if($statement){
+				$statement->bind_param("i", $animal_id);
+				$statement->execute();
+			}else {
+				return json_encode(array("error" => $this->db->error));
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array("error" => $this->db->error));
+			}
+			$result = $statement->get_result();
+			$row = $result->fetch_assoc();
+			if(is_null($row)){
+				return json_encode(array());
+			}else {
+				return json_encode($row);
+			}
+		}
+
 		function remove_mammal($animal_id){
 			//REMOVE MAMMAL WITH GIVEN ID
 			$delete_query="DELETE FROM ". DB_NAME . ".mammal_animals WHERE animal_id=?;";
