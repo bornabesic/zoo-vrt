@@ -536,6 +536,39 @@ app.service('SpeciesService', function($http){
 
 })
 
+//////////////////////////////////////////////////////////////////
+
+app.service('AnimalsService', function($http){
+	var animals=[];
+
+
+	this.getAnimals = function(species_id){
+		post_data={
+			"species_id": species_id,
+			"action": "get_animals"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri dohvatu popisa jedinki vrste.");
+  					console.log(data.error)
+  				}
+  				else{
+  					animals=data;
+  				}
+		}, "JSON");
+		return post_obj;
+	}
+
+
+
+})
+
+
+
+
+/////////////////////////////////////////////////////////////////
+
 app.service('MapService', function(){
 	var dot = {
 		x: null,
