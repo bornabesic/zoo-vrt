@@ -631,7 +631,7 @@
 					"name" => $name,
 					"parent_order_id" => $row['parent_order_id']
 				));
-		} /*greska*/
+		}
 
 		function remove_family($family_id){
 			//remove family with given ID
@@ -742,13 +742,59 @@
 			));
 		}
 
+		//HIERARCHY
+		function get_species_hierarchy($species_id){
+			$this->db->select_db(DB_NAME);
+
+			$hierarchy_query =
+			"SELECT families.family_id, families.name AS family_name, orders.order_id, orders.name AS order_name, classes.class_id, classes.name AS class_name
+			FROM families
+			LEFT JOIN orders ON families.parent_order_id=orders.order_id
+			LEFT JOIN classes ON orders.parent_class_id=classes.class_id
+			LEFT JOIN species ON species.family_id=families.family_id
+			WHERE species.species_id=?;";
+
+			$hierarchy_statement = $this->db->prepare($hierarchy_query);
+			if($hierarchy_statement){
+				$hierarchy_statement->bind_param("i", $species_id);
+		     	$hierarchy_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
+
+			$hierarchy_result = $hierarchy_statement->get_result();
+
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			$row = $hierarchy_result->fetch_assoc();
+
+			
+			
+
+			return json_encode(array(
+				"family_id" => $row["family_id"],
+				"family_name" => $row["family_name"],
+				"order_id" => $row["order_id"],
+				"order_name" => $row["order_name"],
+				"class_id" => $row["class_id"],
+				"class_name" => $row["class_name"]
+			));
+		}
+
 
 		//SPECIES
-		function add_species($name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y){
-			$add_species_query = "INSERT INTO " . DB_NAME . ".species ( `species_id`, `name`, `family_id`, `size`,  `nutrition`, `predators`, `lifetime`, `habitat`, `lifestyle`, `reproduction`, `distribution`, `location_x`, `location_y`) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		function add_species($name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y, $photo_path){
+			$add_species_query = "INSERT INTO " . DB_NAME . ".species ( `species_id`, `name`, `family_id`, `size`,  `nutrition`, `predators`, `lifetime`, `habitat`, `lifestyle`, `reproduction`, `distribution`, `location_x`, `location_y`, `photo_path`) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 			$add_species_statement = $this->db->prepare($add_species_query);
 			if($add_species_statement){
-				$add_species_statement->bind_param("sissssssssii", $name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y);
+				$add_species_statement->bind_param("sissssssssiis", $name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y, $photo_path);
 				$add_species_statement->execute();
 			}else{
 				return json_encode(array(
@@ -811,12 +857,38 @@
 				"reproduction" => $reproduction,
 				"distribution" => $distribution,
 				"location_x" => $location_x,
-				"location_y" => $location_y
+				"location_y" => $location_y,
+				"photo_path" => $photo_path
 			));
 		}
 		
 
 		function remove_species($species_id){
+			//get the photo path so it could be deleted
+			$photo_query = "SELECT * FROM " . DB_NAME . ".species WHERE species_id=?;";
+			$photo_statement = $this->db->prepare($photo_query);
+			if($photo_statement){
+				$photo_statement->bind_param("i", $species_id);
+		     	$photo_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
+
+			$photo_result = $photo_statement->get_result();
+
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			$row = $photo_result->fetch_assoc();
+			unlink("." . $row["photo_path"]);
+
+
 			//remove species with given ID
 			$delete_species_query = "DELETE FROM " . DB_NAME . ".species WHERE species_id=?;";
 			$delete_species_statement = $this->db->prepare($delete_species_query);
@@ -895,7 +967,8 @@
 					"reproduction" => $row['reproduction'],
 					"distribution" => $row['distribution'],
 					"location_x" => $row['location_x'],
-					"location_y" => $row['location_y']
+					"location_y" => $row['location_y'],
+					"photo_path" => $row['photo_path']
 				));
     		}
 
@@ -955,7 +1028,6 @@
 				"photo_path" => $photo_path,
 				"interesting_facts" => $interesting_facts
 			));
-
 		}
 
 		function get_animals($species_id){
@@ -1052,7 +1124,7 @@
 		//VISITS & STATISTICS
 		function register_visit($user_id, $species_id){
 			//REGISTER USER`S VISIT TO SPECIES
-			$visit_query="INSERT INTO ". DB_NAME . ".visits (`user_id`, `species_id`) VALUES (?,?);";
+			$visit_query="INSERT INTO ". DB_NAME . ".visits (`visitor_id`, `species_id`) VALUES (?,?);";
 			$visit_statement = $this->db->prepare($visit_query);
 			if($visit_statement){
 				$visit_statement->bind_param("ii", $user_id, $species_id);
@@ -1073,6 +1145,34 @@
 			return json_encode(array(
 				"user_id" => $user_id,
 				"species_id" => $species_id
+			));
+		}
+
+		function check_visit($user_id, $species_id){
+			//REGISTER USER`S VISIT TO SPECIES
+			$visit_query="SELECT COUNT(DISTINCT visitor_id) AS visited FROM " . DB_NAME . ".visits WHERE visitor_id=? AND species_id=?;";
+			$visit_statement = $this->db->prepare($visit_query);
+			if($visit_statement){
+				$visit_statement->bind_param("ii", $user_id, $species_id);
+		     	$visit_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			$visit_result = $visit_statement->get_result();
+			$row = $visit_result->fetch_assoc();
+
+			return json_encode(array(
+				"visited" => $row["visited"]>0
 			));
 		}
 
@@ -1229,9 +1329,20 @@
 		echo $database->get_families($parent_order_id);
 	}
 
+	//HIERARCHY
+	else if($_POST['action']==="get_species_hierarchy"){
+		echo $database->get_species_hierarchy($_POST['species_id']);
+	}
+
 	//SPECIES
 	else if($_POST['action']==="add_species"){
-		echo $database->add_species($_POST['name'], $_POST['family_id'], $_POST['size'], $_POST['nutrition'], $_POST['predators'], $_POST['lifetime'], $_POST['habitat'], $_POST['lifestyle'], $_POST['reproduction'], $_POST['distribution'], $_POST['location_x'], $_POST['location_y']);
+		$img_dir="/img/species/";
+		mkdir("." . $img_dir, 0700);
+		$photo_path = $img_dir . basename($_FILES["photo"]["name"]);
+		move_uploaded_file($_FILES["photo"]["tmp_name"], "." . $photo_path);
+
+
+		echo $database->add_species($_POST['name'], $_POST['family_id'], $_POST['size'], $_POST['nutrition'], $_POST['predators'], $_POST['lifetime'], $_POST['habitat'], $_POST['lifestyle'], $_POST['reproduction'], $_POST['distribution'], $_POST['location_x'], $_POST['location_y'], $photo_path);
 	}
 	else if($_POST['action']==="remove_species"){
 		echo $database->remove_species($_POST['species_id']);
@@ -1254,8 +1365,20 @@
 	else if($_POST['action']==="remove_mammal"){
 		echo $database->remove_mammal($_POST['animal_id']);
 	}
+	else if($_POST['action']==="get_animals"){
+		echo $database->get_animals($_POST['species_id']);
+	}
+	else if($_POST['action']==="get_mammal"){
+		echo $database->get_mammal($_POST['animal_id']);
+	}
+
+
+	//VISITS & STATISTICS
 	else if($_POST['action']==="register_visit"){
-		echo $database->register_visit($_POST['user_id'], $_POST['species_id']);
+		echo $database->register_visit($_POST["user_id"], $_POST["species_id"]);
+	}
+	else if($_POST['action']==="check_visit"){
+		echo $database->check_visit($_POST["user_id"], $_POST["species_id"]);
 	}
 	else if($_POST['action']==="get_visit_count"){
 		echo $database->get_visit_count($_POST['species_id']);

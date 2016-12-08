@@ -18,7 +18,6 @@ app.service('AuthService', function() {
 
   				}
 		}, "JSON");
-
 		return post_obj;
 	}
 
@@ -130,6 +129,23 @@ app.service('UserService', function() {
 });
 
 app.service('HierarchyService', function() {
+	//HIERARCHY
+	this.getSpeciesHierarchy = function(species_id){
+		post_data={
+			"species_id": species_id,
+			"action": "get_species_hierarchy"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri dohvatu hijerarhije životinjske vrste.");
+  					console.log(data.error)
+  				}
+		}, "JSON");
+
+		return post_obj;
+	}
+
 	//CLASSES
 	this.getClasses = function (){
 		post_data={
@@ -394,11 +410,11 @@ app.service('HierarchyService', function() {
 	}
 })
 
-app.service('SpeciesService', function(){
+app.service('SpeciesService', function($http){
 	var species=[];
 
 	this.registerSpecies = function(species){
-		post_data={
+		/*post_data={
 			"name": species.name,
 			"family_id": species.family_id,
 			"size": species.size,
@@ -411,10 +427,27 @@ app.service('SpeciesService', function(){
 			"distribution": species.distribution,
 			"location_x": species.location_x,
 			"location_y": species.location_y,
+			"photo": photo
 			"action": "add_species"
-		}
+		}*/
 
-		var post_obj = $.post("/Database.php", post_data, function(data) {
+		var post_data = new FormData()
+		post_data.append("name", species.name)
+		post_data.append("family_id", species.family_id)
+		post_data.append("size", species.size)
+		post_data.append("nutrition", species.nutrition)
+		post_data.append("predators", species.predators)
+		post_data.append("lifetime", species.lifetime)
+		post_data.append("habitat", species.habitat)
+		post_data.append("lifestyle", species.lifestyle)
+		post_data.append("reproduction", species.reproduction)
+		post_data.append("distribution", species.distribution)
+		post_data.append("location_x", species.location_x)
+		post_data.append("location_y", species.location_y)
+		post_data.append("photo", species.photo_path)
+		post_data.append("action", "add_species")
+
+		/*var post_obj = $.post("/Database.php", post_data, function(data) {
   				if(data.error){
   					alert("Nažalost, došlo je do greške pri registraciji životinjske vrste.");
   					console.log(data.error)
@@ -424,7 +457,28 @@ app.service('SpeciesService', function(){
   				}
 		}, "JSON");
 
-		return post_obj;
+		return post_obj;*/
+
+		var post_obj = $http.post("/Database.php", post_data, {
+             transformRequest: angular.identity,
+             headers: {'Content-Type': undefined,'Process-Data': false}
+         })
+
+		post_obj.success(function(data){
+			if(data.error){
+  					alert("Nažalost, došlo je do greške pri registraciji životinjske vrste.");
+  					console.log(data.error)
+  				}
+  				else{
+ 					alert("Životinjska vrsta uspješno registrirana!")
+  				}
+		})
+         
+         post_obj.error(function(data){
+            alert("Prijenos slike na poslužitelj nije uspio.");
+         })
+
+         return post_obj;
 
 	}
 	this.deleteSpecies = function(species){
@@ -491,4 +545,43 @@ app.service('MapService', function(){
 	return{
 		dot: dot
 	}
+})
+
+
+app.service('VisitService', function(){
+
+	this.registerVisit = function(user_id, species_id){
+		post_data={
+			"user_id": user_id,
+			"species_id": species_id,
+			"action": "register_visit"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri registraciji posjete.");
+  					console.log(data.error)
+  				}
+		}, "JSON");
+
+		return post_obj;
+	}
+
+	this.checkVisit = function(user_id, species_id){
+		post_data={
+			"user_id": user_id,
+			"species_id": species_id,
+			"action": "check_visit"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri provjeri posjete.");
+  					console.log(data.error)
+  				}
+		}, "JSON");
+
+		return post_obj;
+	}
+	
 })

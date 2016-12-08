@@ -15,14 +15,19 @@ app.controller("LoginController", function($scope, $state, AuthService, UserServ
 
 	$scope.formSubmitted = function(){
 		if($scope.registration){
-			console.log($scope.username)
+			/*console.log($scope.username)
 			console.log($scope.first_last_name)
 			console.log($scope.email)
 			console.log($scope.city)
-			console.log($scope.year_of_birth)
+			console.log($scope.year_of_birth)*/
+
+			var post_obj = UserService.registerUser($scope.username, $scope.password, $scope.first_last_name, $scope.year_of_birth, $scope.city, $scope.email, 1)
+			post_obj.then(function(result){
+				location.reload()
+			})
 		}
 		else{
-			console.log($scope.username)
+			/*console.log($scope.username)*/
 
 			var post_obj = AuthService.loginUser($scope.username, $scope.password)
 			post_obj.then(function(result){

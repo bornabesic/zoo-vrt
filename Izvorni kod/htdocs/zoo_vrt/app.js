@@ -46,7 +46,8 @@ app.config(function($stateProvider, $locationProvider){
 		url: "/",
 		views: {
 			"main": web,
-			"map@web": map
+			"map@web": map,
+			"content@web": explore
 		}
 	});
 

@@ -1,5 +1,4 @@
 app.controller("SpeciesController", function($scope, HierarchyService, SpeciesService){
-	/* updateSpecies nije rješen, dropdown u updateu ne radi */
 
 	//Variables
 	$scope.new_species = {
@@ -16,7 +15,8 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 		reproduction: null,
 		distribution: null,
 		location_x: null,
-		location_y: null
+		location_y: null,
+		photo_path: null
 	}
 
 	//Functions
@@ -24,7 +24,6 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 		var post_obj = SpeciesService.getSpecies()
 		post_obj.then(function(result){
 			$scope.species=result
-			console.log(result)
 			$scope.$apply()
 		})
 	}
@@ -76,7 +75,7 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 	}
 
 	$scope.registerSpecies = function(){
-		var post_obj = SpeciesService.registerSpecies($scope.new_species);
+		var post_obj = SpeciesService.registerSpecies($scope.new_species, $scope.new_photo);
 		post_obj.then(function(result){
 			$scope.refreshSpecies()
 		})
@@ -90,7 +89,7 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 	}
 
 	$scope.updateSpecies = function(species){
-		
+		alert(JSON.stringify(species))
 	}
 
 	$scope.toggleEditSpecies = function(specie){
@@ -114,18 +113,18 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 		})
 	}
 
-	$scope.refreshOrdersByParentClass = function(){
+	$scope.refreshOrdersByParentClass = function(parent_class_id){
 		$scope.orders=[];
-		var post_obj = HierarchyService.getOrdersByParentClass($scope.new_species.class_id);
+		var post_obj = HierarchyService.getOrdersByParentClass(parent_class_id);
 		post_obj.then(function(result){
 			$scope.orders=result;
 			$scope.$apply()
 		})
 	}
 
-	$scope.refreshFamiliesByParentOrder = function(){
+	$scope.refreshFamiliesByParentOrder = function(parent_order_id){
 		$scope.families=[];
-		var post_obj = HierarchyService.getFamiliesByParentOrder($scope.new_species.order_id);
+		var post_obj = HierarchyService.getFamiliesByParentOrder(parent_order_id);
 		post_obj.then(function(result){
 			$scope.families=result;
 			$scope.$apply()

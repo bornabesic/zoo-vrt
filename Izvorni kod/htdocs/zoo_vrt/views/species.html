@@ -2,29 +2,79 @@
 <style type="text/css">
 	#left-column{
 		height: 100%;
-		width: 30%;
+		width: 35%;
 		float: left;
-		background-color: red;
 	}
 	#main-info{
 		height: 100%;
-		width: 70%;
+		width: 65%;
 		float: right;
-		background-color: green;
+		
+text-align: justify;
+    text-justify: inter-word;
+
+		padding-left: 30px;
+		font-weight: normal;
+		font-family: Verdana, Geneva, sans-serif;
+	}
+
+	.attribute{
+		font-size: 14pt;
+	}
+
+	.name{
+		font-size: 20pt;
+		text-decoration: underline;
 	}
 </style>
 
 <div id="left-column">
-Ovdje idu slika i ispod nje gumb za posvajanje ako je vrsta sisavac
+<img src="{{species.photo_path}}" width="100%"/><br/>
+<a class="btn btn-primary" style="width:100%;" href="#/animals/{{species.species_id}}" ng-if="hierarchy.class_name=='Mammalia'"><span class="glyphicon glyphicon-list-alt"/> Popis jedinki</a><br/>
+
+<div class="radio" style="position: relative; top:0; left:0;">
+	<input type="radio" ng-model="visited" ng-value="true" ng-click="registerVisit()">Posjetio/la sam ovu vrstu</input>
+</div>
+
 </div>
 <div id="main-info">
-	Ime: {{species.name}}<br/>
-	Veličina: {{species.size}}<br/>
-	Prehrana: {{species.nutrition}}<br/>
-	Grabežljivci: {{species.predators}}<br/>
-	Životni vijek: {{species.lifetime}}<br/>
-	Stanište: {{species.habitat}}<br/>
-	Način života: {{species.lifestyle}}<br/>
-	Razmnožavanje: {{species.reproduction}}<br/>
-	Rasprostranjenost: {{species.distribution}}<br/>
+			{{hierarchy.class_name}} / {{hierarchy.order_name}} / {{hierarchy.family_name}}<br/>
+		<label class="name">{{species.name}}</label><br/>
+		<br/>
+	<div class="col-md-6">
+				<label class="attribute">Rasprostranjenost:</label><br/>
+		{{species.distribution}}<br/>
+		<br/>
+		<label class="attribute">Veličina:</label><br/>
+		{{species.size}}<br/>
+		<br/>
+
+
+		<label class="attribute">Prehrana:</label><br/>
+		{{species.nutrition}}<br/>
+		<br/>
+
+
+		<label class="attribute">Životni vijek:</label><br/>
+		{{species.lifetime}}<br/>
+		<br/>
+
+		<label class="attribute">Stanište:</label><br/>
+		{{species.habitat}}<br/>
+		<br/>
+
+		<label class="attribute">Grabežljivci:</label><br/>
+		{{species.predators}}<br/>
+	</div>
+	<div class="col-md-6">
+
+		<label class="attribute">Razmnožavanje:</label><br/>
+		{{species.reproduction}}<br/>
+		<br/>
+
+		<label class="attribute">Način života:</label><br/>
+		{{species.lifestyle}}<br/>
+	</div>
+	
+
 </div>

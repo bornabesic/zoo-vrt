@@ -23,9 +23,6 @@ input{
 	display:none;
 }
 
-.green:focus {
-    border-color: green;
-}
 a:link {
 	color: #FFF;
 }
@@ -60,13 +57,13 @@ a:hover {
 <div id="form" class="center">
 <form id="iform" ng-submit="formSubmitted()">
 	<div class="center">
-	<input class="form-control green" id="un" ng-model="username" type="text" placeholder="Korisničko ime"/>
-	<input class="form-control green" ng-model="password" type="password" placeholder="Lozinka"/>
+	<input class="form-control" id="un" ng-model="username" type="text" placeholder="Korisničko ime"/>
+	<input class="form-control" ng-model="password" type="password" placeholder="Lozinka"/>
 	<div id="registration">
-		<input class="form-control green" ng-model="first_last_name" type="text" placeholder="Ime i prezime"/>
-		<input class="form-control green" ng-model="email" type="email" placeholder="E-mail adresa"/>
-		<input class="form-control green" ng-model="city" type="text" placeholder="Mjesto stanovanja"/>
-		<input class="form-control green" ng-model="year_of_birth" type="text" placeholder="Godina rođenja"/>
+		<input class="form-control" ng-model="first_last_name" type="text" placeholder="Ime i prezime"/>
+		<input class="form-control" ng-model="email" type="email" placeholder="E-mail adresa"/>
+		<input class="form-control" ng-model="city" type="text" placeholder="Mjesto stanovanja"/>
+		<input class="form-control" ng-model="year_of_birth" type="text" placeholder="Godina rođenja"/>
 	</div><br/>
 	<input class="btn btn-primary" id="submit_button" type="submit" form="iform" value="Prijavi se"/>
 	<div>

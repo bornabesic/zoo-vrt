@@ -147,7 +147,8 @@ CREATE TABLE `species` (
   `reproduction` text COLLATE utf8_croatian_ci,
   `distribution` text COLLATE utf8_croatian_ci,
   `location_x` int(11) NOT NULL,
-  `location_y` int(11) NOT NULL
+  `location_y` int(11) NOT NULL,
+  `photo_path` varchar(256) COLLATE utf8_croatian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
 
 -- --------------------------------------------------------

@@ -5,9 +5,18 @@
 .btn-primary:focus {
 	font-weight: bold;
     background-color: #00b300 !important;
-	border-color: black;
+			border-width: 0;
 }
 
 a, a:active, a:visited{
 	color: white !important;
 }
+
+.form-control, .form-control:focus{
+    border-color: green;
+
+}
+
+.form-control:focus{
+	    box-shadow: 0 0 5px green
+};

@@ -16,6 +16,10 @@ app.controller("WebController", function($scope, $state, AuthService){
 			}, 1000);
 	}
 
+	$scope.isGuard = function(){
+		return ls['role']&2;
+	}
+
 	//Init
 	if(!AuthService.loggedIn() || ls['role']&1==0){
 		$state.go("login")

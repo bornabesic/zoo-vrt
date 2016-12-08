@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+<div class="row">
 	<div class="col-md-4">
 			<h4><u>Registracija životinjske vrste:</u></h4>
 			<div class="col-md-11">
@@ -8,13 +8,13 @@ Ime: <input type="text" class="form-control" ng-model="new_species.name" require
 <div class="row">
 	<div class="col-md-4">
 Razred:</br>
-<select ng-model="new_species.class_id"  ng-change="refreshOrdersByParentClass()">
+<select ng-model="new_species.class_id"  ng-change="refreshOrdersByParentClass(new_species.class_id)">
   <option ng-repeat="klass in classes track by $index" ng-value="klass.class_id">{{klass.name}}</option>
 </select>
 </div>
 	<div class="col-md-4">
 Red:</br>
-<select ng-model="new_species.order_id" ng-change="refreshFamiliesByParentOrder()">
+<select ng-model="new_species.order_id" ng-change="refreshFamiliesByParentOrder(new_species.order_id)">
   <option ng-repeat="order in orders track by $index" ng-value="order.order_id">{{order.name}}</option>
 </select>
 </div>
@@ -30,21 +30,28 @@ Prehrana:<textarea class="form-control" ng-model="new_species.nutrition"/></br>
 Grabežljivci:<textarea class="form-control"  ng-model="new_species.predators"/></br>
 Životni vijek:<textarea class="form-control" ng-model="new_species.lifetime"/></br>
 Stanište:<textarea class="form-control" ng-model="new_species.habitat"/></br>
+
 <input class="btn btn-success btn-xs" type="submit" value="Registracija"/></br></br>
 </form>
 </div>
 </div>
-
 <div class="col-md-4">
 	<br/></br>
 	<div class="col-md-11">
 	Način života:<textarea class="form-control" ng-model="new_species.lifestyle"/></br>
-Razmnožavanje:<textarea class="form-control" ng-model="new_species.reproduction"/></br>
-Rasprostranjenost:<textarea class="form-control" ng-model="new_species.distribution"/></br>
+	Razmnožavanje:<textarea class="form-control" ng-model="new_species.reproduction"/></br>
+	Rasprostranjenost:<textarea class="form-control" ng-model="new_species.distribution"/></br>
 	Lokacija nastambe: (klikni na mapu)<br/>
 	<canvas id="karta" width="500" height="354"/>
 </div>
 </div>
+<div class="col-md-4">
+	<br/><br/>
+	Fotografija: <input type="file" file-model="new_species.photo_path" accept="image/*"/>
+</div>
+</div>
+</div>
+
 
 <div class="col-md-4">
 <h4><u>Životinjske vrste:</u></h4>
@@ -55,15 +62,15 @@ Rasprostranjenost:<textarea class="form-control" ng-model="new_species.distribut
     <a class="btn btn-default btn-xs" href="" ng-click="toggleEditSpecies(specie)">Uredi</a>
     <a class="btn btn-danger btn-xs" href="" ng-click="deleteSpecies(specie)">Izbriši</a><br/>
 
-    <form id="form_{{specie.species_id}}" ng-submit="updateSpecie(specie)" style="display: none;">
+    <form id="form_{{specie.species_id}}" ng-submit="updateSpecies(specie)" style="display: none;">
         <hr>
     	Ime: <input type="text" ng-model="specie.name" class="form-control" required/></br>
 		Razred:</br>
-		<select ng-model="specie.class_id" ng-change="refreshOrdersByParentClass()">
+		<select ng-model="specie.class_id" ng-change="refreshOrdersByParentClass(klass.class_id)">
 		  <option ng-repeat="klass in classes track by $index" ng-value="klass.class_id">{{klass.name}}</option>
 		</select></br></br>
 		Red:</br>
-		<select ng-model="specie.order_id"  ng-change="refreshFamiliesByParentOrder()">
+		<select ng-model="specie.order_id"  ng-change="refreshFamiliesByParentOrder(order.order_id)">
 		  <option ng-repeat="order in orders track by $index" ng-value="order.order_id">{{order.name}}</option>
 		</select></br></br>
 		Porodica:</br>

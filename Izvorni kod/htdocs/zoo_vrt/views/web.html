@@ -32,6 +32,12 @@
 			top: 0;
 			right: 30%;
 			margin: 10px;
+			text-align: right;
+		}
+
+		.options-button{
+			/*width: 100%;*/
+			margin-bottom:5px;
 		}
 
 		.box{
@@ -77,10 +83,12 @@
 				<div id="navigation">
 					<a href="#/explore" class="btn btn-primary" ng-click="scrollToContent()"><span class="glyphicon glyphicon-home"/> Životinjske vrste</a>
 					<a href="#/adopted" class="btn btn-primary"><span class="glyphicon glyphicon-th-list"/> Posvojene životinje</a>
+					<a href="#/assigned" class="btn btn-primary" ng-if="isGuard()"><span class="glyphicon glyphicon-tag"/> Dodijeljene životinje</a>
 				</div>
 				<div id="user_info">
-					<label style="margin-left: 10px; margin-right: 10px;">Dobrodošao/la, {{username}}!</label>
-					<a href="" class="btn btn-primary" ng-click="logout()"><span class="glyphicon glyphicon-off"/> Odjava</a>
+					<label>Dobrodošao/la, {{username}}!</label><br/>
+					<a href="" class="btn btn-primary options-button"><span class="glyphicon glyphicon-pencil"/> Uredi profil</a><br/>
+					<a href="" class="btn btn-primary options-button" ng-click="logout()"><span class="glyphicon glyphicon-off"/> Odjava</a>
 				</div>
 			</div>
 			<div class="content" ui-view="content">
