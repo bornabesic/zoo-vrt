@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<style type="text/css">
+	#left-column{
+		height: 100%;
+		width: 25%;
+		float: left;
+	}
+	#main-info{
+
+		font-size: 20px;
+		padding: 10px;
+		height: 100%;
+		width: 75%;
+		float: right;
+		background-color: green;
+	}
+
+	#animal-card{
+		height: 200px;
+		margin-bottom: 60px;
+	}
+	
+    [class*='col-'] {
+        float: left; 
+        min-height: 1px; 
+        width: 16.66%; 
+        /*-- our gutter -- */
+        padding: 3px; 
+        background-color: green;
+    }
+
+    .col-1{ width: 16.66%;text-align: left; }
+    .col-2{ width: 25%; text-align: left;	}
+    .col-3{ width: 33.33%; text-align: left;}
+    .col-4{ width: 50%;text-align: left;    }
+    .col-5{ width: 66.66%;text-align: left; }
+    .col-6{ width: 83.33%;text-align: left; }
+    .col-7{ width: 100%; text-align: left;  }
+
+	.modal {
+	    display: none; /* Hidden by default */
+	    position: fixed; /* Stay in place */
+	    z-index: 1; /* Sit on top */
+	    padding-top: 100px; /* Location of the box */
+	    left: 0;
+	    top: 0;
+	    width: 100%; /* Full width */
+	    height: 100%; /* Full height */
+	    overflow: auto; /* Enable scroll if needed */
+	    background-color: rgb(0,0,0); /* Fallback color */
+	    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+	.modal-content {
+	    background-color: grey;
+	    margin: auto;
+	    padding: 20px;
+	    border: 1px solid #888;
+	    width: 80%;
+	}
+
+	.close {
+	    color: #aaaaaa;
+	    float: right;
+	    font-size: 28px;
+	    font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+	    color: blue;
+	    text-decoration: none;
+	    cursor: pointer;
+	}
+	#btnDialogAccept,#btnDialogClose{
+		color: black;
+	}
+</style>
+
+<div id="animal-card" ng-repeat="animal in animals track by $index">
+
+	<div id="left-column">
+		<!--  tu mi baca da nemre nac sliku, al ju svedno prikaze ? lol  -->
+		<img src="{{animal.photo_path}}">
+	</div>
+	<div id="main-info">
+		<div id="row">
+			<div class="col-5">Ime: {{animal.name}}</div>
+			<div class="col-3">Dob: {{animal.age}}</div>
+		</div>
+
+		<div id="row">
+			<div class="col-5">Datum dolaska: {{animal.arrival_date}}</div>
+			<div class="col-3">Spol: {{animal.sex}}</div>
+		</div>
+
+		<div id="row">
+			<div class="col-7">Mjesto rođenja: {{animal.birth_location}}</div>
+		</div>
+		<!-- prosirenje zanimljivosti nije najbolje napravljeno, ovaj button s ID="show"-->
+		<div id="row">
+			<div class="col-2">Zanimljivosti:</div>
+			<button id="show" style="color:black;float:left" ng-click="isVisible=!isVisible">Više/manje</button>
+			<button id="myBtn" style="color:black;float:right"  onclick="popup()">RZ je smece!</button><br>
+		</div>
+
+		<div class="col-7" id="show/hide" ng-show="isVisible" >
+			{{animal.interesting_facts}}
+			<div class="show-more">
+				
+        	</div>
+		</div>
+
+
+
+	<script>
+		isVisible=false;
+		var modal = document.getElementById('myModal');
+
+		var btn = document.getElementById("myBtn");
+		var btnAccept = document.getElementById("btnDialogAccept");;
+		var btnClose = document.getElementById("btnDialogClose");;
+
+		var span = document.getElementsByClassName("close")[0];
+
+		function popup() {
+		    modal.style.display = "block";
+		}
+
+		span.onclick = function() {
+		    modal.style.display = "none";
+		}
+
+		window.onclick = function(event) {
+		    if (event.target == modal) {
+		        modal.style.display = "none";
+		    }
+		}
+
+		btnClose.onclick = function () {
+			modal.style.display = "none";
+		}
+
+		btnAccept.onclick = function () {
+			//todo slanje maila
+			//micanje jedinke? smije li jedna zivotinja imati vise posvojtielja?
+			modal.style.display = "none";
+		}
+	</script>
+
+</div>
+
+<div id="myModal" class="modal">
+
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Odabirom opcije 'Potvrdi' postajete posvojitelj ove jedinke. Informacije o uplati će biti dostavljene na Vašu adresu e-pošte.</p>
+    <button id="btnDialogAccept">Potvrdi</button>
+    <button id="btnDialogClose">Odustani</button>
+  </div>
+
+</div>
+
+
+
+
+
+

@@ -33,6 +33,11 @@ app.config(function($stateProvider, $locationProvider){
 		templateUrl: "/zoo_vrt/views/species.html"
 	}
 
+	var animals = {
+		controller: "AnimalsController",
+		templateUrl: "/zoo_vrt/views/animals.html"
+	}
+
 	// ================================== ROUTING ==================================
 
 	$stateProvider.state("login", {
@@ -75,6 +80,15 @@ app.config(function($stateProvider, $locationProvider){
 			"main": web,
 			"map@species": map,
 			"content@species": species
+		}
+	});
+
+	$stateProvider.state("animals", {
+		url: "/animals/:species_id",
+		views: {
+			"main": web,
+			"map@animals": map,
+			"content@animals": animals
 		}
 	});
 })
