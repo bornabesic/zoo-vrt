@@ -173,7 +173,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `password_hash`, `first_last_name`, `year_of_birth`, `city`, `email`, `role`) VALUES
-(1, 'admin', '$2a$08$d/PQYIgWTi2tlmAmZoKy2O/vpCmSCtjNUHqwv0Y0EpEDGuLwUXY7W', 'Admin', 2017, 'Zagreb', 'admin@zoo-vrt.hr', 4);
+(1, 'admin', '$2a$08$d/PQYIgWTi2tlmAmZoKy2O/vpCmSCtjNUHqwv0Y0EpEDGuLwUXY7W', 'Admin', 2017, 'Zagreb', 'admin@zoo-vrt.hr', 7);
 
 -- --------------------------------------------------------
 
@@ -282,12 +282,12 @@ ALTER TABLE `visits`
 -- AUTO_INCREMENT for table `classes`
 --
 ALTER TABLE `classes`
-  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 --
 -- AUTO_INCREMENT for table `families`
 --
 ALTER TABLE `families`
-  MODIFY `family_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `family_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 --
 -- AUTO_INCREMENT for table `mammal_animals`
 --
@@ -297,17 +297,17 @@ ALTER TABLE `mammal_animals`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 --
 -- AUTO_INCREMENT for table `species`
 --
 ALTER TABLE `species`
-  MODIFY `species_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `species_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 --
 -- Constraints for dumped tables
 --
@@ -316,64 +316,64 @@ ALTER TABLE `users`
 -- Constraints for table `adopter_exclusive_facts`
 --
 ALTER TABLE `adopter_exclusive_facts`
-  ADD CONSTRAINT `adopter_exclusive_facts_fk0` FOREIGN KEY (`animal_id`) REFERENCES `mammal_animals` (`animal_id`);
+  ADD CONSTRAINT `adopter_exclusive_facts_fk0` FOREIGN KEY (`animal_id`) REFERENCES `mammal_animals` (`animal_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `adopter_exclusive_photos`
 --
 ALTER TABLE `adopter_exclusive_photos`
-  ADD CONSTRAINT `adopter_exclusive_photos_fk0` FOREIGN KEY (`animal_id`) REFERENCES `mammal_animals` (`animal_id`);
+  ADD CONSTRAINT `adopter_exclusive_photos_fk0` FOREIGN KEY (`animal_id`) REFERENCES `mammal_animals` (`animal_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `adopter_exclusive_videos`
 --
 ALTER TABLE `adopter_exclusive_videos`
-  ADD CONSTRAINT `adopter_exclusive_videos_fk0` FOREIGN KEY (`animal_id`) REFERENCES `mammal_animals` (`animal_id`);
+  ADD CONSTRAINT `adopter_exclusive_videos_fk0` FOREIGN KEY (`animal_id`) REFERENCES `mammal_animals` (`animal_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `adoptions`
 --
 ALTER TABLE `adoptions`
-  ADD CONSTRAINT `adoptions_fk0` FOREIGN KEY (`visitor_id`) REFERENCES `users` (`user_id`),
-  ADD CONSTRAINT `adoptions_fk1` FOREIGN KEY (`animal_id`) REFERENCES `mammal_animals` (`animal_id`);
+  ADD CONSTRAINT `adoptions_fk0` FOREIGN KEY (`visitor_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `adoptions_fk1` FOREIGN KEY (`animal_id`) REFERENCES `mammal_animals` (`animal_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `families`
 --
 ALTER TABLE `families`
-  ADD CONSTRAINT `families_fk0` FOREIGN KEY (`parent_order_id`) REFERENCES `orders` (`order_id`);
+  ADD CONSTRAINT `families_fk0` FOREIGN KEY (`parent_order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `guard_assigned_animals`
 --
 ALTER TABLE `guard_assigned_animals`
-  ADD CONSTRAINT `guard_assigned_animals_fk0` FOREIGN KEY (`guard_id`) REFERENCES `users` (`user_id`),
-  ADD CONSTRAINT `guard_assigned_animals_fk1` FOREIGN KEY (`animal_id`) REFERENCES `mammal_animals` (`animal_id`);
+  ADD CONSTRAINT `guard_assigned_animals_fk0` FOREIGN KEY (`guard_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `guard_assigned_animals_fk1` FOREIGN KEY (`animal_id`) REFERENCES `mammal_animals` (`animal_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `mammal_animals`
 --
 ALTER TABLE `mammal_animals`
-  ADD CONSTRAINT `mammal_animals_fk0` FOREIGN KEY (`species_id`) REFERENCES `species` (`species_id`);
+  ADD CONSTRAINT `mammal_animals_fk0` FOREIGN KEY (`species_id`) REFERENCES `species` (`species_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_fk0` FOREIGN KEY (`parent_class_id`) REFERENCES `classes` (`class_id`);
+  ADD CONSTRAINT `orders_fk0` FOREIGN KEY (`parent_class_id`) REFERENCES `classes` (`class_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `species`
 --
 ALTER TABLE `species`
-  ADD CONSTRAINT `species_fk0` FOREIGN KEY (`family_id`) REFERENCES `families` (`family_id`);
+  ADD CONSTRAINT `species_fk0` FOREIGN KEY (`family_id`) REFERENCES `families` (`family_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `visits`
 --
 ALTER TABLE `visits`
-  ADD CONSTRAINT `visits_fk0` FOREIGN KEY (`visitor_id`) REFERENCES `users` (`user_id`),
-  ADD CONSTRAINT `visits_fk1` FOREIGN KEY (`species_id`) REFERENCES `species` (`species_id`);
+  ADD CONSTRAINT `visits_fk0` FOREIGN KEY (`visitor_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `visits_fk1` FOREIGN KEY (`species_id`) REFERENCES `species` (`species_id`) ON DELETE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -2,7 +2,7 @@
 
 app.service('AuthService', function() {
 	var ls = localStorage
-	this.loginUser = function (username, password){
+	var loginUser = function (username, password){
 		post_data={
 			"username": username,
 			"password": password,
@@ -21,7 +21,7 @@ app.service('AuthService', function() {
 		return post_obj;
 	}
 
-	this.loggedIn = function(){
+	var loggedIn = function(){
 		return ls['user_id']!=undefined &&
 		ls['username']!=undefined && 
 		ls['city']!=undefined && 
@@ -31,13 +31,19 @@ app.service('AuthService', function() {
 		ls['role']!=undefined
 	}
 
-	this.logoutUser = function(){
+	var logoutUser = function(){
 		ls.clear()
+	}
+
+	return{
+		loginUser: loginUser,
+		loggedIn: loggedIn,
+		logoutUser: logoutUser
 	}
 })
 
 app.service('UserService', function() {
-    this.registerUser = function (username, password, first_last_name, year_of_birth, city, email, role) {
+    var registerUser = function (username, password, first_last_name, year_of_birth, city, email, role) {
         
         post_data={
 			"username": username,
@@ -63,7 +69,7 @@ app.service('UserService', function() {
 		return post_obj;
     }
 
-    this.deleteUser = function(user_id){
+    var deleteUser = function(user_id){
     	post_data={
 			"user_id": user_id,
 			"action": "delete_user"
@@ -108,7 +114,7 @@ app.service('UserService', function() {
 		return post_obj;
     }
 
-    this.getUsers = function(){
+    var getUsers = function(){
     	post_data={
 			"action": "get_users"
 		}
@@ -126,11 +132,17 @@ app.service('UserService', function() {
 
 		return post_obj;
     }
+
+    return{
+    	registerUser: registerUser,
+		deleteUser: deleteUser,
+		getUsers: getUsers
+    }
 });
 
 app.service('HierarchyService', function() {
 	//HIERARCHY
-	this.getSpeciesHierarchy = function(species_id){
+	var getSpeciesHierarchy = function(species_id){
 		post_data={
 			"species_id": species_id,
 			"action": "get_species_hierarchy"
@@ -147,7 +159,7 @@ app.service('HierarchyService', function() {
 	}
 
 	//CLASSES
-	this.getClasses = function (){
+	var getClasses = function (){
 		post_data={
 			"action": "get_classes"
 		}
@@ -166,7 +178,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	this.registerClass = function (name){
+	var registerClass = function (name){
 		post_data={
 			"name": name,
 			"action": "add_class"
@@ -185,7 +197,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	this.deleteClass = function (class_id){
+	var deleteClass = function (class_id){
 		post_data={
 			"class_id": class_id,
 			"action": "remove_class"
@@ -204,7 +216,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	this.updateClass = function(class_id, name){
+	var updateClass = function(class_id, name){
 		post_data={
 			"class_id": class_id,
 			"name": name,
@@ -225,7 +237,7 @@ app.service('HierarchyService', function() {
 	}
 
 	//ORDERS
-	this.getOrders = function(){
+	var getOrders = function(){
 		post_data={
 			"action": "get_orders"
 		}
@@ -240,7 +252,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	this.getOrdersByParentClass = function(parent_class_id){
+	var getOrdersByParentClass = function(parent_class_id){
 		post_data={
 			"parent_class_id": parent_class_id,
 			"action": "get_orders"
@@ -256,7 +268,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	this.registerOrder = function(name, parent_class_id){
+	var registerOrder = function(name, parent_class_id){
 		post_data={
 			"name": name,
 			"parent_class_id": parent_class_id,
@@ -276,7 +288,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	this.updateOrder = function(order_id, name, parent_class_id){
+	var updateOrder = function(order_id, name, parent_class_id){
 		post_data={
 			"order_id": order_id,
 			"name": name,
@@ -297,7 +309,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	this.deleteOrder = function(order_id){
+	var deleteOrder = function(order_id){
 		post_data={
 			"order_id": order_id,
 			"action": "remove_order"
@@ -317,7 +329,7 @@ app.service('HierarchyService', function() {
 	}
 
 	//FAMILIES
-	this.getFamilies = function(){
+	var getFamilies = function(){
 		post_data={
 			"action": "get_families"
 		}
@@ -332,7 +344,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	this.getFamiliesByParentOrder = function(parent_order_id){
+	var getFamiliesByParentOrder = function(parent_order_id){
 		post_data={
 			"parent_order_id": parent_order_id,
 			"action": "get_families"
@@ -348,7 +360,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	this.registerFamily = function(name, parent_order_id){
+	var registerFamily = function(name, parent_order_id){
 		post_data={
 			"name": name,
 			"parent_order_id": parent_order_id,
@@ -368,7 +380,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	this.updateFamily = function(family_id, name, parent_order_id){
+	var updateFamily = function(family_id, name, parent_order_id){
 		alert(parent_order_id)
 		post_data={
 			"family_id": family_id,
@@ -390,7 +402,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	this.deleteFamily = function(family_id){
+	var deleteFamily = function(family_id){
 		post_data={
 			"family_id": family_id,
 			"action": "remove_family"
@@ -408,12 +420,34 @@ app.service('HierarchyService', function() {
 
 		return post_obj;
 	}
+
+	return{
+		getSpeciesHierarchy: getSpeciesHierarchy,
+
+		getClasses: getClasses,
+		registerClass: registerClass,
+		deleteClass: deleteClass,
+		updateClass: updateClass,
+
+		getOrders: getOrders,
+		getOrdersByParentClass: getOrdersByParentClass,
+		registerOrder: registerOrder,
+		updateOrder: updateOrder,
+		deleteOrder: deleteOrder,
+
+		getFamilies: getFamilies,
+		getFamiliesByParentOrder: getFamiliesByParentOrder,
+		registerFamily: registerFamily,
+		updateFamily: updateFamily,
+		deleteFamily: deleteFamily
+	}
+
 })
 
-app.service('SpeciesService', function($http){
-	var species=[];
+app.service('SpeciesService', function($http, $q){
+	var _species=[];
 
-	this.registerSpecies = function(species){
+	var registerSpecies = function(species){
 		/*post_data={
 			"name": species.name,
 			"family_id": species.family_id,
@@ -472,6 +506,7 @@ app.service('SpeciesService', function($http){
   				else{
  					alert("Životinjska vrsta uspješno registrirana!")
   				}
+  				_species.splice(0,_species.length) //invalidate cache
 		})
          
          post_obj.error(function(data){
@@ -481,7 +516,8 @@ app.service('SpeciesService', function($http){
          return post_obj;
 
 	}
-	this.deleteSpecies = function(species){
+
+	var deleteSpecies = function(species){
 		post_data={
 			"species_id": species.species_id,
 			"action": "remove_species"
@@ -495,43 +531,78 @@ app.service('SpeciesService', function($http){
   				else{
  					alert("Životinjska vrsta uspješno obrisana!")
   				}
+  				_species.splice(0,_species.length) //invalidate cache
 		}, "JSON");
-
 		return post_obj;
 	}
 
-	this.updateSpecies = function(){
+	var updateSpecies = function(){
 		
 	}
 
-	this.getSpecies = function(){
-		post_data={
-			"action": "get_species"
+	var getSpecies = function(){
+		if(_species.length<=0){ // nema u cacheu (polje 'species')
+			post_data={
+				"action": "get_species"
+			}
+
+			var post_obj = $.post("/Database.php", post_data, function(data) {
+	  				if(data.error){
+	  					alert("Nažalost, došlo je do greške pri dohvatu popisa životinjskih vrsti.");
+	  					console.log(data.error)
+	  				}
+	  				else{
+	  					_species=data;
+	  				}
+			}, "JSON");
+
+			return post_obj;
 		}
-
-		var post_obj = $.post("/Database.php", post_data, function(data) {
-  				if(data.error){
-  					alert("Nažalost, došlo je do greške pri dohvatu popisa životinjskih vrsti.");
-  					console.log(data.error)
-  				}
-  				else{
-  					species=data;
-  				}
-		}, "JSON");
-
-		return post_obj;
+		else{ //ima u cacheu
+			return $q(function(resolve, reject) {
+				resolve(_species)
+			})
+		}
 	}
 
-	this.getSpeciesByParentFamily = function(parent_family_id){
+	var getSpeciesByParentFamily = function(parent_family_id){
 		
 	}
 
-	this.getSpeciesById = function(species_id){
-		for(var i=0; i<species.length; i++){
-			if(species[i].species_id==species_id)
-				return species[i]
-		}
-		return null;
+	var getSpeciesById = function(species_id){
+		
+			if(_species.length<=0){ // ako nije već dohvaćeno u polje 'species', dohvati iz baze
+				return $q(function(resolve, reject) {
+					getSpecies().then(function(result){
+						for(var i=0; i<_species.length; i++){
+							if(_species[i].species_id==species_id){
+								resolve(_species[i])
+								break;
+							}
+						}
+					})
+				});
+			}
+			else{ // inače nađi vrstu u polju 'species' i vrati ju
+				return $q(function(resolve, reject) {
+					for(var i=0; i<_species.length; i++){
+						if(_species[i].species_id==species_id){
+							resolve(_species[i])
+							break;
+						}
+					}
+				});
+			}
+
+	}
+
+	return {
+		registerSpecies: registerSpecies,
+		deleteSpecies: deleteSpecies,
+		updateSpecies: updateSpecies,
+		getSpecies: getSpecies,
+		getSpeciesByParentFamily: getSpeciesByParentFamily,
+		getSpeciesById: getSpeciesById
 	}
 
 })
@@ -550,7 +621,7 @@ app.service('MapService', function(){
 
 app.service('VisitService', function(){
 
-	this.registerVisit = function(user_id, species_id){
+	var registerVisit = function(user_id, species_id){
 		post_data={
 			"user_id": user_id,
 			"species_id": species_id,
@@ -567,7 +638,7 @@ app.service('VisitService', function(){
 		return post_obj;
 	}
 
-	this.checkVisit = function(user_id, species_id){
+	var checkVisit = function(user_id, species_id){
 		post_data={
 			"user_id": user_id,
 			"species_id": species_id,
@@ -582,6 +653,11 @@ app.service('VisitService', function(){
 		}, "JSON");
 
 		return post_obj;
+	}
+
+	return{
+		registerVisit: registerVisit,
+		checkVisit: checkVisit
 	}
 	
 })
