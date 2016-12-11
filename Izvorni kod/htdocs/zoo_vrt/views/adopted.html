@@ -1,2 +1,132 @@
 <!DOCTYPE html>
-<p>... pregled posvojenih jedinki ...</p>
+<style type="text/css">
+	#left-column{
+		height: 100%;
+		width: 30%;
+		float: left;
+		text-align: center;
+	}
+	#main-info{
+		padding: 15px;
+		height: 100%;
+		width: 70%;
+		float: right;
+
+		font-weight: normal;
+		font-family: Verdana, Geneva, sans-serif;
+	}
+
+	#more{
+		text-decoration: underline;
+	}
+
+	#gallery-button{
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
+	.orange,
+	.orange:hover,
+	.orange:active,
+	.orange:visited,
+	.orange:focus {
+		background-color: #72b6ff !important;
+	}
+
+	#animal-card{
+		position: relative;
+
+		border-radius: 32px 32px 32px 32px;
+		-moz-border-radius: 32px 32px 32px 32px;
+		-webkit-border-radius: 32px 32px 32px 32px;
+		border: 0px solid #000000;
+
+		margin: 0 auto;
+		width: 80%;
+		display: flex;
+		/*height: 500px;*/
+		margin-bottom: 20px;
+		background-color: rgba(0,0,0,0.05);
+		text-align: left;
+	}
+	
+	.attribute{
+		font-size: 12pt;
+	}
+
+	.blockquote{
+		font-size: 8pt;
+	}
+
+	.animal-img{
+		border-radius: 32px 0px 0px 0px;
+		-moz-border-radius: 32px 0px 0px 0px;
+		-webkit-border-radius: 32px 0px 0px 0px;
+		border: 0px solid #000000;
+	}
+
+	.modal{
+		color: black;
+	}
+
+	.modal-header{
+		background-color: green !important;
+	}
+
+
+</style>
+<script type="text/javascript" src="/html5gallery/html5gallery.js"></script>
+
+<div id="animal-card" ng-repeat="animal in animals track by $index">
+	
+		<div id="left-column">
+			<!--  tu mi baca da nemre nac sliku, al ju svedno prikaze ? lol  -->
+			<img class="animal-img" src="{{animal.photo_path}}" width="100%"/>
+		</div>
+	<div id="main-info">
+		<div class="row">
+			<div class="col-md-5">
+				<label class="attribute">Ime:</label><br/> {{animal.name}}<br/>
+				<label class="attribute">Datum dolaska:</label><br/> {{animal.arrival_date}}<br/>
+				<label class="attribute">Mjesto rođenja:</label><br/> {{animal.birth_location}}
+			</div>
+
+			<div class="col-md-3">
+				<label class="attribute">Dob:</label> {{animal.age}}<br/>
+				<label class="attribute">Spol:</label> {{animal.sex}}<br/>
+			</div>
+		</div>
+
+		<div id="row"><br/>
+			<label class="attribute">Zanimljivosti:</label>
+			<a href="" id="more" ng-click="toggleFacts(animal)">Više...</a>
+				<br/>
+			
+			<div id="facts_{{animal.animal_id}}" style="display:none;">
+				<blockquote class="blockquote">
+  				{{animal.interesting_facts}}<br>
+  				{{animal.exclusive_facts}}
+				</blockquote>
+			</div>
+
+		</div>
+		<div id="gallery-button"><button class="btn btn-primary btn-lg orange" ng-click="openGallery(animal)"><span class="glyphicon glyphicon-film"/> Galerija</button></div>
+
+		<div style="display:none;" id="gallery_{{animal.animal_id}}" >
+			<div style="display:none;" class="html5gallery" data-skin="light" data-width="450" data-height="272" data-resizemode="fill" >
+			    <!-- Add images to Gallery -->
+				<a ng-repeat="photo in animal.exclusive_photos track by $index" href="{{photo}}" ><img src="{{photo}}" alt="{{animal.name}}"></a>
+				<!-- Add videos to Gallery -->
+				<a ng-repeat="video in animal.exclusive_videos track by $index" href="{{video}}" data-webm="{{video}}"><img src="" alt="{{animal.name}}"></a>
+			</div>
+		</div>
+
+
+	</div>
+
+
+		
+
+
+</div>

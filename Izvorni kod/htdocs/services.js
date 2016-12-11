@@ -607,7 +607,6 @@ app.service('SpeciesService', function($http, $q){
 
 })
 
-//////////////////////////////////////////////////////////////////
 
 app.service('AnimalsService', function($http){
 	var animals=[];
@@ -636,9 +635,6 @@ app.service('AnimalsService', function($http){
 })
 
 
-
-
-/////////////////////////////////////////////////////////////////
 
 app.service('MapService', function(){
 	var dot = {
@@ -693,4 +689,31 @@ app.service('VisitService', function(){
 		checkVisit: checkVisit
 	}
 	
+})
+
+
+app.service('AdoptedService', function($http){
+	var animals=[];
+
+
+	this.getAnimalsByUserID = function(user_id){
+		post_data={
+			"user_id": user_id,
+			"action": "get_mammals"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri dohvatu popisa posvojenih jedinki.");
+  					console.log(data.error)
+  				}
+  				else{
+  					animals=data;
+  				}
+		}, "JSON");
+		return post_obj;
+	}
+
+
+
 })
