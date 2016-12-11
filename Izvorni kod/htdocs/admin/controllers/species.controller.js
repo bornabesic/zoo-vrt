@@ -25,14 +25,21 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 		post_obj.then(function(result){
 			$scope.species=result
 			$scope.$apply()
+			for(var i=0; i<$scope.species.length; i++){
+				$scope.drawMap(null, $scope.species[i])
+			}
 		})
 	}
 
-	$scope.drawMap = function(){
+	$scope.drawMap = function(map, species){
+		var map_id=map;
+		if(species!=null){
+			map_id="karta_"+species.species_id;
+		}
 		var img = new Image;
 		img.src = "/img/karta.png";
 
-		var canvas = document.getElementById("karta");
+		var canvas = document.getElementById(map_id);
 		var context = canvas.getContext("2d");
 		context.strokeStyle = "#df4b26";
 		context.lineJoin = "round";
@@ -58,8 +65,15 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 			context.stroke();
 		    //
 
-		    $scope.new_species.location_x = x
-		    $scope.new_species.location_y = y
+		    if(species!=null){
+		    	species.location_x = x
+		    	species.location_y = y
+		    }
+		    else{
+				$scope.new_species.location_x = x
+			    $scope.new_species.location_y = y
+
+		    }
 		    $scope.$apply()
 
 		    //console.log("x: " + x + " y: " + y);
@@ -75,7 +89,7 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 	}
 
 	$scope.registerSpecies = function(){
-		var post_obj = SpeciesService.registerSpecies($scope.new_species, $scope.new_photo);
+		var post_obj = SpeciesService.registerSpecies($scope.new_species);
 		post_obj.then(function(result){
 			$scope.refreshSpecies()
 		})
@@ -89,12 +103,15 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 	}
 
 	$scope.updateSpecies = function(species){
-		alert(JSON.stringify(species))
+		var post_obj = SpeciesService.updateSpecies(species);
+		post_obj.then(function(result){
+			$scope.refreshSpecies()
+		})
 	}
 
-	$scope.toggleEditSpecies = function(specie){
+	$scope.toggleEditSpecies = function(species){
 		$scope.refreshClasses()
-		var form = $("#form_"+specie.species_id)
+		var form = $("#form_"+species.species_id)
 		if(!form.is(":visible")) {
 			form.show()
 			$('html, body').animate({
@@ -135,5 +152,5 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 	//Init
 	$scope.refreshSpecies()
 	$scope.refreshClasses()
-	$scope.drawMap()
+	$scope.drawMap("karta", null)
 });

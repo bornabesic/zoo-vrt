@@ -1,4 +1,4 @@
-app.controller("AnimalsController", function($scope, $stateParams, AnimalsService){
+app.controller("AnimalsController", function($scope, $state, $stateParams, AnimalsService, AdoptService){
 
 	//DIJALOG
 
@@ -16,7 +16,9 @@ app.controller("AnimalsController", function($scope, $stateParams, AnimalsServic
 	}
 
 	function adoptAnimal(animal){
-		alert("Adopted "+animal.name+"!")
+		AdoptService.adopt(localStorage["user_id"], animal.animal_id, localStorage["email"], localStorage["first_last_name"], localStorage["city"]).then(function(){
+			$state.go("adopted")
+		})
 	}
 
 	$scope.toggleFacts = function(animal){

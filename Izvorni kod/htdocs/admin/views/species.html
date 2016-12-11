@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<div class="row">
+
+<div style="display: flex;">
 	<div class="col-md-4">
 			<h4><u>Registracija životinjske vrste:</u></h4>
 			<div class="col-md-11">
@@ -47,7 +48,7 @@ Stanište:<textarea class="form-control" ng-model="new_species.habitat"/></br>
 </div>
 <div class="col-md-4">
 	<br/><br/>
-	Fotografija: <input type="file" file-model="new_species.photo_path" accept="image/*"/>
+	Fotografija: <input type="file" file-model="new_species.photo" accept="image/*"/>
 </div>
 </div>
 </div>
@@ -85,6 +86,9 @@ Stanište:<textarea class="form-control" ng-model="new_species.habitat"/></br>
 		Način života:<textarea class="form-control" ng-model="specie.lifestyle"/></br>
 		Razmnožavanje:<textarea class="form-control" ng-model="specie.reproduction"/></br>
 		Rasprostranjenost:<textarea class="form-control" ng-model="specie.distribution"/></br>
+		Lokacija nastambe: (klikni na mapu)<br/>
+		<canvas id="karta_{{specie.species_id}}" width="500" height="354"/><br/>
+		Fotografija: <input type="file" file-model="specie.photo" accept="image/*"/><br/>
     	<input class="btn btn-success btn-xs" type="submit" value="Potvrdi"/>
     	<a class="btn btn-default btn-xs" ng-click="toggleEditSpecies(specie)">Odustani</a>
     	    	<hr>

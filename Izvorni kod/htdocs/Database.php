@@ -1,5 +1,4 @@
 <?php
-	
 	define("DB_USERNAME", "zoo_vrt");
 	define("DB_PASSWORD", "rzjesmece");
 	define("DB_NAME", "zoo_vrt");
@@ -924,8 +923,42 @@
 			));
 		}
 
-		function update_species($species_id, $name, $class_id, $order_id, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution){
+		function update_species($species_id, $name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y, $photo_path){
+			$update_query="UPDATE ". DB_NAME . ".species SET `name`=?, `family_id`=?, `size`=?, `nutrition`=?, `predators`=?, `lifetime`=?, `habitat`=?, `lifestyle`=?, `reproduction`=?, `distribution`=?, `location_x`=?, `location_y`=?, `photo_path`=? WHERE `species_id`=?;";
+			$update_statement=$this->db->prepare($update_query);
+			if($update_statement){
+				$update_statement->bind_param("sissssssssiisi", $name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y, $photo_path, $species_id);
+		     	$update_statement->execute();
+			}
+			else {
+				log_to_file( $this->db->error);
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
 
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			switch($update_statement->affected_rows){
+				case -1:
+					return json_encode(array(
+						"error" => $this->db->error 
+					));
+					break;
+				case 0:
+					return json_encode(array(
+						"error" => "Species with the given ID could not be updated." 
+					));
+					break;
+			};
+
+			return json_encode(array(
+				"species_id" => $species_id
+			));
 		}
 
 		function get_species($parent_family_id){
@@ -975,7 +1008,7 @@
 			return json_encode($species);
 		}
 
-		//MAMMALS
+		//MAMMALS - 'mammal' je glup naziv, promijenit cemo u 'animal'
 		function add_mammal($species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts){
 			//ADD MAMMAL
 			$add_mammal_query = "INSERT INTO " . DB_NAME . ".mammal_animals (`species_id`, `name`, `age`, `sex`, `birth_location`, `arrival_date`, `photo_path`, `interesting_facts`) VALUES (?,?,?,?,?,?,?,?);";
@@ -1061,6 +1094,7 @@
 			return json_encode($animals);
 		}
 
+		// koristi li se ova funkcija ?
 		function get_mammal($animal_id){
 			$query = "SELECT * FROM " . DB_NAME . ".mammal_animals WHERE animal_id=?";
 			$statement = $this->db->prepare($query);
@@ -1120,6 +1154,167 @@
 				"animal_id" => $animal_id
 			));
 		}
+
+		// ADOPTION
+		function adopt($user_id, $animal_id, $email, $first_last_name, $city){
+			$adopt_query="INSERT INTO ". DB_NAME . ".adoptions (`visitor_id`, `animal_id`) VALUES (?,?);";
+			$adopt_statement = $this->db->prepare($adopt_query);
+			if($adopt_statement){
+				$adopt_statement->bind_param("ii", $user_id, $animal_id);
+		     	$adopt_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			require_once("./Mail.php");
+			send_donation_mail($email, $first_last_name, $city);
+
+			return json_encode(array(
+				"user_id" => $user_id,
+				"animal_id" => $animal_id
+			));
+		}
+
+		// --------------------------------- NIJE TESTIRANO
+		function get_adopted($user_id){
+			$this->db->select_db(DB_NAME);
+
+			$query = "SELECT *
+			FROM adoptions
+			LEFT JOIN mammal_animals ON adoptions.animal_id=mammal_animals.animal_id
+			WHERE visitor_id=?";
+
+			$statement = $this->db->prepare($query);
+			if($statement){
+				$statement->bind_param("i", $user_id);
+				$statement->execute();
+			}else{
+				return json_encode(array("error" => $this->db->error));
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array("error" => $this->db->error));
+			}
+			$result = $statement->get_result();
+			$adopted = array();
+			while($row = $result->fetch_assoc()){
+				array_push($adopted, array(
+					`animal_id` => $row["animal_id"],
+					`species_id` => $row["species_id"],
+					`name` => $row["name"], 
+					`age` => $row["age"],
+					`sex` => $row["sex"],
+					`birth_location` => $row["birth_location"],
+					`arrival_date` => $row["arrival_date"],
+					`photo_path` => $row["photo_path"],
+					`interesting_facts` => $row["interesting_facts"]
+				));
+			}
+			return json_encode($adopted);
+		}
+
+		//EXCLUSIVE CONTENT
+		function get_exclusive_content($animal_id){
+			$this->db->select_db(DB_NAME);
+
+			// ------------ PHOTOS ---------------
+
+			$query = "SELECT *
+			FROM mammal_animals
+			LEFT JOIN adopter_exclusive_photos ON mammal_animals.animal_id=adopter_exclusive_photos.animal_id
+			WHERE animal_id=?;";
+
+			$statement = $this->db->prepare($query);
+			if($statement){
+				$statement->bind_param("i", $animal_id);
+				$statement->execute();
+			}else{
+				return json_encode(array("error" => $this->db->error));
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array("error" => $this->db->error));
+			}
+
+			$photos=array();
+			$result = $statement->get_result();
+			while($row = $result->fetch_assoc()){
+				array_push($photos, $row['photo_path']);
+			}
+
+			// ------------ VIDEOS ---------------
+
+			$query = "SELECT *
+			FROM mammal_animals
+			LEFT JOIN adopter_exclusive_videos ON mammal_animals.animal_id=adopter_exclusive_videos.animal_id
+			WHERE animal_id=?;";
+
+			$statement = $this->db->prepare($query);
+			if($statement){
+				$statement->bind_param("i", $animal_id);
+				$statement->execute();
+			}else{
+				return json_encode(array("error" => $this->db->error));
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array("error" => $this->db->error));
+			}
+
+			$videos=array();
+			$result = $statement->get_result();
+			while($row = $result->fetch_assoc()){
+				array_push($videos, $row['photo_path']);
+			}
+
+
+			// ------------ FACTS ---------------
+
+			$query = "SELECT *
+			FROM mammal_animals
+			LEFT JOIN adopter_exclusive_videos ON mammal_animals.animal_id=adopter_exclusive_facts.animal_id
+			WHERE animal_id=?;";
+
+			$statement = $this->db->prepare($query);
+			if($statement){
+				$statement->bind_param("i", $animal_id);
+				$statement->execute();
+			}else{
+				return json_encode(array("error" => $this->db->error));
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array("error" => $this->db->error));
+			}
+
+			$facts=array();
+			$result = $statement->get_result();
+			while($row = $result->fetch_assoc()){
+				array_push($facts, $row['photo_path']);
+			}
+
+			// ---------------------------
+
+			$content = array(
+				"animal_id" => $animal_id,
+				"photos" => $photos,
+				"videos" => $videos,
+				"facts" => $facts
+			);
+
+			return json_encode($content);
+
+		}
+		// ---------------------------------
 
 		//VISITS & STATISTICS
 		function register_visit($user_id, $species_id){
@@ -1348,7 +1543,12 @@
 		echo $database->remove_species($_POST['species_id']);
 	}
 	else if($_POST['action']==="update_species"){
-		echo $database->add_species($_POST['species_id'], $_POST['name'], $_POST['family_id'], $_POST['size'], $_POST['nutrition'], $_POST['predators'], $_POST['lifetime'], $_POST['habitat'], $_POST['lifestyle'], $_POST['reproduction'], $_POST['distribution']);
+		$img_dir="/img/species/";
+		mkdir("." . $img_dir, 0700);
+		$photo_path = $img_dir . basename($_FILES["photo"]["name"]);
+		move_uploaded_file($_FILES["photo"]["tmp_name"], "." . $photo_path);
+
+		echo $database->update_species($_POST['species_id'], $_POST['name'], $_POST['family_id'], $_POST['size'], $_POST['nutrition'], $_POST['predators'], $_POST['lifetime'], $_POST['habitat'], $_POST['lifestyle'], $_POST['reproduction'], $_POST['distribution'], $_POST['location_x'], $_POST['location_y'], $photo_path);
 	}
 	else if($_POST['action']==="get_species"){
 		if(isset($_POST['parent_family_id'])) $parent_family_id=$_POST['parent_family_id'];
@@ -1372,6 +1572,18 @@
 		echo $database->get_mammal($_POST['animal_id']);
 	}
 
+	//ADOPTION
+	else if($_POST['action']==="adopt"){
+		echo $database->adopt($_POST['user_id'], $_POST['animal_id'], $_POST['email'], $_POST['first_last_name'], $_POST['city']);
+	}
+	else if($_POST['action']==="get_adopted"){
+		echo $database->get_adopted($_POST['user_id']);
+	}
+
+	//EXCLUSIVE CONTENT
+	else if($_POST['action']==="get_exclusive_content"){
+		echo $database->get_exclusive_content($_POST['animal_id']);
+	}
 
 	//VISITS & STATISTICS
 	else if($_POST['action']==="register_visit"){

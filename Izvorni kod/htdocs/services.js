@@ -478,7 +478,7 @@ app.service('SpeciesService', function($http, $q){
 		post_data.append("distribution", species.distribution)
 		post_data.append("location_x", species.location_x)
 		post_data.append("location_y", species.location_y)
-		post_data.append("photo", species.photo_path)
+		post_data.append("photo", species.photo)
 		post_data.append("action", "add_species")
 
 		/*var post_obj = $.post("/Database.php", post_data, function(data) {
@@ -536,8 +536,48 @@ app.service('SpeciesService', function($http, $q){
 		return post_obj;
 	}
 
-	var updateSpecies = function(){
-		
+	var updateSpecies = function(species){
+		var post_data = new FormData()
+		post_data.append("species_id", species.species_id)
+		post_data.append("name", species.name)
+		post_data.append("family_id", species.family_id)
+		post_data.append("size", species.size)
+		post_data.append("nutrition", species.nutrition)
+		post_data.append("predators", species.predators)
+		post_data.append("lifetime", species.lifetime)
+		post_data.append("habitat", species.habitat)
+		post_data.append("lifestyle", species.lifestyle)
+		post_data.append("reproduction", species.reproduction)
+		post_data.append("distribution", species.distribution)
+		post_data.append("location_x", species.location_x)
+		post_data.append("location_y", species.location_y)
+		post_data.append("photo", species.photo)
+		post_data.append("action", "update_species")
+
+		alert(JSON.stringify(post_data))
+
+		var post_obj = $http.post("/Database.php", post_data, {
+             transformRequest: angular.identity,
+             headers: {'Content-Type': undefined,'Process-Data': false}
+         })
+
+		post_obj.success(function(data){
+			// nekad je error da ne prođe ovaj uvjet ?! nego javi da je uspješno
+			if(data.error){
+  					alert("Nažalost, došlo je do greške pri ažuriranju životinjske vrste.");
+  					console.log(data.error)
+  				}
+  				else{
+ 					alert("Životinjska vrsta uspješno ažurirana!")
+  				}
+  				_species.splice(0,_species.length) //invalidate cache
+		})
+         
+         post_obj.error(function(data){
+            alert("Prijenos slike na poslužitelj nije uspio.");
+         })
+
+         return post_obj;
 	}
 
 	var getSpecies = function(){
@@ -607,38 +647,121 @@ app.service('SpeciesService', function($http, $q){
 
 })
 
-//////////////////////////////////////////////////////////////////
 
-app.service('AnimalsService', function($http){
-	var animals=[];
+app.service('AnimalsService', function($q){
+	var _animals=[];
+	//var _exclusive_content=[]; treba implementirati cache
 
 
-	this.getAnimals = function(species_id){
+	var getAnimals = function(species_id){
+		if(_animals.length<=0){ //nema u cacheu
+			post_data={
+				"species_id": species_id,
+				"action": "get_animals"
+			}
+
+			var post_obj = $.post("/Database.php", post_data, function(data) {
+	  				if(data.error){
+	  					alert("Nažalost, došlo je do greške pri dohvatu popisa jedinki vrste.");
+	  					console.log(data.error)
+	  				}
+	  				else{
+	  					_animals=data;
+	  				}
+			}, "JSON");
+			return post_obj;
+		}
+		else{ // ima u cacheu
+			return $q(function(resolve, reject) {
+				resolve(_animals)
+			})
+		}
+	}
+
+	var getExclusiveContent = function(animal_id){
 		post_data={
-			"species_id": species_id,
-			"action": "get_animals"
+			"animal_id": animal_id,
+			"action": "get_exclusive_content"
 		}
 
 		var post_obj = $.post("/Database.php", post_data, function(data) {
   				if(data.error){
-  					alert("Nažalost, došlo je do greške pri dohvatu popisa jedinki vrste.");
+  					alert("Nažalost, došlo je do greške pri dohvatu ekskluzivnog sadržaja.");
   					console.log(data.error)
   				}
   				else{
-  					animals=data;
+  					//_exclusive_content=data;
   				}
+		}, "JSON");
+
+		return post_obj;
+	}
+
+	return{
+		getAnimals: getAnimals,
+		getExclusiveContent: getExclusiveContent
+	}
+
+})
+
+app.service('AdoptService', function($q){
+	var _adopted=[]
+
+	var adopt = function(user_id, animal_id, email, first_last_name, city){
+		post_data={
+			"user_id": user_id,
+			"animal_id": animal_id,
+			"email": email,
+			"first_last_name": first_last_name,
+			"city": city,
+			"action": "adopt"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri posvajanju jedinke.");
+  					console.log(data.error)
+  				}
+  				else{
+  					alert("Jedinka uspješno posvojena!");
+  				}
+  				 
+  				_adopted.splice(0,_adopted.length) //invalidate cache
 		}, "JSON");
 		return post_obj;
 	}
 
+	var getAdopted = function(user_id){
+		if(_adopted.length<=0){ //nema u cacheu
+			post_data={
+				"user_id": species_id,
+				"action": "get_adopted"
+			}
 
+			var post_obj = $.post("/Database.php", post_data, function(data) {
+	  				if(data.error){
+	  					alert("Nažalost, došlo je do greške pri dohvatu posvojenih jedinki.");
+	  					console.log(data.error)
+	  				}
+	  				else{
+	  					_adopted=data;
+	  				}
+			}, "JSON");
+			return post_obj;
+		}
+		else{//ima u cacheu
+			return $q(function(resolve, reject) {
+				resolve(_adopted)
+			})
+		}
+	}
+
+	return{
+		adopt: adopt,
+		getAdopted: getAdopted
+	}
 
 })
-
-
-
-
-/////////////////////////////////////////////////////////////////
 
 app.service('MapService', function(){
 	var dot = {
