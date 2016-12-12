@@ -931,7 +931,6 @@
 		     	$update_statement->execute();
 			}
 			else {
-				log_to_file( $this->db->error);
 				return json_encode(
 							array( "error" => $this->db->error )
 						);
@@ -1191,7 +1190,7 @@
 			$query = "SELECT *
 			FROM adoptions
 			LEFT JOIN mammal_animals ON adoptions.animal_id=mammal_animals.animal_id
-			WHERE visitor_id=?";
+			WHERE visitor_id=?;";
 
 			$statement = $this->db->prepare($query);
 			if($statement){
@@ -1208,17 +1207,18 @@
 			$adopted = array();
 			while($row = $result->fetch_assoc()){
 				array_push($adopted, array(
-					`animal_id` => $row["animal_id"],
-					`species_id` => $row["species_id"],
-					`name` => $row["name"], 
-					`age` => $row["age"],
-					`sex` => $row["sex"],
-					`birth_location` => $row["birth_location"],
-					`arrival_date` => $row["arrival_date"],
-					`photo_path` => $row["photo_path"],
-					`interesting_facts` => $row["interesting_facts"]
+					"animal_id" => $row["animal_id"],
+					"species_id" => $row["species_id"],
+					"name" => $row["name"], 
+					"age" => $row["age"],
+					"sex" => $row["sex"],
+					"birth_location" => $row["birth_location"],
+					"arrival_date" => $row["arrival_date"],
+					"photo_path" => $row["photo_path"],
+					"interesting_facts" => $row["interesting_facts"]
 				));
 			}
+
 			return json_encode($adopted);
 		}
 
@@ -1231,7 +1231,7 @@
 			$query = "SELECT *
 			FROM mammal_animals
 			LEFT JOIN adopter_exclusive_photos ON mammal_animals.animal_id=adopter_exclusive_photos.animal_id
-			WHERE animal_id=?;";
+			WHERE mammal_animals.animal_id=?;";
 
 			$statement = $this->db->prepare($query);
 			if($statement){
@@ -1248,7 +1248,7 @@
 			$photos=array();
 			$result = $statement->get_result();
 			while($row = $result->fetch_assoc()){
-				array_push($photos, $row['photo_path']);
+				if($row['photo_path']!=null) array_push($photos, $row['photo_path']);
 			}
 
 			// ------------ VIDEOS ---------------
@@ -1256,7 +1256,7 @@
 			$query = "SELECT *
 			FROM mammal_animals
 			LEFT JOIN adopter_exclusive_videos ON mammal_animals.animal_id=adopter_exclusive_videos.animal_id
-			WHERE animal_id=?;";
+			WHERE mammal_animals.animal_id=?;";
 
 			$statement = $this->db->prepare($query);
 			if($statement){
@@ -1273,7 +1273,7 @@
 			$videos=array();
 			$result = $statement->get_result();
 			while($row = $result->fetch_assoc()){
-				array_push($videos, $row['photo_path']);
+				if($row['video_path']!=null) array_push($videos, $row['video_path']);
 			}
 
 
@@ -1281,8 +1281,8 @@
 
 			$query = "SELECT *
 			FROM mammal_animals
-			LEFT JOIN adopter_exclusive_videos ON mammal_animals.animal_id=adopter_exclusive_facts.animal_id
-			WHERE animal_id=?;";
+			LEFT JOIN adopter_exclusive_facts ON mammal_animals.animal_id=adopter_exclusive_facts.animal_id
+			WHERE mammal_animals.animal_id=?;";
 
 			$statement = $this->db->prepare($query);
 			if($statement){
@@ -1299,10 +1299,20 @@
 			$facts=array();
 			$result = $statement->get_result();
 			while($row = $result->fetch_assoc()){
-				array_push($facts, $row['photo_path']);
+				if($row['fact']!=null) array_push($facts, $row['fact']);
 			}
 
 			// ---------------------------
+
+			if(count($photos)==0){
+				$photos=null;
+			}
+			if(count($videos)==0){
+				$videos=null;
+			}
+			if(count($facts)==0){
+				$facts=null;
+			}
 
 			$content = array(
 				"animal_id" => $animal_id,

@@ -647,13 +647,20 @@ app.service('SpeciesService', function($http, $q){
 
 })
 
+//////////////////////////////////////////////////////////////////
 
 app.service('AnimalsService', function($q){
-	var _animals=[];
+	var _species_id=null
+	var _animals=[]
 	//var _exclusive_content=[]; treba implementirati cache
 
 
 	var getAnimals = function(species_id){
+		if(species_id!=_species_id){
+			_animals.splice(0,_animals.length) //invalidate cache
+			_species_id=null
+		}
+
 		if(_animals.length<=0){ //nema u cacheu
 			post_data={
 				"species_id": species_id,
@@ -666,7 +673,8 @@ app.service('AnimalsService', function($q){
 	  					console.log(data.error)
 	  				}
 	  				else{
-	  					_animals=data;
+	  					_animals=data
+	  					_species_id=species_id
 	  				}
 			}, "JSON");
 			return post_obj;
@@ -734,7 +742,7 @@ app.service('AdoptService', function($q){
 	var getAdopted = function(user_id){
 		if(_adopted.length<=0){ //nema u cacheu
 			post_data={
-				"user_id": species_id,
+				"user_id": user_id,
 				"action": "get_adopted"
 			}
 
@@ -745,6 +753,7 @@ app.service('AdoptService', function($q){
 	  				}
 	  				else{
 	  					_adopted=data;
+	  					console.log(data)
 	  				}
 			}, "JSON");
 			return post_obj;

@@ -11,9 +11,11 @@ app.controller("ExploreController", function($scope, SpeciesService, MapService)
 		var post_obj = SpeciesService.getSpecies();
 		post_obj.then(function(result){
 			species=result;
-			console.log(result)
-			$scope.result=result;			
-			$scope.$apply();
+			$scope.result=result;
+
+			if(!$scope.$$phase) {
+				$scope.$apply();
+			}		
 		})
 	}
 
