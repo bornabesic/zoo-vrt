@@ -141,6 +141,102 @@ app.service('UserService', function() {
     }
 });
 
+app.service('GuardService', function($q) {
+
+	var assignAnimal = function(user_id, animal_id){
+		post_data={
+			"user_id": user_id,
+			"animal_id": animal_id,
+			"action": "assign_animal"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri dodjeli jedinke čuvaru.");
+  					console.log(data.error)
+  				}
+  				else{
+  					alert("Jedinka uspješno dodijeljena!");
+  				}
+		}, "JSON");
+
+		return post_obj;
+	}
+
+	var unassignAnimal = function(user_id, animal_id){
+		post_data={
+			"user_id": user_id,
+			"animal_id": animal_id,
+			"action": "unassign_animal"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri uskraćivanju jedinke čuvaru.");
+  					console.log(data.error)
+  				}
+  				else{
+  					alert("Jedinka uspješno uskraćena!");
+  				}
+		}, "JSON");
+
+		return post_obj;
+	}
+
+	var getAssignedAnimals = function(user_id){
+		post_data={
+			"user_id": user_id,
+			"action": "get_assigned_animals"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri dohvaćanju dodijeljenih jedinki.");
+  					console.log(data.error)
+  				}
+		}, "JSON");
+
+		return $q(function(resolve, reject) {
+					post_obj.then(function(result){
+						var species = result
+						var groups=new Set()
+						var final_result=[]
+						//priprema polja za kontroler
+						for(var i=0; i<species.length; i++){
+							groups.add(species[i].species_name);
+						}
+
+						for(let group of groups){
+							var group_animals=[]
+							for(var i=0; i<species.length; i++){
+								if(species[i].species_name===group){
+									group_animals.push(species[i])
+								}
+							}
+							final_result.push(
+								{
+									species_name: group,
+									animals: group_animals
+								}
+							)
+						}
+
+						console.log(final_result)
+
+						//vrati
+						resolve(final_result)
+					})
+				})
+	}
+
+	return{
+		assignAnimal: assignAnimal,
+		unassignAnimal: unassignAnimal,
+		getAssignedAnimals: getAssignedAnimals
+	}
+
+})
+
 app.service('HierarchyService', function() {
 	//HIERARCHY
 	var getSpeciesHierarchy = function(species_id){
@@ -647,8 +743,6 @@ app.service('SpeciesService', function($http, $q){
 	}
 
 })
-
-
 
 app.service('AnimalsService', function($q){
 	var _species_id=null

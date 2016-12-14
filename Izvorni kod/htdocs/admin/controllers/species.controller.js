@@ -37,7 +37,7 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 			map_id="karta_"+species.species_id;
 		}
 		var img = new Image;
-		img.src = "/img/karta.png";
+		img.src = "/media/karta.png";
 
 		var canvas = document.getElementById(map_id);
 		var context = canvas.getContext("2d");

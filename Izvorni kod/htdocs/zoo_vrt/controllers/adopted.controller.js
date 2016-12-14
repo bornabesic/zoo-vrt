@@ -1,4 +1,5 @@
-app.controller("AdoptedController", function($scope, $stateParams, AdoptService, AnimalsService){
+app.controller("AdoptedController", function($scope, $stateParams, AdoptService, AnimalsService, MapService){
+	MapService.setDot(null, null)
 
 	//
 	$scope.animals = []

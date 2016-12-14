@@ -12,7 +12,7 @@ app.controller("MapController", function($scope, $state, MapService){
 	canvas.setAttribute('width', $('#map').width());
 
 	var img = new Image;
-	img.src = "/img/karta.png";
+	img.src = "/media/karta.png";
 
 	/* TEST
 	var dot={
