@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<div style="margin:0 auto;width:50%">
+	<form id="form_{{user.user_id}}" ng-submit="updateUser(user)" >
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Korisničko ime</th>
+					<th>{{user.username}}</th>
+				</tr>
+			</thead>
+
+			<thead>
+				<tr>
+					<th>Ime i prezime</th>
+					<th>
+						<input type="text" class="form-control form-control-sm"  ng-model="user.first_last_name" required/>
+					</th>
+				</tr>
+			</thead>
+
+			<thead>
+				<tr>
+					<th>E-mail</th>
+					<th>
+						<input type="text" class="form-control form-control-sm" ng-model="user.email" required/>
+					</th>
+				</tr>
+			</thead>
+
+			<thead>
+				<tr>
+					<th>Mjesto stanovanja</th>
+					<th>
+						<input type="text" class="form-control form-control-sm" ng-model="user.city" required/>
+					</th>
+				</tr>
+			</thead>
+
+			<thead>
+				<tr>
+					<th>Godina rođenja</th>
+					<th>
+						<input type="number" class="form-control form-control-sm" ng-model="user.year_of_birth" min="1900" max="2017" required/>
+					</th>
+				</tr>
+			</thead>
+
+			<thead>
+				<tr>
+					<th>Lozinka</th>
+					<th>
+						<input type="password" class="form-control form-control-sm" ng-model="user.password1" required/>
+					</th>
+				</tr>
+			</thead>
+
+			<thead>
+				<tr>
+					<th>Potvrda lozinke</th>
+					<th>
+						<input type="password" class="form-control form-control-sm" ng-model="user.password2" required/>
+					</th>
+				</tr>
+			</thead>
+		</table>
+		<input class="btn btn-success btn-xs" type="submit" value="Potvrdi"/>
+	</form>
+</div>
