@@ -88,7 +88,7 @@ app.service('UserService', function() {
 		return post_obj;
     }
 
-     this.updateUser = function(user_id, username, password, first_last_name, year_of_birth, city, email, role){
+    var updateUser = function(user_id, username, password, first_last_name, year_of_birth, city, email, role){
     	post_data={
     		"user_id": user_id,
 			"username": username,
@@ -136,7 +136,8 @@ app.service('UserService', function() {
     return{
     	registerUser: registerUser,
 		deleteUser: deleteUser,
-		getUsers: getUsers
+		getUsers: getUsers,
+		updateUser: updateUser
     }
 });
 
@@ -773,13 +774,38 @@ app.service('AdoptService', function($q){
 })
 
 app.service('MapService', function(){
+	var mapScope=null
+
 	var dot = {
 		x: null,
 		y: null
 	}
 
+	var setDot = function(x,y){
+		dot.x=x
+		dot.y=y
+
+		if(mapScope==null) return
+
+		mapScope.dot.x=dot.x
+		mapScope.dot.y=dot.y
+		if(mapScope.draw) mapScope.draw()
+	}
+
+	var setScope = function(scope){
+		mapScope=scope
+
+		if(dot.x!=null && dot.y!=null){
+			mapScope.dot.x=dot.x
+			mapScope.dot.y=dot.y
+			
+			if(mapScope.draw) mapScope.draw()
+		}
+	}
+
 	return{
-		dot: dot
+		setDot: setDot,
+		setScope: setScope
 	}
 })
 

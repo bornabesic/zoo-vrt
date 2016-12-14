@@ -4,7 +4,6 @@ app.controller("MapController", function($scope, $state, MapService){
 	var canvas = document.getElementById("karta");
 	var context = canvas.getContext("2d");
 
-
 	/*
 	potrebno zato sto CSS sere
 	kad se u map.html mijenja width i height potrebno je i tu promjenit
@@ -21,9 +20,18 @@ app.controller("MapController", function($scope, $state, MapService){
 		y: 200
 	}*/
 
-	var dot=MapService.dot
+
+	$scope.dot={
+		x: null,
+		y: null
+	}
+
+	MapService.setScope($scope)
+
+	var dot = $scope.dot
 
 	//Functions
+
 	function draw(scale, translatePos){
 		context.clearRect(0, 0, canvas.width*scale, canvas.height*scale);
 		context.drawImage(img,translatePos.x,translatePos.y, img.width*scale, img.height*scale);
@@ -53,6 +61,12 @@ app.controller("MapController", function($scope, $state, MapService){
 		}
     }
 
+    var translatePos={}
+    var scale = 1;
+    $scope.draw = function(){
+		draw(scale, translatePos);
+	}
+
 	//Init
 	img.onload = function(){
 			context.drawImage(img,
@@ -60,7 +74,7 @@ app.controller("MapController", function($scope, $state, MapService){
 				0,0, canvas.width, canvas.height);
 
 			//centriraj mapu na tocku
-			var translatePos={}
+			
 			if(dot.x!=null && dot.y!=null){
 				translatePos.x= canvas.width/2-dot.x
 				translatePos.y=canvas.height/2-dot.y
@@ -69,8 +83,6 @@ app.controller("MapController", function($scope, $state, MapService){
 				translatePos.x=canvas.width/2-img.width/2
 				translatePos.y=canvas.height/2-img.height/2
 			}
-
-            var scale = 1;
             var startDragOffset = {};
             var mouseDown = false;
 

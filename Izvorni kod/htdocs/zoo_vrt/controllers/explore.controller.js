@@ -3,8 +3,9 @@ app.controller("ExploreController", function($scope, SpeciesService, MapService)
 	var species = [];
 	$scope.result = [];
 
-	MapService.dot.x=null
-	MapService.dot.y=null
+	MapService.setDot(null, null)
+	/*MapService.dot.x=null
+	MapService.dot.y=null*/
 
 	//Functions
 	function getSpecies(){

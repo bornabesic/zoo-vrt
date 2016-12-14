@@ -1,6 +1,6 @@
-app.controller("AnimalsController", function($scope, $state, $stateParams, AnimalsService, AdoptService){
+app.controller("AnimalsController", function($scope, $state, $stateParams, AnimalsService, AdoptService, MapService){
 
-	//DIJALOG
+	MapService.setDot(null, null)
 
 	//
 	$scope.animals = [];
@@ -11,13 +11,35 @@ app.controller("AnimalsController", function($scope, $state, $stateParams, Anima
 
 		AnimalsService.getAnimals(species_id).then(function(result) {
 			$scope.animals=result;
-			$scope.$apply();
+
+			AdoptService.getAdopted(localStorage['user_id']).then(function(result) {
+				var adopted = result
+				var animals = $scope.animals
+				for(var i=0; i<animals.length; i++){
+					animals[i].adopted=false
+					for(var j=0; j<adopted.length; j++){
+						if(animals[i].animal_id==adopted[j].animal_id){
+							animals[i].adopted=true
+							console.log(animals[i].name + " je posvojen")
+							break;
+						}
+					}
+				}
+
+				if(!$scope.$$phase) {
+					$scope.$apply();
+				}
+			})
 		})
 	}
 
 	function adoptAnimal(animal){
 		AdoptService.adopt(localStorage["user_id"], animal.animal_id, localStorage["email"], localStorage["first_last_name"], localStorage["city"]).then(function(){
-			$state.go("adopted")
+			animal.adopted=true
+
+			if(!$scope.$$phase) {
+					$scope.$apply();
+				}
 		})
 	}
 
@@ -49,7 +71,4 @@ app.controller("AnimalsController", function($scope, $state, $stateParams, Anima
 
 	//init
 	getAnimals(species_id);
-
-
-	
 })

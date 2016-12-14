@@ -6,9 +6,6 @@ app.controller("SpeciesController", function($scope, $stateParams, SpeciesServic
 	var species_id = $stateParams["species_id"] //dohvati id iz URL-a
 	SpeciesService.getSpeciesById(species_id).then(function(result){
 		$scope.species = result
-		
-		MapService.dot.x=$scope.species.location_x
-		MapService.dot.y=$scope.species.location_y
 
 		HierarchyService.getSpeciesHierarchy($scope.species.species_id).then(function(result){
 			$scope.hierarchy=result;
@@ -20,6 +17,10 @@ app.controller("SpeciesController", function($scope, $stateParams, SpeciesServic
 			$scope.visited_initial=result.visited
 			$scope.$apply()
 		})
+
+		MapService.setDot($scope.species.location_x, $scope.species.location_y)
+		/*MapService.dot.x=
+		MapService.dot.y=*/
 	})
 
 	//Functions
