@@ -88,7 +88,7 @@ app.service('UserService', function() {
 		return post_obj;
     }
 
-     this.updateUser = function(user_id, username, password, first_last_name, year_of_birth, city, email, role){
+     var updateUser = function(user_id, username, password, first_last_name, year_of_birth, city, email, role){
     	post_data={
     		"user_id": user_id,
 			"username": username,
@@ -136,7 +136,8 @@ app.service('UserService', function() {
     return{
     	registerUser: registerUser,
 		deleteUser: deleteUser,
-		getUsers: getUsers
+		getUsers: getUsers,
+		updateUser: updateUser
     }
 });
 
