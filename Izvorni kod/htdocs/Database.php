@@ -1307,7 +1307,7 @@
 		function get_assigned_animals($user_id){
 			$this->db->select_db(DB_NAME);
 
-			$query = "SELECT animal_id, mammal_animals.name AS animal_name, species_id, species.name AS species_name, age, sex, birth_location, arrival_date, photo_path, interesting_facts FROM
+			$query = "SELECT guard_assigned_animals.animal_id, mammal_animals.name AS animal_name, species.species_id, species.name AS species_name, age, sex, birth_location, arrival_date, mammal_animals.photo_path, interesting_facts FROM
 			guard_assigned_animals
 			LEFT JOIN mammal_animals ON  guard_assigned_animals.animal_id = mammal_animals.animal_id
 			LEFT JOIN species ON mammal_animals.species_id=species.species_id

@@ -46,6 +46,7 @@ app.config(function($stateProvider, $locationProvider){
 		templateUrl: "views/families.html"
 	}
 
+
 	// ================================== ROUTING ==================================
 
 	$stateProvider.state("login", {
@@ -109,6 +110,7 @@ app.config(function($stateProvider, $locationProvider){
 			"adminPanel@families": families
 		}
 	});
+
 })
 
 // ================================== DIREKTIVE ==================================
