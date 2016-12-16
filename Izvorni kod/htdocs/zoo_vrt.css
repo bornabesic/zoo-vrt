@@ -18,5 +18,5 @@ a, a:active, a:visited{
 }
 
 .form-control:focus{
-	    box-shadow: 0 0 5px green
-};
+	    box-shadow: 0 0 5px green;
+}

@@ -1,77 +1,137 @@
 <!DOCTYPE html>
 <style type="text/css">
 
-	#animal-card{
-		position: relative;
+	.animal-card{
+		font-family: Verdana, Geneva, sans-serif;
+		/*color: #ffae3d !important;
+		text-shadow: -0.5px 0 black, 0 0.5px black, 0.5px 0 black, 0 -0.5px black;*/
 
-		border-radius: 32px 32px 32px 32px;
-		-moz-border-radius: 32px 32px 32px 32px;
-		-webkit-border-radius: 32px 32px 32px 32px;
+		border-radius: 32px 0px 32px 0px;
 		border: 0px solid #000000;
 
 		margin: 0 auto;
 		width: 60%;
-		padding: 8px;
-		
-		/*display: flex;*/
-		
-		
-		background-color: rgba(0,0,0,0.05);
+		display: flex;
+		flex-direction: column;
+
+		margin-bottom: 10px;
+		background: linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.15));
 		text-align: left;
+
+		/*background: url("/media/ricepaper.png");*/
+	}
+
+	img {
+		vertical-align: top;
+	}
+
+	#animal-header{
+		cursor: pointer;
+		position: relative;
+
+		width: 100%;
+
+		font-size: 20pt;
+
+		vertical-align: middle;
+		height: 80px;
+		line-height: 80px;
 	}
 
 	#animal-icon{
+
 		position: absolute;
-		left: 0;
 		top: 0;
-		width: 9%;
+		left: 0;
+
+		height: 100%;
+	}
+
+	#animal-info{
+		height: 100%;
+		width: 100%;
+
+		text-align: center;
+		vertical-align: middle;
+		text-shadow: 0px -1px 5px black;
 	}
 
 	#species{
-		background-color:#00b300;
-		text-align:center;
-		font-size:20pt;
+		font-family: "Arial Black", Gadget, sans-serif;
+		position: absolute;
+		transform: rotate(180deg);
+		-webkit-transform: rotate(180deg);
+		top: 0;
+		left: 0;
 
+		writing-mode: tb-rl;
+		font-size:14pt;
+		/*text-transform: uppercase;*/
+		text-shadow: 0px 0px 5px #ffae3d;
 	}
 
+	#animals{
+		float: right;
+		margin: 0 auto;
+		width: 100%;
+	}
+
+	.attribute{
+		font-size: 14pt;
+	}
+
+	.red,
+	.red:hover,
+	.red:active,
+	.red:visited,
+	.red:focus{
+		background-color: #ff4949 !important;
+	}
+
+	.row{
+		position: relative;
+	}
 
 </style>
 
-<div ng-repeat="species in assigned track by $index">
-	 <div id="species" class="col-md-12">{{species.species_name}}</div>
-	<br><br>
-
-		<div  id="animal-card" ng-repeat="animal in species.animals track by $index">
-				<div id="animal-icon"><img src="{{animal.photo_path}}" width="100%"></div>
-				<div  ng-click="toggleEditAnimals(animal)" style="font-size:17pt;text-align:center;">
-					{{animal.animal_name}}
-					<span style="float:right;" class="glyphicon glyphicon-menu-down"/>
+<div class="row" ng-repeat="species in assigned track by $index">
+	 <div id="species">{{species.species_name}}</div>
+	 <div id="animals">
+		<div  class="animal-card" ng-repeat="animal in species.animals track by $index">
+			<div id="animal-header" ng-click="toggleEditAnimals(animal)">
+				<div id="animal-icon">
+					<img src="{{animal.photo_path}}" height="100%" style="		border-radius: 32px 0px 0px 0px;"/>
 				</div>
-				<!-- <br> -->
-				
-
-				 <form id="form_{{animal.animal_id}}" ng-submit="updateAnimal(animal)" style="display: none;">
-				 	
-			        <hr>
-			    	Ime: <input type="text" ng-model="animal.animal_name" class="form-control" required/></br>
-					Datum dolaska:<textarea class="form-control" ng-model="animal.arrival_date"/></br>
-					Mjesto rođenja:<textarea class="form-control" ng-model="animal.birth_location"/></br>
-					<!--Datum rođenja:<textarea class="form-control" ng-model="animal.predators"/></br> -->
-					Zanimljivosti:<textarea class="form-control" ng-model="animal.interesting_facts"/></br>
-					Ekskluzivni sadržaj:
-					Zaniljivosti:<textarea class="form-control" ng-model="animal.exclusive_facts"/></br>
-					Fotografija: <input type="file" file-model="animal.photo" accept="image/*"/><br/>
-					Video: <input type="file" file-model="animal.video" accept="video/*"/><br/>
+				<div id="animal-info">
+					{{animal.animal_name}}
+				</div>
+			</div>
+			<div id="form_{{animal.animal_id}}" style="display: none; padding: 20px; padding-top:0;">
+		        <hr>
+		        <label class="attribute">Osnovne informacije:</label><br/>
+		    	Ime: <input type="text" ng-model="animal.animal_name" class="form-control" required/></br/>
+				Datum dolaska:
+				<!--<textarea class="form-control" ng-model="animal.arrival_date"/>-->
+				<input type="text" class="form-control datepicker" ng-model="animal.arrival_date"/> 
+				</br/>
+				Mjesto rođenja:<textarea class="form-control" ng-model="animal.birth_location"/></br/>
+				Zanimljivosti:<textarea class="form-control" ng-model="animal.interesting_facts"/><br/>
+				<button class="btn btn-primary green" ng-click="updateAnimal(animal)" type="submit"><span class="glyphicon glyphicon-ok"/> Potvrdi</button>
+				<hr>
+				<label class="attribute">Ekskluzivni sadržaj:</label><br/>
+				Zanimjivost:<textarea class="form-control" ng-model="animal.exclusive_fact"/></br>
+				<button class="btn btn-primary btn-xs green" ng-click="addExclusiveFact(animal)"><span class="glyphicon glyphicon-plus"/> Dodaj zanimljivost</button>
+				<br/><br/>
+				Fotografija: <input type="file" file-model="animal.exclusive_photo" accept="image/*"/>
+				<br/><button class="btn btn-primary btn-xs green" ng-click="addExclusivePhoto(animal)"><span class="glyphicon glyphicon-plus"/> Dodaj fotografiju</button>
+				<br/><br/>
+				Video: <input type="file" file-model="animal.exclusive_video" accept="video/*"/>
+				<br/><button class="btn btn-primary btn-xs green" ng-click="addExclusiveVideo(animal)"><span class="glyphicon glyphicon-plus"/> Dodaj video isječak</button>
+				<br/>
 					
-					
-			    	<input class="btn btn-success btn-xs" type="submit" value="Potvrdi"/>
-			    	<button class="btn btn-default btn-xs" ng-click="toggleEditAnimals(animal)"  style="text-color:yellow;">Odustani</button>
-			    	<hr>
-	    		</form>
-			
-
+			    <button class="btn btn-primary red" ng-click="toggleEditAnimals(animal)" style="float:right;"><span class="glyphicon glyphicon-remove"/> Odustani</button>
+	    	</div>
 		</div>
-
-
-
+		<hr>
+	</div>
 </div>

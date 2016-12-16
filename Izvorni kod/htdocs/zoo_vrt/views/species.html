@@ -24,13 +24,23 @@ text-align: justify;
 
 	.name{
 		font-size: 20pt;
-		text-decoration: underline;
+		/*text-decoration: underline;*/
+		text-shadow: 0px -1px 5px black;
+
+	}
+
+	.orange,
+	.orange:hover,
+	.orange:active,
+	.orange:visited,
+	.orange:focus {
+		background-color: #ffae3d !important;
 	}
 </style>
 
 <div id="left-column">
 <img src="{{species.photo_path}}" width="100%"/><br/>
-<a class="btn btn-primary" style="width:100%;" href="#/animals/{{species.species_id}}" ng-if="hierarchy.class_name=='Mammalia'"><span class="glyphicon glyphicon-list-alt"/> Popis jedinki</a><br/>
+<a class="btn btn-primary orange" style="width:100%;" href="#/animals/{{species.species_id}}" ng-if="hierarchy.class_name=='Mammalia'"><span class="glyphicon glyphicon-list-alt"/> Popis jedinki</a><br/>
 
 <div class="radio" style="position: relative; top:0; left:0;">
 	<input type="radio" ng-model="visited" ng-value="true" ng-click="registerVisit()">Posjetio/la sam ovu vrstu</input>

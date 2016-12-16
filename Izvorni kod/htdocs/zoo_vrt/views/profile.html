@@ -1,7 +1,23 @@
 <!DOCTYPE html>
 
-<div style="margin:0 auto;width:50%">
-	<form id="form_{{user.user_id}}" ng-submit="updateUser(user)" >
+<style type="text/css">
+
+#edit-profile{
+	font-family: Verdana;
+}
+
+#title{
+	
+	font-size: 20pt;
+	text-align: left;
+	text-decoration: underline;
+}
+
+</style>
+
+<div id="edit-profile" style="margin:0 auto;width:50%">
+	<div id="title">Uredi profil</div><br/><br/>
+	<div id="form_{{user.user_id}}" >
 		<table class="table">
 			<thead>
 				<tr>
@@ -64,6 +80,6 @@
 				</tr>
 			</thead>
 		</table>
-		<input class="btn btn-success btn-xs" type="submit" value="Potvrdi"/>
-	</form>
+		<button class="btn btn-primary" type="submit" ng-click="updateUser(user)"><span class="glyphicon glyphicon-ok"/> Potvrdi</button>
+	</div>
 </div>

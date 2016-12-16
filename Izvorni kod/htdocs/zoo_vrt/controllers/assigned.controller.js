@@ -1,6 +1,5 @@
 app.controller("AssignedController", function($scope, GuardService){
 
-
 /*
 	$scope.assigned =
 		[
@@ -67,6 +66,18 @@ app.controller("AssignedController", function($scope, GuardService){
 
 		}
 		else form.hide()
+	}
+
+	$scope.addExclusiveFact = function(animal){
+		
+	}
+
+	$scope.addExclusivePhoto = function(animal){
+		
+	}
+
+	$scope.addExclusiveVideo = function(animal){
+		
 	}
 
 /*
