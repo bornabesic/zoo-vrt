@@ -1,4 +1,4 @@
-app.controller("ExploreController", function($scope, SpeciesService, MapService){
+app.controller("ExploreController", function($scope, $location, SpeciesService, MapService){
 
 	var species = [];
 	$scope.result = [];
@@ -9,6 +9,10 @@ app.controller("ExploreController", function($scope, SpeciesService, MapService)
 
 	//Functions
 	
+$scope.goToSpeciesRoute = function(path) {
+ $location.path("/species/" + path);
+};
+
 		var createTable = function(arr, size) {
 	var newArr = [];
 		for (var i=0; i<arr.length; i+=size) {
