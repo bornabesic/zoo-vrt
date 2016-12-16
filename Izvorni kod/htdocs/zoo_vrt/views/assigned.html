@@ -58,16 +58,11 @@
 
 	#species{
 		font-family: "Arial Black", Gadget, sans-serif;
-		position: absolute;
-		transform: rotate(180deg);
-		-webkit-transform: rotate(180deg);
-		top: 0;
-		left: 0;
+		text-align: left;
 
-		writing-mode: tb-rl;
 		font-size:14pt;
-		/*text-transform: uppercase;*/
-		text-shadow: 0px 0px 5px #ffae3d;
+		text-transform: uppercase;
+		text-shadow: 0px 0px 5px green;
 	}
 
 	#animals{
@@ -90,6 +85,8 @@
 
 	.row{
 		position: relative;
+		display: flex;
+		flex-direction: column;
 	}
 
 </style>
@@ -97,10 +94,11 @@
 <div class="row" ng-repeat="species in assigned track by $index">
 	 <div id="species">{{species.species_name}}</div>
 	 <div id="animals">
+	 	<br/>
 		<div  class="animal-card" ng-repeat="animal in species.animals track by $index">
 			<div id="animal-header" ng-click="toggleEditAnimals(animal)">
 				<div id="animal-icon">
-					<img src="{{animal.photo_path}}" height="100%" style="		border-radius: 32px 0px 0px 0px;"/>
+					<img src="{{animal.photo_path}}" height="100%" style="border-radius: 32px 0px 0px 0px;"/>
 				</div>
 				<div id="animal-info">
 					{{animal.animal_name}}
@@ -112,20 +110,20 @@
 		    	Ime: <input type="text" ng-model="animal.animal_name" class="form-control" required/></br/>
 				Datum dolaska:
 				<!--<textarea class="form-control" ng-model="animal.arrival_date"/>-->
-				<input type="text" class="form-control datepicker" ng-model="animal.arrival_date"/> 
+				<input type="text" class="form-control" ng-model="animal.arrival_date"/> 
 				</br/>
 				Mjesto rođenja:<textarea class="form-control" ng-model="animal.birth_location"/></br/>
 				Zanimljivosti:<textarea class="form-control" ng-model="animal.interesting_facts"/><br/>
 				<button class="btn btn-primary green" ng-click="updateAnimal(animal)" type="submit"><span class="glyphicon glyphicon-ok"/> Potvrdi</button>
 				<hr>
 				<label class="attribute">Ekskluzivni sadržaj:</label><br/>
-				Zanimjivost:<textarea class="form-control" ng-model="animal.exclusive_fact"/></br>
+				Zanimljivost:<textarea class="form-control" ng-model="animal.exclusive_fact"/></br>
 				<button class="btn btn-primary btn-xs green" ng-click="addExclusiveFact(animal)"><span class="glyphicon glyphicon-plus"/> Dodaj zanimljivost</button>
 				<br/><br/>
 				Fotografija: <input type="file" file-model="animal.exclusive_photo" accept="image/*"/>
 				<br/><button class="btn btn-primary btn-xs green" ng-click="addExclusivePhoto(animal)"><span class="glyphicon glyphicon-plus"/> Dodaj fotografiju</button>
 				<br/><br/>
-				Video: <input type="file" file-model="animal.exclusive_video" accept="video/*"/>
+				Video isječak (max. 32 MiB): <input type="file" file-model="animal.exclusive_video" accept="video/*"/>
 				<br/><button class="btn btn-primary btn-xs green" ng-click="addExclusiveVideo(animal)"><span class="glyphicon glyphicon-plus"/> Dodaj video isječak</button>
 				<br/>
 					

@@ -141,7 +141,7 @@ app.service('UserService', function() {
     }
 });
 
-app.service('GuardService', function($q) {
+app.service('GuardService', function($http, $q) {
 
 	var assignAnimal = function(user_id, animal_id){
 		post_data={
@@ -198,19 +198,20 @@ app.service('GuardService', function($q) {
 
 		return $q(function(resolve, reject) {
 					post_obj.then(function(result){
-						var species = result
+						var animals = result
 						var groups=new Set()
 						var final_result=[]
 						//priprema polja za kontroler
-						for(var i=0; i<species.length; i++){
-							groups.add(species[i].species_name);
+						for(var i=0; i<animals.length; i++){
+							groups.add(animals[i].species_name);
 						}
 
 						for(let group of groups){
 							var group_animals=[]
-							for(var i=0; i<species.length; i++){
-								if(species[i].species_name===group){
-									group_animals.push(species[i])
+							for(var i=0; i<animals.length; i++){
+								if(animals[i].species_name===group){
+									group_animals.push(animals[i])
+									console.log(JSON.stringify(animals[i]))
 								}
 							}
 							final_result.push(
@@ -229,10 +230,89 @@ app.service('GuardService', function($q) {
 				})
 	}
 
+	var addExclusiveFact = function(animal_id, fact){
+		post_data={
+			"animal_id": animal_id,
+			"fact": fact,
+			"action": "add_exclusive_fact"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri dodavanju eksluzivne činjenice.");
+  					console.log(data.error)
+  				}
+  				else{
+  					alert("Ekskluzivna činjenica uspješno dodana!");
+  				}
+		}, "JSON");
+
+		return post_obj;
+	}
+
+	var addExclusivePhoto = function(animal_id, photo){
+		var post_data = new FormData()
+		post_data.append("animal_id", animal_id)
+		post_data.append("photo", photo)
+		post_data.append("action", "add_exclusive_photo")
+
+		var post_obj = $http.post("/Database.php", post_data, {
+             transformRequest: angular.identity,
+             headers: {'Content-Type': undefined,'Process-Data': false}
+         })
+
+		post_obj.success(function(data){
+			if(data.error){
+  					alert("Nažalost, došlo je do greške pri dodavanju eksluzivne fotografije.");
+  					console.log(data.error)
+  				}
+  				else{
+ 					alert("Eksluzivna fotografija uspješno dodana!")
+  				}
+		})
+         
+         post_obj.error(function(data){
+            alert("Prijenos slike na poslužitelj nije uspio.");
+         })
+
+         return post_obj;
+	}
+
+	var addExclusiveVideo = function(animal_id, video){
+		var post_data = new FormData()
+		post_data.append("animal_id", animal_id)
+		post_data.append("video", video)
+		post_data.append("action", "add_exclusive_video")
+
+		var post_obj = $http.post("/Database.php", post_data, {
+             transformRequest: angular.identity,
+             headers: {'Content-Type': undefined,'Process-Data': false}
+         })
+
+		post_obj.success(function(data){
+			if(data.error){
+  					alert("Nažalost, došlo je do greške pri dodavanju eksluzivnog video isječka.");
+  					console.log(data.error)
+  				}
+  				else{
+ 					alert("Eksluzivni video isječak uspješno dodan!")
+  				}
+		})
+         
+         post_obj.error(function(data){
+            alert("Prijenos video isječka na poslužitelj nije uspio.");
+         })
+
+         return post_obj;
+	}
+
 	return{
 		assignAnimal: assignAnimal,
 		unassignAnimal: unassignAnimal,
-		getAssignedAnimals: getAssignedAnimals
+		getAssignedAnimals: getAssignedAnimals,
+		addExclusiveFact: addExclusiveFact,
+		addExclusivePhoto: addExclusivePhoto,
+		addExclusiveVideo: addExclusiveVideo
 	}
 
 })
@@ -750,6 +830,36 @@ app.service('AnimalsService', function($q){
 	//var _exclusive_content=[]; treba implementirati cache
 
 
+	var updateAnimal = function(animal){
+		var name;
+		if(animal.name) name=animal.name;
+		else if(animal.animal_name) name=animal.animal_name;
+
+		post_data = {
+			"animal_id": animal.animal_id,
+			"species_id": animal.species_id, 
+			"name": name, 
+			"age": animal.age, 
+			"sex": animal.sex, 
+			"birth_location": animal.birth_location, 
+			"arrival_date": animal.arrival_date, 
+			"photo_path": animal.photo_path, 
+			"interesting_facts": animal.interesting_facts,
+			"action": "update_animal"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+			if(data.error){
+				alert("Nažalost, došlo je do greške pri ažuriranju jedinke.");
+				console.log(data.error)
+			}
+			else{
+				alert("Jedinka uspješno ažurirana!")
+			}
+		}, "JSON");
+		return post_obj;
+	}
+
 	var getAnimals = function(species_id){
 		if(species_id!=_species_id){
 			_animals.splice(0,_animals.length) //invalidate cache
@@ -802,7 +912,8 @@ app.service('AnimalsService', function($q){
 
 	return{
 		getAnimals: getAnimals,
-		getExclusiveContent: getExclusiveContent
+		getExclusiveContent: getExclusiveContent,
+		updateAnimal: updateAnimal
 	}
 
 })

@@ -89,6 +89,8 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 	}
 
 	$scope.registerSpecies = function(){
+		console.log($scope.new_species.photo)
+
 		var post_obj = SpeciesService.registerSpecies($scope.new_species);
 		post_obj.then(function(result){
 			$scope.refreshSpecies()

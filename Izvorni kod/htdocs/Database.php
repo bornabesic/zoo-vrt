@@ -1065,6 +1065,83 @@
 			));
 		}
 
+		function remove_mammal($animal_id){
+			//REMOVE MAMMAL WITH GIVEN ID
+			$delete_query="DELETE FROM ". DB_NAME . ".mammal_animals WHERE animal_id=?;";
+			$delete_statement=$this->db->prepare($delete_query);
+			if($delete_statement){
+				$delete_statement->bind_param("i", $animal_id);
+		     	$delete_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			switch($delete_statement->affected_rows){
+				case -1:
+					return json_encode(array(
+						"error" => $this->db->error 
+					));
+					break;
+				case 0:
+					return json_encode(array(
+						"error" => "Animal with the given ID could not be deleted." 
+					));
+					break;
+			};
+
+			return json_encode(array(
+				"animal_id" => $animal_id
+			));
+		}
+
+		function update_animal($animal_id, $species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts){
+			
+
+			$update_query="UPDATE ". DB_NAME . ".mammal_animals SET `species_id`=?, `name`=?, `age`=?, `sex`=?, `birth_location`=?, `arrival_date`=?, `photo_path`=?, `interesting_facts`=? WHERE `animal_id`=?;";
+			$update_statement=$this->db->prepare($update_query);
+			if($update_statement){
+				$update_statement->bind_param("isisssssi", $species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts, $animal_id);
+		     	$update_statement->execute();
+			}
+			else {
+				return json_encode(
+							array( "error" => $this->db->error )
+						);
+			}
+
+			if($this->db->errno!=0){
+				return json_encode(array(
+					"error" => $this->db->error 
+				));
+			}
+
+			switch($update_statement->affected_rows){
+				case -1:
+					return json_encode(array(
+						"error" => $this->db->error 
+					));
+					break;
+				case 0:
+					return json_encode(array(
+						"error" => "Species with the given ID could not be updated." 
+					));
+					break;
+			};
+
+			return json_encode(array(
+				"animal_id" => $animal_id
+			));
+		}
+
 		function get_animals($species_id){
 			$query = "SELECT * FROM " . DB_NAME . ".mammal_animals WHERE species_id=?";
 			$statement = $this->db->prepare($query);
@@ -1117,44 +1194,6 @@
 			}else {
 				return json_encode($row);
 			}
-		}
-
-		function remove_mammal($animal_id){
-			//REMOVE MAMMAL WITH GIVEN ID
-			$delete_query="DELETE FROM ". DB_NAME . ".mammal_animals WHERE animal_id=?;";
-			$delete_statement=$this->db->prepare($delete_query);
-			if($delete_statement){
-				$delete_statement->bind_param("i", $animal_id);
-		     	$delete_statement->execute();
-			}
-			else {
-				return json_encode(
-							array( "error" => $this->db->error )
-						);
-			}
-
-			if($this->db->errno!=0){
-				return json_encode(array(
-					"error" => $this->db->error 
-				));
-			}
-
-			switch($delete_statement->affected_rows){
-				case -1:
-					return json_encode(array(
-						"error" => $this->db->error 
-					));
-					break;
-				case 0:
-					return json_encode(array(
-						"error" => "Animal with the given ID could not be deleted." 
-					));
-					break;
-			};
-
-			return json_encode(array(
-				"animal_id" => $animal_id
-			));
 		}
 
 
@@ -1303,6 +1342,7 @@
 				"animal_id" => $animal_id
 			));
 		}
+		// --------------- NIJE TESTIRANO -------------------
 
 		function get_assigned_animals($user_id){
 			$this->db->select_db(DB_NAME);
@@ -1420,7 +1460,7 @@
 		function add_exclusive_video($animal_id, $video_path){
 			$this->db->select_db(DB_NAME);
 
-			$query="INSERT INTO adopter_exclusive_photos (`animal_id`, `video_path`) VALUES (?, ?);";
+			$query="INSERT INTO adopter_exclusive_videos (`animal_id`, `video_path`) VALUES (?, ?);";
 			$statement = $this->db->prepare($query);
 			if($statement){
 				$statement->bind_param("is", $animal_id, $video_path);
@@ -1452,7 +1492,6 @@
 
 			return json_encode(array("animal_id" => $animal_id, "video_path" => $video_path));
 		}
-		// --------------- NIJE TESTIRANO -------------------
 
 		function get_exclusive_content($animal_id){
 			$this->db->select_db(DB_NAME);
@@ -1795,13 +1834,16 @@
 		echo $database->get_species($parent_family_id);
 	}
 
-	//MAMMALS
+	//MAMMALS odnosno ANIMALS
 	else if($_POST['action']==="add_mammal"){
 		echo $database->add_mammal($_POST['species_id'], $_POST['name'], $_POST['age'], $_POST['sex'], $_POST['birth_location'], $_POST['arrival_date'], $_POST['photo_path'], $_POST['interesting_facts']);
 		//echo $database->add_mammal($_GET['species_id'], $_GET['name'], $_GET['age'], $_GET['sex'], $_GET['birth_location'], $_GET['arrival_date'], $_GET['photo_path'], $_GET['interesting_facts']);
 	}
 	else if($_POST['action']==="remove_mammal"){
 		echo $database->remove_mammal($_POST['animal_id']);
+	}
+	else if($_POST['action']==="update_animal"){
+		echo $database->update_animal($_POST["animal_id"], $_POST["species_id"], $_POST["name"], $_POST["age"], $_POST["sex"], $_POST["birth_location"], $_POST["arrival_date"], $_POST["photo_path"], $_POST["interesting_facts"]);
 	}
 	else if($_POST['action']==="get_animals"){
 		echo $database->get_animals($_POST['species_id']);
@@ -1831,7 +1873,7 @@
 
 	//EXCLUSIVE CONTENT
 	else if($_POST['action']==="add_exclusive_fact"){
-		echo $database->get_assigned_animals($_POST['animal_id'], $_POST['fact']);
+		echo $database->add_exclusive_fact($_POST['animal_id'], $_POST['fact']);
 	}
 	else if($_POST['action']==="add_exclusive_photo"){
 		mkdir("." . $media_dir, 0700);
@@ -1842,10 +1884,10 @@
 	}
 	else if($_POST['action']==="add_exclusive_video"){
 		mkdir("." . $media_dir, 0700);
-		$video_path = $media_dir . basename($_FILES["photo"]["name"]);
-		move_uploaded_file($_FILES["photo"]["tmp_name"], "." . $video_path);
+		$video_path = $media_dir . basename($_FILES["video"]["name"]);
+		move_uploaded_file($_FILES["video"]["tmp_name"], "." . $video_path);
 
-		echo $database->add_exclusive_photo($_POST['animal_id'], $video_path);
+		echo $database->add_exclusive_video($_POST['animal_id'], $video_path);
 	}
 	else if($_POST['action']==="get_exclusive_content"){
 		echo $database->get_exclusive_content($_POST['animal_id']);

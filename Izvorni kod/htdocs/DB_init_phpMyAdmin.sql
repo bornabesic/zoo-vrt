@@ -27,6 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `adopter_exclusive_facts` (
+  `ef_id` int(11) NOT NULL,
   `animal_id` int(11) NOT NULL,
   `fact` text COLLATE utf8_croatian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
@@ -38,6 +39,7 @@ CREATE TABLE `adopter_exclusive_facts` (
 --
 
 CREATE TABLE `adopter_exclusive_photos` (
+  `ep_id` int(11) NOT NULL,
   `animal_id` int(11) NOT NULL,
   `photo_path` varchar(256) COLLATE utf8_croatian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
@@ -49,6 +51,7 @@ CREATE TABLE `adopter_exclusive_photos` (
 --
 
 CREATE TABLE `adopter_exclusive_videos` (
+  `ev_id` int(11) NOT NULL,
   `animal_id` int(11) NOT NULL,
   `video_path` varchar(256) COLLATE utf8_croatian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
@@ -136,7 +139,7 @@ CREATE TABLE `orders` (
 
 CREATE TABLE `species` (
   `species_id` int(11) NOT NULL,
-  `name` varchar(32) COLLATE utf8_croatian_ci NOT NULL,
+  `name` varchar(128) COLLATE utf8_croatian_ci NOT NULL,
   `family_id` int(11) NOT NULL,
   `size` text COLLATE utf8_croatian_ci,
   `nutrition` text COLLATE utf8_croatian_ci,
@@ -171,7 +174,10 @@ CREATE TABLE `users` (
 --
 -- Dumping data for table `users`
 --
-
+/*
+  korisnik: admin
+  lozinka: admin
+*/
 INSERT INTO `users` (`user_id`, `username`, `password_hash`, `first_last_name`, `year_of_birth`, `city`, `email`, `role`) VALUES
 (1, 'admin', '$2a$08$d/PQYIgWTi2tlmAmZoKy2O/vpCmSCtjNUHqwv0Y0EpEDGuLwUXY7W', 'Admin', 2017, 'Zagreb', 'admin@zoo-vrt.hr', 7);
 
@@ -194,18 +200,21 @@ CREATE TABLE `visits` (
 -- Indexes for table `adopter_exclusive_facts`
 --
 ALTER TABLE `adopter_exclusive_facts`
+  ADD PRIMARY KEY (`ef_id`),
   ADD KEY `adopter_exclusive_facts_fk0` (`animal_id`);
 
 --
 -- Indexes for table `adopter_exclusive_photos`
 --
 ALTER TABLE `adopter_exclusive_photos`
+  ADD PRIMARY KEY (`ep_id`),
   ADD KEY `adopter_exclusive_photos_fk0` (`animal_id`);
 
 --
 -- Indexes for table `adopter_exclusive_videos`
 --
 ALTER TABLE `adopter_exclusive_videos`
+  ADD PRIMARY KEY (`ev_id`),
   ADD KEY `adopter_exclusive_videos_fk0` (`animal_id`);
 
 --
@@ -277,6 +286,15 @@ ALTER TABLE `visits`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+ALTER TABLE `adopter_exclusive_facts`
+  MODIFY `ef_id` int (11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+ALTER TABLE `adopter_exclusive_photos`
+  MODIFY `ep_id` int (11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+ALTER TABLE `adopter_exclusive_videos`
+  MODIFY `ev_id` int (11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `classes`
