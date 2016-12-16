@@ -16,20 +16,53 @@
 		margin-bottom: 50px;
 		width: 60%;
 	}
-	.height-box .results{
-		flex: 1 1 auto;
-
-		overflow-y : auto;
-	}
 
 
+.explore-table{
+    
+    border-spacing: 2px;
+	border-collapse: separate;
+}
+
+	td{
+	
+	padding: 10px;
+	
+	border: 2px solid white;
+	border-top-right-radius: calc(.25rem - 1px);
+    border-top-left-radius: calc(.25rem - 1px);
+}
+
+.card-img-top{
+	height: 100%;
+	width: 100%;
+	
+	border-top-right-radius: calc(.25rem - 1px);
+    border-top-left-radius: calc(.25rem - 1px);
+	
+}
+.card-block{
+
+    line-height: 1.5;
+  
+}
 </style>
 <div class="height-box">
-	<div class="search" class="input-group">
+		<div class="search" class="input-group">
 		<input type="text" class="form-control input-lg" placeholder="Unesi ime životinje..." ng-model="search_species" ng-change="filterSpecies()"/>
 	</div>
-	<div class="results">
-		<a href="#/species/{{species.species_id}}" ng-repeat="species in result track by $index">{{species.name}}</p>
 
-	</div>
+<table class = "explore-table">
+	<tr ng-repeat="row in table">
+	<td ng-repeat="species in row">
+
+		<div class="card">
+  <img class="card-img-top" src="{{species.photo_path}}">
+  <div class="card-block">
+   	<a href="#/species/{{species.species_id}}" >{{species.name}}</a>
+  </div>
+</div>
+	</td>
+	</tr>
+</table>
 </div>
