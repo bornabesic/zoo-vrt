@@ -7,6 +7,8 @@
 
 	$media_dir="/media/";
 
+	session_start();
+
 	function log_to_file($msg) {
 		$file = './Database_log.txt';
 		file_put_contents($file, $msg . "\r\n", LOCK_EX | FILE_APPEND);
@@ -163,6 +165,8 @@
 			$row = $user_result->fetch_assoc();
 
 			if($hasher->CheckPassword($password, $row['password_hash'])){
+				$_SESSION["logged_in"]=true;
+				log_to_file("session_start");
 				return json_encode(array(
 					"user_id" => $row['user_id'],
 					"role" => $row['role'],
@@ -1737,13 +1741,19 @@
 	*/
 	$database = new Database();
 
+	if($_POST['action']==="login_user"){
+		echo $database->login_user($_POST['username'], $_POST['password']);
+		exit();
+	}
+
+	if (session_status() == PHP_SESSION_NONE || !isset($_SESSION["logged_in"]) || $_SESSION["logged_in"]!=true) { //nije ulogiran
+		echo json_encode(array("error" => "User is not logged in."));
+		exit();
+	}
+
 	//USERS
 	if($_POST['action']==="register_user"){
-		//echo $database->register_user($_GET['username'], $_GET['password'], $_GET['first_last_name'], $_GET['year_of_birth'], $_GET['city'], $_GET['email'], 1);
 		echo $database->register_user($_POST['username'], $_POST['password'], $_POST['first_last_name'], $_POST['year_of_birth'], $_POST['city'], $_POST['email'], $_POST['role']);
-	}
-	else if($_POST['action']==="login_user"){
-		echo $database->login_user($_POST['username'], $_POST['password']);
 	}
 	else if($_POST['action']==="delete_user"){
 		echo $database->delete_user($_POST['user_id']);
