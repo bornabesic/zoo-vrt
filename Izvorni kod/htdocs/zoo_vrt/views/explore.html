@@ -14,20 +14,15 @@
 		width: 60%;
 	}
 	
-	.explore-table {
-		border-spacing: 2px;
-		border-collapse: separate;
-	}
-	
-	td {
-		padding: 10px;
-	}
 	
 	.card-img {
-		height: 100%;
-		width: 100%;
-		border-top-right-radius: calc(.25rem - 1px);
-		border-top-left-radius: calc(.25rem - 1px);
+		max-width: 100%;
+		max-height: 100%;
+		box-shadow: 0px 0px 30px rgba(0, 0, 0, .05);
+	}
+	
+	.panel.card:hover .card-img {
+		box-shadow: 0px 0px 30px rgba(0, 0, 0, .2);
 	}
 	/*////*/
 	
@@ -54,23 +49,24 @@
 	}
 	
 	.card {
-		border-bottom: 1px solid rgba(250, 250, 250, .5);
-	}
-	
-	.card {
+		margin: 10px;
 		color: #fff;
-		border-bottom: 1px;
+		border-bottom: 1px solid rgba(250, 250, 250, .5);
 		background-color: rgba(0, 0, 0, .1);
 		box-shadow: 0px 3px 0px rgba(0, 0, 0, .3);
 	}
 	
-	.panel.card .btn {
+	.panel.card {
 		box-shadow: 0 -1px 0px rgba(50, 50, 50, .2) inset;
 		border: 0px;
 	}
 	/*White COLOR*/
 	
 	.card.panel-color>.panel-heading {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		width: 200px;
+		height: 80px;
 		color: #333;
 		background-color: #f9f9f9;
 		border-color: #ccc;
@@ -83,12 +79,10 @@
 	}
 	
 	.card.panel-color>.panel-body {
-		color: #fff;
-		background-color: #dfdfdf;
-	}
-	
-	.card.panel-color>.panel-body {
+		width: 200px;
+		height: 130px;
 		text-shadow: 0px 2px 0px rgba(250, 250, 250, .8);
+		background-color: #dfdfdf;
 		color: #666;
 	}
 	
@@ -100,31 +94,31 @@
 	.card.panel-color {
 		color: #333;
 		background-color: rgba(50, 50, 50, .01);
-		font-weight: 600;
-		text-shadow: 0px 1px 0px rgba(250, 250, 250, .75);
 	}
+	
+	.name {
+		font-size: 15px;
+	}
+
 </style>
 <div class="height-box">
 	<div class="search" class="input-group">
-		<input type="text" class="form-control input-lg" placeholder="Unesi ime životinje..." ng-model="search_species" ng-change="filterSpecies()"
-		/>
-
+		<input type="text" class="form-control input-lg" placeholder="Unesi ime životinje..." ng-model="search_species" ng-change="filterSpecies()"/>
 	</div>
 
-	<table class="explore-table">
-		<tr ng-repeat="row in table">
+	<table class="container-fluid">
+		<tr ng-repeat="row in table" class="row">
 			<td ng-repeat="species in row">
-
 				<div class="panel card panel-color" ng-click="goToSpeciesRoute(species.species_id)">
-					<div class="panel-heading arrow_box text-center">
 
-						<div class="panel-heading arrow_box text-center">
-							<h4>{{species.name}}</h4>
-						</div>
+					<div class="panel-heading text-center">
+						<span class="name">{{species.name}}</span>
 					</div>
-					<div class="panel-body text-center">
+
+					<div class="panel-body">
 						<img class="card-img" src="{{species.photo_path}}">
 					</div>
+
 				</div>
 			</td>
 		</tr>
