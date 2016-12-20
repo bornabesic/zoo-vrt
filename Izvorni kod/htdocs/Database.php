@@ -1159,10 +1159,13 @@
 		}
 
 		function get_animals($species_id){
-			$query = "SELECT * FROM " . DB_NAME . ".mammal_animals WHERE species_id=?";
+			if($species_id>=0) $condition=" WHERE species_id=?";
+			else $condition="";
+
+			$query = "SELECT * FROM " . DB_NAME . ".mammal_animals" . $condition . ";";
 			$statement = $this->db->prepare($query);
 			if($statement){
-				$statement->bind_param("i", $species_id);
+				if($species_id>=0) $statement->bind_param("i", $species_id);
 				$statement->execute();
 			}else{
 				return json_encode(array("error" => $this->db->error));
@@ -1885,7 +1888,10 @@
 		echo $database->update_animal($_POST["animal_id"], $_POST["species_id"], $_POST["name"], $_POST["age"], $_POST["sex"], $_POST["birth_location"], $_POST["arrival_date"], $_POST["photo_path"], $_POST["interesting_facts"]);
 	}
 	else if($_POST['action']==="get_animals"){
-		echo $database->get_animals($_POST['species_id']);
+		if(isset($_POST['species_id'])) $species_id=$_POST['species_id'];
+		else $species_id=-1;
+
+		echo $database->get_animals($species_id);
 	}
 	else if($_POST['action']==="get_mammal"){
 		echo $database->get_mammal($_POST['animal_id']);
