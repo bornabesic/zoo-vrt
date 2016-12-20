@@ -1030,7 +1030,7 @@ app.service('VisitService', function(){
 			"user_id": user_id,
 			"species_id": species_id,
 			"action": "register_visit"
-		}
+		};
 
 		var post_obj = $.post("/Database.php", post_data, function(data) {
   				if(data.error){
@@ -1047,7 +1047,7 @@ app.service('VisitService', function(){
 			"user_id": user_id,
 			"species_id": species_id,
 			"action": "check_visit"
-		}
+		};
 
 		var post_obj = $.post("/Database.php", post_data, function(data) {
   				if(data.error){
@@ -1059,9 +1059,26 @@ app.service('VisitService', function(){
 		return post_obj;
 	}
 
-	return{
+	var visitCount = function(species_id) {
+		post_data = {
+			"species_id": species_id,
+			"action": "get_visit_count"
+		};
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri provjeri posjete.");
+  					console.log(data.error);
+  				}
+		}, "JSON");
+
+		return post_obj;
+	}
+
+	return {
 		registerVisit: registerVisit,
-		checkVisit: checkVisit
+		checkVisit: checkVisit,
+		visitCount: visitCount
 	}
 	
 })
