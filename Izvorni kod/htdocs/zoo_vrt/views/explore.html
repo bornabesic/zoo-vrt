@@ -114,8 +114,8 @@
 	<table class="explore-table">
 		<tr ng-repeat="row in table">
 			<td ng-repeat="species in row">
-
-				<div class="panel card panel-color" ng-click="goToSpeciesRoute(species.species_id)">
+				<a href="#/species/{{species.species_id}}">
+				<div class="panel card panel-color">
 					<div class="panel-heading arrow_box text-center">
 
 						<div class="panel-heading arrow_box text-center">
@@ -125,7 +125,7 @@
 					<div class="panel-body text-center">
 						<img class="card-img" src="{{species.photo_path}}">
 					</div>
-				</div>
+				</div></a>
 			</td>
 		</tr>
 	</table>

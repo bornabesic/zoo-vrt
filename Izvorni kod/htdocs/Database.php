@@ -8,6 +8,10 @@
 	$media_dir="/media/";
 
 	session_start();
+	if(!isset($_SESSION["logged_in"])){
+		$_SESSION["logged_in"]=false;
+		$_SESSION["role"]=0;
+	}
 
 	function log_to_file($msg) {
 		$file = './Database_log.txt';
@@ -166,6 +170,8 @@
 
 			if($hasher->CheckPassword($password, $row['password_hash'])){
 				$_SESSION["logged_in"]=true;
+				$_SESSION["role"]=$row['role'];
+
 				log_to_file("session_start");
 				return json_encode(array(
 					"user_id" => $row['user_id'],
@@ -182,6 +188,12 @@
 					array( "error" => "Username or password invalid." )
 				);
 			}
+		}
+
+		function logout_user(){
+			$_SESSION["logged_in"]=false;
+			$_SESSION["role"]=0;
+			return json_encode(array("status" => "Successfully logged out."));
 		}
 
 		function update_user($username, $password, $first_last_name, $year_of_birth, $city, $email, $role, $user_id){
@@ -1741,20 +1753,37 @@
 	*/
 	$database = new Database();
 
+	if($_POST['action']==="check_user_state"){
+		echo json_encode(array(
+			"logged_in" => $_SESSION["logged_in"],
+			"is_visitor" =>  $_SESSION["role"]&1,
+			"is_guard" =>  $_SESSION["role"]&2,
+			"is_admin" =>  $_SESSION["role"]&4
+		));
+		exit();
+	}
+
 	if($_POST['action']==="login_user"){
 		echo $database->login_user($_POST['username'], $_POST['password']);
 		exit();
 	}
+	else if($_POST['action']==="logout_user"){
+		echo $database->logout_user();
+		exit();
+	}
+	else if($_POST['action']==="register_user"){
+		echo $database->register_user($_POST['username'], $_POST['password'], $_POST['first_last_name'], $_POST['year_of_birth'], $_POST['city'], $_POST['email'], $_POST['role']);
+		exit();
+	}
 
-	if (session_status() == PHP_SESSION_NONE || !isset($_SESSION["logged_in"]) || $_SESSION["logged_in"]!=true) { //nije ulogiran
+	if (session_status() == PHP_SESSION_NONE || !$_SESSION["logged_in"]) { //nije ulogiran
 		echo json_encode(array("error" => "User is not logged in."));
 		exit();
 	}
 
+	// ------- OGRAĐENI POZIVI ------------
+
 	//USERS
-	if($_POST['action']==="register_user"){
-		echo $database->register_user($_POST['username'], $_POST['password'], $_POST['first_last_name'], $_POST['year_of_birth'], $_POST['city'], $_POST['email'], $_POST['role']);
-	}
 	else if($_POST['action']==="delete_user"){
 		echo $database->delete_user($_POST['user_id']);
 	}

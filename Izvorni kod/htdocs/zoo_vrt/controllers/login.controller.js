@@ -15,20 +15,12 @@ app.controller("LoginController", function($scope, $state, AuthService, UserServ
 
 	$scope.formSubmitted = function(){
 		if($scope.registration){
-			/*console.log($scope.username)
-			console.log($scope.first_last_name)
-			console.log($scope.email)
-			console.log($scope.city)
-			console.log($scope.year_of_birth)*/
-
 			var post_obj = UserService.registerUser($scope.username, $scope.password, $scope.first_last_name, $scope.year_of_birth, $scope.city, $scope.email, 1)
 			post_obj.then(function(result){
 				location.reload()
 			})
 		}
 		else{
-			/*console.log($scope.username)*/
-
 			var post_obj = AuthService.loginUser($scope.username, $scope.password)
 			post_obj.then(function(result){
 				if(!result.error){
@@ -39,7 +31,6 @@ app.controller("LoginController", function($scope, $state, AuthService, UserServ
 						ls.setItem("email", result.email);
 						ls.setItem("year_of_birth", result.year_of_birth);
 						ls.setItem("first_last_name", result.first_last_name);
-						ls.setItem("role", result.role);
 						$state.go("web")
 					}
 					else{
@@ -51,8 +42,18 @@ app.controller("LoginController", function($scope, $state, AuthService, UserServ
 	}
 
 	//Init
-	if(AuthService.loggedIn() && ls['role']&1){
-		$state.go("web")
-	}
+	AuthService.checkUserState().then(function(result){
+		$scope.isVisitor=result.is_visitor
+		$scope.isGuard=result.is_guard
+		$scope.isAdmin=result.is_admin
+		$scope.loggedIn=result.logged_in
 
+		if(!$scope.$$phase) {
+			$scope.$apply();
+		}
+
+		if($scope.loggedIn && $scope.isVisitor){
+			$state.go("web")
+		}
+	})
 })
