@@ -1,2 +1,11 @@
 <!DOCTYPE html>
 <h4>Statistika:</h4>
+<table class= "table">
+	<thead>
+		<td>Naziv vrste</td><td>Broj posjeta</td>
+	</thead>
+  <tr ng-repeat="stat in statistics track by $index">
+    <td>{{ stat.name }}</td>
+    <td>{{ stat.visits }}</td>
+  </tr>
+</table>
