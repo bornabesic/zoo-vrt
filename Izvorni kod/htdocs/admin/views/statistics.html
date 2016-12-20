@@ -2,10 +2,11 @@
 <h4>Statistika:</h4>
 <table class= "table">
 	<thead>
-		<td>Naziv vrste</td><td>Broj posjeta</td>
+		<td>Naziv vrste</td><td>Broj posjeta</td><td>Udio u ukupnim posjetima</td>
 	</thead>
   <tr ng-repeat="stat in statistics track by $index">
     <td>{{ stat.name }}</td>
     <td>{{ stat.visits }}</td>
+    <td>{{ stat.percentage }} %</td>
   </tr>
 </table>

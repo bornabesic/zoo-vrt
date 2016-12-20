@@ -1656,7 +1656,7 @@
 
 		function get_visit_count($species_id){
 			//GET COUNT OF SPECIES' VISITS
-			$count_query="SELECT COUNT(user_id) as count FROM " . DB_NAME . ".visits WHERE species_id=?;";
+			$count_query="SELECT COUNT(*) as count FROM " . DB_NAME . ".visits WHERE species_id=?;";
 			$count_statement = $this->db->prepare($count_query);
 			if($count_statement){
 				$count_statement->bind_param("i", $species_id);
