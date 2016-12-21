@@ -7,20 +7,26 @@ app.controller("SpeciesController", function($scope, $stateParams, SpeciesServic
 	SpeciesService.getSpeciesById(species_id).then(function(result){
 		$scope.species = result
 
+		if(!$scope.$$phase) {
+			$scope.$apply();
+		}
+
 		HierarchyService.getSpeciesHierarchy($scope.species.species_id).then(function(result){
 			$scope.hierarchy=result;
-			$scope.$apply()
+			if(!$scope.$$phase) {
+				$scope.$apply();
+			}
 		})
 
 		VisitService.checkVisit(localStorage["user_id"], $scope.species.species_id).then(function(result){
 			$scope.visited=result.visited
 			$scope.visited_initial=result.visited
-			$scope.$apply()
+			if(!$scope.$$phase) {
+				$scope.$apply();
+			}
 		})
 
 		MapService.setDot($scope.species.location_x, $scope.species.location_y)
-		/*MapService.dot.x=
-		MapService.dot.y=*/
 	})
 
 	//Functions

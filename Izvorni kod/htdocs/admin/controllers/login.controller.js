@@ -14,7 +14,6 @@ app.controller("LoginController", function($scope, $state, AuthService){
 					localStorage.setItem("email", result.email);
 					localStorage.setItem("year_of_birth", result.year_of_birth);
 					localStorage.setItem("first_last_name", result.first_last_name);
-					localStorage.setItem("role", result.role);
 					$state.go("panel")
 				}
 				else{
@@ -22,17 +21,22 @@ app.controller("LoginController", function($scope, $state, AuthService){
 				}
 			}
 		})
-
-		/*if($scope.username){
-			localStorage.setItem("username", $scope.username);
-			$state.go("panel")
-		}*/
-
 	}
 
 	//Init
-	if($state.current=="panel"){
-		$state.go("panel")
-	}
+	AuthService.checkUserState().then(function(result){
+		$scope.isVisitor=result.is_visitor
+		$scope.isGuard=result.is_guard
+		$scope.isAdmin=result.is_admin
+		$scope.loggedIn=result.logged_in
+
+		if(!$scope.$$phase) {
+			$scope.$apply();
+		}
+
+		if($scope.loggedIn && $scope.isAdmin){
+			$state.go("panel")
+		}
+	})
 
 });

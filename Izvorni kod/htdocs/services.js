@@ -21,24 +21,35 @@ app.service('AuthService', function() {
 		return post_obj;
 	}
 
-	var loggedIn = function(){
-		return ls['user_id']!=undefined &&
-		ls['username']!=undefined && 
-		ls['city']!=undefined && 
-		ls['email']!=undefined && 
-		ls['year_of_birth']!=undefined &&
-		ls['first_last_name']!=undefined &&
-		ls['role']!=undefined
+	var checkUserState = function(){
+		post_data={
+			"action": "check_user_state"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, null, "JSON");
+		return post_obj;
 	}
 
 	var logoutUser = function(){
-		ls.clear()
+		post_data={
+			"action": "logout_user"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(){
+			ls.removeItem("user_id")
+			ls.removeItem("username")
+			ls.removeItem("city")
+			ls.removeItem("email")
+			ls.removeItem("year_of_birth")
+			ls.removeItem("first_last_name")
+		}, "JSON");
+		return post_obj;
 	}
 
 	return{
 		loginUser: loginUser,
-		loggedIn: loggedIn,
-		logoutUser: logoutUser
+		logoutUser: logoutUser,
+		checkUserState: checkUserState
 	}
 })
 
@@ -211,7 +222,6 @@ app.service('GuardService', function($http, $q) {
 							for(var i=0; i<animals.length; i++){
 								if(animals[i].species_name===group){
 									group_animals.push(animals[i])
-									console.log(JSON.stringify(animals[i]))
 								}
 							}
 							final_result.push(
@@ -221,8 +231,6 @@ app.service('GuardService', function($http, $q) {
 								}
 							)
 						}
-
-						console.log(final_result)
 
 						//vrati
 						resolve(final_result)
@@ -1070,7 +1078,7 @@ app.service('VisitService', function(){
 			"user_id": user_id,
 			"species_id": species_id,
 			"action": "register_visit"
-		}
+		};
 
 		var post_obj = $.post("/Database.php", post_data, function(data) {
   				if(data.error){
@@ -1087,7 +1095,7 @@ app.service('VisitService', function(){
 			"user_id": user_id,
 			"species_id": species_id,
 			"action": "check_visit"
-		}
+		};
 
 		var post_obj = $.post("/Database.php", post_data, function(data) {
   				if(data.error){
@@ -1099,9 +1107,26 @@ app.service('VisitService', function(){
 		return post_obj;
 	}
 
-	return{
+	var visitCount = function(species_id) {
+		post_data = {
+			"species_id": species_id,
+			"action": "get_visit_count"
+		};
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri provjeri posjete.");
+  					console.log(data.error);
+  				}
+		}, "JSON");
+
+		return post_obj;
+	}
+
+	return {
 		registerVisit: registerVisit,
-		checkVisit: checkVisit
+		checkVisit: checkVisit,
+		visitCount: visitCount
 	}
 	
 })

@@ -87,7 +87,7 @@ Stanište:<textarea class="form-control" ng-model="new_species.habitat"/></br>
 		Razmnožavanje:<textarea class="form-control" ng-model="specie.reproduction"/></br>
 		Rasprostranjenost:<textarea class="form-control" ng-model="specie.distribution"/></br>
 		Lokacija nastambe: (klikni na mapu)<br/>
-		<canvas id="karta_{{specie.species_id}}" width="500" height="354"/><br/>
+		<canvas id="karta_{{specie.species_id}}" ng-init="mapInit(specie)" width="500" height="354"/><br/>
 		Fotografija: <input type="file" file-model="specie.photo" accept="image/*"/><br/>
     	<input class="btn btn-success btn-xs" type="submit" value="Potvrdi"/>
     	<a class="btn btn-default btn-xs" ng-click="toggleEditSpecies(specie)">Odustani</a>
