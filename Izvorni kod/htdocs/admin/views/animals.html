@@ -42,7 +42,7 @@
     <div class="row" ng-repeat="animal in animals track by $index">
     <!--<div class="col-xs-2">-->
   <li>
-    <b>{{animal.animal_name}}</b>
+    <b>{{animal.name}}</b>
     <a class="btn btn-default btn-xs" href="" ng-click="toggleEditAnimal(animal)">Uredi</a>
     <a class="btn btn-danger btn-xs" href="" ng-click="deleteAnimal(animal)">Izbriši</a>
     <form id="form_{{animal.animal_id}}" ng-submit="updateAnimal(animal)" style="display: none;">
