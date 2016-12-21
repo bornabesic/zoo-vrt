@@ -1020,8 +1020,10 @@
 			$add_mammal_query = "INSERT INTO " . DB_NAME . ".mammal_animals (`species_id`, `name`, `age`, `sex`, `birth_location`, `arrival_date`, `photo_path`, `interesting_facts`) VALUES (?,?,?,?,?,?,?,?);";
 			$add_mammal_statement = $this->db->prepare($add_mammal_query);
 			if($add_mammal_statement){
-				$add_mammal_statement->bind_param("isiissss", $species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts);
+				$add_mammal_statement->bind_param("isisssss", $species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts);
+		     	log_to_file((string)$this->db->errno);
 		     	$add_mammal_statement->execute();
+		     	log_to_file((string)$this->db->errno);
 			}
 			else {
 				return json_encode(
@@ -1055,7 +1057,6 @@
 
 			$animal_id_result = $animal_id_statement->get_result();
 			$row = $animal_id_result->fetch_assoc();
-
 			return json_encode(array(
 				"animal_id" => $row['animal_id'],
 				"species_id" => $species_id,

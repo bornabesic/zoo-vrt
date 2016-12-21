@@ -14349,7 +14349,8 @@ Lexer.prototype = {
   isValidIdentifierStart: function(ch) {
     return ('a' <= ch && ch <= 'z' ||
             'A' <= ch && ch <= 'Z' ||
-            '_' === ch || ch === '$');
+            '_' === ch || ch === '$' ||
+            129 <= ch.charCodeAt(0) && ch.charCodeAt(0) <= 496);
   },
 
   isIdentifierContinue: function(ch) {

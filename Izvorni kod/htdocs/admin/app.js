@@ -46,6 +46,11 @@ app.config(function($stateProvider, $locationProvider){
 		templateUrl: "views/families.html"
 	}
 
+	var animals = {
+		controller: "AnimalsController",
+		templateUrl: "views/animals.html"
+	}
+
 
 	// ================================== ROUTING ==================================
 
@@ -108,6 +113,14 @@ app.config(function($stateProvider, $locationProvider){
 		views: {
 			"adminMain": panel,
 			"adminPanel@families": families
+		}
+	});
+
+	$stateProvider.state("animals", {
+		url: "/animals",
+		views: {
+			"adminMain": panel,
+			"adminPanel@animals": animals
 		}
 	});
 
