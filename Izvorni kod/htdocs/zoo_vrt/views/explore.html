@@ -18,109 +18,73 @@
 	.card-img {
 		max-width: 100%;
 		max-height: 100%;
-		box-shadow: 0px 0px 30px rgba(0, 0, 0, .05);
 	}
 	
-	.panel.card:hover .card-img {
-		box-shadow: 0px 0px 30px rgba(0, 0, 0, .2);
-	}
 	/*////*/
-	
-	.panel.card,
-	.panel.card>.panel-heading {
-		border-radius: 0px;
-		-webkit-transition: all .3s ease;
-		-moz-transition: all .3s ease;
-		-o-transition: all .3s ease;
-		transition: all .3s ease;
-	}
-	
-	.panel.card:hover {
-		box-shadow: 0px 0px 30px rgba(0, 0, 0, .2);
-	}
-	
-	.panel.card:hover>.panel-heading {
-		box-shadow: 0px 0px 30px rgba(0, 0, 0, .2) inset;
-	}
 	
 	.panel.card>.panel-heading {
 		box-shadow: 0px 5px 0px rgba(50, 50, 50, .2) inset;
-		text-shadow: 0px 3px 0px rgba(50, 50, 50, .6);
 	}
 	
-	.card {
-		margin: 10px;
+	.card {		
 		color: #fff;
 		border-bottom: 1px solid rgba(250, 250, 250, .5);
 		background-color: rgba(0, 0, 0, .1);
 		box-shadow: 0px 3px 0px rgba(0, 0, 0, .3);
 	}
 	
-	.panel.card {
-		box-shadow: 0 -1px 0px rgba(50, 50, 50, .2) inset;
-		border: 0px;
-	}
-	/*White COLOR*/
-	
 	.card.panel-color>.panel-heading {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		width: 200px;
-		height: 80px;
+		height : 5vw;	
 		color: #333;
 		background-color: #f9f9f9;
-		border-color: #ccc;
 		border-bottom: 1px solid #ccc;
 		text-shadow: 0px 2px 0px rgba(250, 250, 250, .7);
 	}
+
 	
-	.panel.panel-color.card:hover>.panel-heading {
-		box-shadow: 0px 0px 30px rgba(0, 0, 0, .05) inset;
-	}
-	
-	.card.panel-color>.panel-body {
-		width: 200px;
-		height: 130px;
-		text-shadow: 0px 2px 0px rgba(250, 250, 250, .8);
+	.card.panel-color>.panel-body {	
+		height: 12vw;
 		background-color: #dfdfdf;
 		color: #666;
 	}
 	
-	.card:hover.panel-color>.panel-body {
-		text-shadow: 0px 2px 0px rgba(250, 250, 250, .9);
-		color: #333;
-	}
 	
 	.card.panel-color {
 		color: #333;
 		background-color: rgba(50, 50, 50, .01);
 	}
-	
-	.name {
-		font-size: 15px;
+
+	td{
+		 padding: 12px;
 	}
 
+	table{
+		table-layout: fixed;
+		width: 100%;	
+	}
 </style>
 <div class="height-box">
 	<div class="search" class="input-group">
 		<input type="text" class="form-control input-lg" placeholder="Unesi ime životinje..." ng-model="search_species" ng-change="filterSpecies()"/>
 	</div>
 
-	<table class="container-fluid">
-		<tr ng-repeat="row in table" class="row">
-			<td ng-repeat="species in row">
-				<div class="panel card panel-color" ng-click="goToSpeciesRoute(species.species_id)">
+	<table>
+		<tr ng-repeat="row in table">
+				
+			<td ng-repeat="species in row" > 
+				<div class="panel card panel-color " ng-click="goToSpeciesRoute(species.species_id)">
 
-					<div class="panel-heading text-center">
-						<span class="name">{{species.name}}</span>
+					<div class="panel-heading" >
+						<h4>{{species.name}}</h4> 
 					</div>
 
 					<div class="panel-body">
-						<img class="card-img" src="{{species.photo_path}}">
+						<img class="card-img" src="{{species.photo_path}}"> 
 					</div>
 
 				</div>
 			</td>
+				
 		</tr>
 	</table>
 </div>
