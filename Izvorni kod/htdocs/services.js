@@ -874,12 +874,45 @@ app.service('AnimalsService', function($http, $q){
 
 	}
 
+	var deleteAnimal = function(animal){
+		post_data={
+			"animal_id": animal.animal_id,
+			"action": "remove_mammal"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri brisanju jedinke.");
+  					console.log(data.error)
+  				}
+  				else{
+ 					alert("Jedinka uspješno obrisana!")
+  				}
+  				_animals.splice(0,_animals.length) //invalidate cache
+		}, "JSON");
+		return post_obj;
+	}
+
 	var updateAnimal = function(animal){
 		var name;
 		if(animal.name) name=animal.name;
 		else if(animal.animal_name) name=animal.animal_name;
 
-		post_data = {
+
+/*
+		var post_data = new FormData()
+		post_data.append("animal_id", animal.animal_id)
+		post_data.append("species_id", animal.species_id)
+		post_data.append("name", name)
+		post_data.append("age", animal.age)
+		post_data.append("sex", animal.sex)
+		post_data.append("birth_location", animal.birth_location)
+		post_data.append("arrival_date", animal.arrival_date)
+		post_data.append("photo_path", animal.photo_path)
+		post_data.append("interesting_facts", animal.interesting_facts)
+		post_data.append("action", "update_animal")
+*/
+		var post_data = {
 			"animal_id": animal.animal_id,
 			"species_id": animal.species_id, 
 			"name": name, 
@@ -891,8 +924,8 @@ app.service('AnimalsService', function($http, $q){
 			"interesting_facts": animal.interesting_facts,
 			"action": "update_animal"
 		}
-
-		var post_obj = $.post("/Database.php", post_data, function(data) {
+		console.log(post_data);
+		var post_obj = $http.post("/Database.php", post_data, function(data) {
 			if(data.error){
 				alert("Nažalost, došlo je do greške pri ažuriranju jedinke.");
 				console.log(data.error)
@@ -969,7 +1002,8 @@ app.service('AnimalsService', function($http, $q){
 		getAnimals: getAnimals,
 		getExclusiveContent: getExclusiveContent,
 		updateAnimal: updateAnimal,
-		registerAnimal: registerAnimal
+		registerAnimal: registerAnimal,
+		deleteAnimal: deleteAnimal
 	}
 
 })

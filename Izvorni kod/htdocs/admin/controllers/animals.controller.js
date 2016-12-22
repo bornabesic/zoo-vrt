@@ -75,25 +75,7 @@ app.controller("AnimalsController", function($scope, AnimalsService, SpeciesServ
 		})
 	}
 
-	$scope.toggleEditAnimals = function(animals){
-		$scope.refreshClasses()
-		var form = $("#form_"+animals.animal_id)
-		if(!form.is(":visible")) {
-			form.show()
-			$('html, body').animate({
-				scrollTop: form.offset().top
-			});
-		}
-		else form.hide()
-	}
-
 	}*/
-
-
-
-
-
-	
 
 	//Variables
 	$scope.animals=[];
@@ -116,9 +98,6 @@ app.controller("AnimalsController", function($scope, AnimalsService, SpeciesServ
 						$scope.$apply();
 		})
 	}
-
-
-
 
 	$scope.mammalSpecies=[];
 
@@ -188,7 +167,7 @@ app.controller("AnimalsController", function($scope, AnimalsService, SpeciesServ
 					$scope.animals=result;
 					if(!$scope.$$phase)
 						$scope.$apply();
-					console.log("animals:" + JSON.stringify($scope.animals))
+					//console.log("animals:" + JSON.stringify($scope.animals))
 					/*for (var i = 0; i < $scope.animals.length; i++) {
 						var species = getSpeciesByID($scope.animals[i].species_id);
 						$scope.animals[i].species_name=species.name;
@@ -200,6 +179,15 @@ app.controller("AnimalsController", function($scope, AnimalsService, SpeciesServ
 
 	})
 
+	$scope.getSpeciesByID = function(species_id){
+		for (var i = 0; i < $scope.species.length; i++) {
+			if($scope.species[i].species_id===species_id){
+				return $scope.species[i];
+			}
+			
+		};
+	}
+
 	$scope.registerAnimal = function(){
 		//console.log($scope.new_species.photo)
 		AnimalsService.registerAnimal($scope.new_animal).then(function(result){
@@ -207,7 +195,30 @@ app.controller("AnimalsController", function($scope, AnimalsService, SpeciesServ
 		})
 	}
 
+
+	$scope.deleteAnimal = function(animal){
+		AnimalsService.deleteAnimal(animal).then(function(result){
+			location.reload();
+		})
+	}
+
+	$scope.toggleEditAnimal = function(animal){
+		//$scope.refreshClasses()
+		var form = $("#form_"+animal.animal_id)
+		if(!form.is(":visible")) {
+			form.show()
+			$('html, body').animate({
+				scrollTop: form.offset().top
+			});
+		}
+		else form.hide()
+	}
 	
+	$scope.updateAnimal = function(animal){
+		AnimalsService.updateAnimal(animal).then(function(result){
+			location.reload();
+		})
+	}
 
 
 

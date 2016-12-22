@@ -1121,12 +1121,14 @@
 		}
 
 		function update_animal($animal_id, $species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts){
-			
+			log_to_file("prekid");
 
 			$update_query="UPDATE ". DB_NAME . ".mammal_animals SET `species_id`=?, `name`=?, `age`=?, `sex`=?, `birth_location`=?, `arrival_date`=?, `photo_path`=?, `interesting_facts`=? WHERE `animal_id`=?;";
 			$update_statement=$this->db->prepare($update_query);
+
 			if($update_statement){
 				$update_statement->bind_param("isisssssi", $species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts, $animal_id);
+		     	
 		     	$update_statement->execute();
 			}
 			else {
@@ -1756,6 +1758,11 @@
 		kod update metoda affected_rows bude 0 ako se ništa ne mijenja pa javlja gresku, a ne bi trebala bit
 	*/
 	$database = new Database();
+
+	//log_to_file(json_encode($_POST));
+	if(isset($_POST['key']) && $_POST['key']==15){
+		log_to_file("neki tekst");
+	}
 
 	if($_POST['action']==="check_user_state"){
 		echo json_encode(array(
