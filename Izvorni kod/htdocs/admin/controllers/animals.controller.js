@@ -71,35 +71,41 @@ app.controller("AnimalsController", function($scope, AnimalsService, SpeciesServ
 			orders=result;
 
 			// dohvati sve porodice na temelju reda
+			var cats=0;
 			for (var i = 0; i < orders.length; i++) {
 				HierarchyService.getFamiliesByParentOrder(orders[i].order_id).then(function(result){
-					families=result;
+					families=families.concat(result);
+					cats++;
 
-					//dohvati sve vrste
-					SpeciesService.getSpecies().then(function(result){
-						species=result
+					if(cats==orders.length){
+						//dohvati sve vrste
+						SpeciesService.getSpecies().then(function(result){
+							species=result
 
-						// filtriraj vrste tako da uzmeš samo sisavce
-						var _mammalSpecies=[]
-						for (var i = 0; i < species.length; i++) {
-							for (var j = 0; j < families.length; j++) {
-								if(families[j].family_id===species[i].family_id){
-									_mammalSpecies.push(species[i]);
-									break;
-								}
+							// filtriraj vrste tako da uzmeš samo sisavce
+							var _mammalSpecies=[]
+							for (var i = 0; i < species.length; i++) {
+								for (var j = 0; j < families.length; j++) {
+									if(families[j].family_id===species[i].family_id){
+										_mammalSpecies.push(species[i]);
+										break;
+									}
+								};
 							};
-						};
 
-						$scope.mammalSpecies=_mammalSpecies;
+							$scope.mammalSpecies=_mammalSpecies;
 
-						// dohvati jedinke za uređivanje
-						AnimalsService.getAnimals(null).then(function(result){
-							$scope.animals=result;
+							// dohvati jedinke za uređivanje
+							AnimalsService.getAnimals(null).then(function(result){
+								$scope.animals=result;
 
-							if(!$scope.$$phase)
-								$scope.$apply();
+								if(!$scope.$$phase)
+									$scope.$apply();
+							})
 						})
-					})
+					}
+
+					
 				})
 			}
 
