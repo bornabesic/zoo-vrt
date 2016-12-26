@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 
-<div class="col-md-3">
+<div class="col-md-5">
 	<h4><u>Dodavanje jedinke:</u></h4>
-	<div class="col-xs-12">
+	<div class="col-xs-8">
 		<form id="form_registration" ng-submit="registerAnimal()">
 		    Ime jedinke: <input type="text" class="form-control" ng-model="new_animal.name" required/><br/>
 
-			<div class="row">
-				<div class="col-md-4">
-					Vrsta:
-					<select ng-model="new_animal.species_id" >
-			 			<option ng-repeat="specie in mammalSpecies track by $index" ng-value="specie.species_id">{{specie.name}}</option>
-					</select>
-				</div>
-			</div><br>
 
-			<div >
+			Vrsta:
+			<select ng-model="new_animal.species_id" >
+	 			<option ng-repeat="specie in mammalSpecies track by $index" ng-value="specie.species_id">{{specie.name}}</option>
+			</select>
+			<br/><br/>
 
-				Fotografija:<input type="file" file-model="new_species.photo" accept="image/*"/>
-			</div>
-			<br>
-
-			Broj godina:<input class="form-control" ng-model="new_animal.age"/></br>
 			Spol:
 			<select ng-model="new_animal.sex" >
 	 			<option ng-value="M">M</option>
 	 			<option ng-value="Ž">Ž</option>
 			</select><br><br>
+
+			<div >
+
+				Fotografija:<input type="file" file-model="new_animal.photo" accept="image/*"/>
+			</div>
+			<br>
+
+			Broj godina:<input class="form-control" ng-model="new_animal.age"/></br>
 			Mjesto rođenja:<input class="form-control"  ng-model="new_animal.birth_location"/></br>
 			Datum dolaska<textarea class="form-control" ng-model="new_animal.arrival_date"/></br>
 			Zanimljive činjenice:<textarea class="form-control" ng-model="new_animal.interesting_facts"/></br>
@@ -35,7 +34,7 @@
 	</div>
 </div>
 
-<div class="col-md-2" style="border-left:1px solid #0066cc;height:900px;">
+<div class="col-md-2" style="border-left:1px solid #0066cc;height:500px;">
 	<h4><u>Jedinke:</u></h4>
 
 	<ul>
@@ -57,7 +56,7 @@
 				</div><br> -->
 
 				<div >
-					Fotografija:<input type="file" file-model="species.photo" accept="image/*"/>
+					Fotografija:<input type="file" file-model="animal.photo" accept="image/*"/>
 				</div>
 				<br>
 

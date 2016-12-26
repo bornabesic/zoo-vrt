@@ -838,7 +838,9 @@ app.service('AnimalsService', function($http, $q){
 	//var _exclusive_content=[]; treba implementirati cache
 
 	var registerAnimal = function(animal){
-		console.log(JSON.stringify(animal));
+
+		console.log(animal)
+
 		var post_data = new FormData()
 		post_data.append("name", animal.name)
 		post_data.append("age", animal.age)
@@ -847,7 +849,7 @@ app.service('AnimalsService', function($http, $q){
 		post_data.append("birth_location", animal.birth_location)
 		post_data.append("arrival_date", animal.arrival_date)
 		post_data.append("interesting_facts", animal.interesting_facts)
-		post_data.append("photo_path", animal.photo_path)
+		post_data.append("photo", animal.photo)
 		post_data.append("action", "add_mammal")
 
 		var post_obj = $http.post("/Database.php", post_data, {
@@ -898,34 +900,24 @@ app.service('AnimalsService', function($http, $q){
 		if(animal.name) name=animal.name;
 		else if(animal.animal_name) name=animal.animal_name;
 
-
-/*
 		var post_data = new FormData()
 		post_data.append("animal_id", animal.animal_id)
-		post_data.append("species_id", animal.species_id)
 		post_data.append("name", name)
 		post_data.append("age", animal.age)
 		post_data.append("sex", animal.sex)
+		post_data.append("photo", animal.photo)
 		post_data.append("birth_location", animal.birth_location)
 		post_data.append("arrival_date", animal.arrival_date)
-		post_data.append("photo_path", animal.photo_path)
 		post_data.append("interesting_facts", animal.interesting_facts)
 		post_data.append("action", "update_animal")
-*/
-		var post_data = {
-			"animal_id": animal.animal_id,
-			"species_id": animal.species_id, 
-			"name": name, 
-			"age": animal.age, 
-			"sex": animal.sex, 
-			"birth_location": animal.birth_location, 
-			"arrival_date": animal.arrival_date, 
-			"photo_path": animal.photo_path, 
-			"interesting_facts": animal.interesting_facts,
-			"action": "update_animal"
-		}
-		console.log(post_data);
-		var post_obj = $http.post("/Database.php", post_data, function(data) {
+
+		console.log(animal);
+		var post_obj = $http.post("/Database.php", post_data, {
+             transformRequest: angular.identity,
+             headers: {'Content-Type': undefined,'Process-Data': false}
+         })
+
+		post_obj.success(function(data){
 			if(data.error){
 				alert("Nažalost, došlo je do greške pri ažuriranju jedinke.");
 				console.log(data.error)
@@ -933,8 +925,13 @@ app.service('AnimalsService', function($http, $q){
 			else{
 				alert("Jedinka uspješno ažurirana!")
 			}
-		}, "JSON");
-		return post_obj;
+		})
+         
+         post_obj.error(function(data){
+            alert("Prijenos slike na poslužitelj nije uspio.");
+         })
+
+         return post_obj;
 	}
 
 	var getAnimals = function(species_id){

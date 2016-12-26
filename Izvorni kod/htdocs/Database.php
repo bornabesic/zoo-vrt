@@ -172,7 +172,6 @@
 				$_SESSION["logged_in"]=true;
 				$_SESSION["role"]=$row['role'];
 
-				log_to_file("session_start");
 				return json_encode(array(
 					"user_id" => $row['user_id'],
 					"role" => $row['role'],
@@ -1033,9 +1032,7 @@
 			$add_mammal_statement = $this->db->prepare($add_mammal_query);
 			if($add_mammal_statement){
 				$add_mammal_statement->bind_param("isisssss", $species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts);
-		     	log_to_file((string)$this->db->errno);
 		     	$add_mammal_statement->execute();
-		     	log_to_file((string)$this->db->errno);
 			}
 			else {
 				return json_encode(
@@ -1120,15 +1117,14 @@
 			));
 		}
 
-		function update_animal($animal_id, $species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts){
-			log_to_file("prekid");
+		/* species_id je maknut od parametara */
+		function update_animal($animal_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts){
 
-			$update_query="UPDATE ". DB_NAME . ".mammal_animals SET `species_id`=?, `name`=?, `age`=?, `sex`=?, `birth_location`=?, `arrival_date`=?, `photo_path`=?, `interesting_facts`=? WHERE `animal_id`=?;";
+			$update_query="UPDATE ". DB_NAME . ".mammal_animals SET `name`=?, `age`=?, `sex`=?, `birth_location`=?, `arrival_date`=?, `photo_path`=?, `interesting_facts`=? WHERE `animal_id`=?;";
 			$update_statement=$this->db->prepare($update_query);
 
 			if($update_statement){
-				$update_statement->bind_param("isisssssi", $species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts, $animal_id);
-		     	
+				$update_statement->bind_param("sisssssi", $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts, $animal_id);
 		     	$update_statement->execute();
 			}
 			else {
@@ -1161,7 +1157,7 @@
 			));
 		}
 
-		function get_animals($species_id){
+		function get_animals($species_id){ /* ako je species_id -1 onda treba dohvatiti pravi */
 			if($species_id>=0) $condition=" WHERE species_id=?";
 			else $condition="";
 
@@ -1182,7 +1178,7 @@
 			while($row = $result->fetch_assoc()){
 				array_push($animals, array(
 					"animal_id" => $row['animal_id'],
-					"species_id" => $species_id,
+					"species_id" => $row['species_id'],
 					"name" => $row['name'],
 					"age" => $row['age'],
 					"sex" => $row['sex'],
@@ -1759,11 +1755,6 @@
 	*/
 	$database = new Database();
 
-	//log_to_file(json_encode($_POST));
-	if(isset($_POST['key']) && $_POST['key']==15){
-		log_to_file("neki tekst");
-	}
-
 	if($_POST['action']==="check_user_state"){
 		echo json_encode(array(
 			"logged_in" => $_SESSION["logged_in"],
@@ -1886,13 +1877,21 @@
 
 	//MAMMALS odnosno ANIMALS
 	else if($_POST['action']==="add_mammal"){
-		echo $database->add_mammal($_POST['species_id'], $_POST['name'], $_POST['age'], $_POST['sex'], $_POST['birth_location'], $_POST['arrival_date'], $_POST['photo_path'], $_POST['interesting_facts']);
+		mkdir("." . $media_dir, 0700);
+		$photo_path = $media_dir . basename($_FILES["photo"]["name"]);
+		move_uploaded_file($_FILES["photo"]["tmp_name"], "." . $photo_path);
+
+		echo $database->add_mammal($_POST['species_id'], $_POST['name'], $_POST['age'], $_POST['sex'], $_POST['birth_location'], $_POST['arrival_date'], $photo_path, $_POST['interesting_facts']);
 	}
 	else if($_POST['action']==="remove_mammal"){
 		echo $database->remove_mammal($_POST['animal_id']);
 	}
 	else if($_POST['action']==="update_animal"){
-		echo $database->update_animal($_POST["animal_id"], $_POST["species_id"], $_POST["name"], $_POST["age"], $_POST["sex"], $_POST["birth_location"], $_POST["arrival_date"], $_POST["photo_path"], $_POST["interesting_facts"]);
+		mkdir("." . $media_dir, 0700);
+		$photo_path = $media_dir . basename($_FILES["photo"]["name"]);
+		move_uploaded_file($_FILES["photo"]["tmp_name"], "." . $photo_path);
+
+		echo $database->update_animal($_POST["animal_id"], $_POST["name"], $_POST["age"], $_POST["sex"], $_POST["birth_location"], $_POST["arrival_date"], $photo_path, $_POST["interesting_facts"]);
 	}
 	else if($_POST['action']==="get_animals"){
 		if(isset($_POST['species_id'])) $species_id=$_POST['species_id'];
