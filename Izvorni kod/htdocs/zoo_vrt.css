@@ -4,9 +4,42 @@
 .btn-primary:visited,
 .btn-primary:focus {
 	font-weight: bold;
-    background-color: #00b300 !important;
-			border-width: 0;
+    background-color: #3eb23e !important;
+	border-width: 0;
 }
+
+.orange,
+.orange:hover,
+.orange:active,
+.orange:visited,
+.orange:focus {
+    background-color: #fcb553 !important;
+}
+
+.brown,
+.brown:hover,
+.brown:active,
+.brown:visited,
+.brown:focus {
+	background-color: #a58463 !important;
+}
+
+.blue,
+.blue:hover,
+.blue:active,
+.blue:visited,
+.blue:focus {
+	background-color: #88c0fc !important;
+}
+
+.red,
+.red:hover,
+.red:active,
+.red:visited,
+.red:focus{
+	background-color: #ff4949 !important;
+}
+
 
 a, a:active, a:visited{
 	color: white !important;

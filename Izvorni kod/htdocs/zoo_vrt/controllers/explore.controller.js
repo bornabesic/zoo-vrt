@@ -1,13 +1,25 @@
-app.controller("ExploreController", function($scope, $location, SpeciesService, MapService){
+app.controller("ExploreController", function($scope, $location, SpeciesService, VisitService, MapService){
+
+	MapService.setDot(null, null)
+
+	// Variables
+
+	$scope.showTopButton=false;
 
 	var species = [];
 	$scope.result = [];
 
-	MapService.setDot(null, null)
+	var recommendation=[]
+	var number_of_recommendations=4;
+
+	var box =  document.getElementsByClassName("content")[0];
+	var searchBar = document.getElementById("search-bar");
 
 	//Functions
 
 	function createTable(arr, size) {
+		if(size<=0) return arr;
+
 		var newArr = [];
 			for (var i=0; i<arr.length; i+=size) {
 				newArr.push(arr.slice(i, i+size));
@@ -15,18 +27,62 @@ app.controller("ExploreController", function($scope, $location, SpeciesService, 
 		return newArr;
 	}
 
-	function getSpecies(){
-		var post_obj = SpeciesService.getSpecies();
-		post_obj.then(function(result){
-			species=result;
-			$scope.result=result;
-			$scope.table = createTable($scope.result, 3);	
-			
-			if(!$scope.$$phase) {
-				$scope.$apply();
-			}		
+	function containsSpecies(_species, _specie){
+		for(var i=0; i<_species.length; i++){
+			if(_species[i].species_id==_specie.species_id) return true;
+		}
+		return false;
+	}
+
+	function recommendSpecies(){
+		var recursion_limit=10;
+		recommendation=[]
+
+		recommendSpecie(number_of_recommendations, recursion_limit);
+
+		if(recommendation.length<=0){ // ako nemreš nać vrste koje korisnik nije posjetio, napuni nasumično
+
+			var to_go=number_of_recommendations;
+
+			while(to_go>0){
+				var index = Math.floor(Math.random()*species.length);
+				if(!containsSpecies(recommendation, species[index])){
+					recommendation.push(species[index])
+					to_go--;
+				}
+			}
+
+			$scope.recommendTable=createTable(recommendation, number_of_recommendations)
+		}
+
+		if(!$scope.$$phase) {
+			$scope.$apply();
+		}
+	}
+
+	/*  
+		Rekurzija za preporuku
+		- i je broj preostalih vrsta za preporuku,
+		- drugi broj limitira rekurziju na najviše limit poziva (ukoliko se dogodi da ne može nać dovoljno vrsti)
+	*/
+	function recommendSpecie(i, first, limit){
+		if(i<=0 || limit<=0){
+			$scope.recommendTable=createTable(recommendation, number_of_recommendations-i)
+			return;
+		}
+
+		var index = Math.floor(Math.random()*species.length);
+		var specie = species[index];
+
+		VisitService.checkVisit(localStorage["user_id"], specie.species_id).then(function(result){
+			if(!result.visited && !containsSpecies(recommendation, specie)){
+				recommendation.push(specie)
+				recommendSpecie(i-1, limit-1)
+			}
+			else{
+				recommendSpecie(i, limit-1)
+			}
 		})
-		
 	}
 
 	$scope.filterSpecies = function(){
@@ -38,7 +94,34 @@ app.controller("ExploreController", function($scope, $location, SpeciesService, 
 		$scope.table = createTable($scope.result, 3);	
 	}
 
+	$scope.shouldShowRecommendation = function(){
+		return recommendation.length>0 && !$scope.search_species;
+	}
+
+	box.onscroll = function(){
+		$scope.showTopButton = box.scrollTop>0;
+
+		if(!$scope.$$phase) {
+			$scope.$apply();
+		}
+	}
+
+	$scope.scrollResultsToTop = function(){
+		box.scrollTop = 0;
+		searchBar.focus()
+	}
+
 	//Init
-	getSpecies();
+	SpeciesService.getSpecies().then(function(result){
+		species=result;
+		$scope.result=result;
+		$scope.table = createTable($scope.result, 3);	
+		
+		if(!$scope.$$phase) {
+			$scope.$apply();
+		}		
+
+		recommendSpecies()
+	})
 
 })

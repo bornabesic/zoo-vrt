@@ -6,6 +6,8 @@ app.controller("AnimalsController", function($scope, $state, $stateParams, Anima
 	$scope.animals = [];
 	var species_id = $stateParams["species_id"] //dohvati id iz URL-a
 
+	$scope.noAnimals=false;
+
 	//functions
 	function getAnimals(species_id){
 
@@ -24,6 +26,11 @@ app.controller("AnimalsController", function($scope, $state, $stateParams, Anima
 							break;
 						}
 					}
+				}
+
+				if($scope.animals.length<=0){
+					$scope.noAnimals=true;
+					console.log("noAnimals")
 				}
 
 				if(!$scope.$$phase) {
