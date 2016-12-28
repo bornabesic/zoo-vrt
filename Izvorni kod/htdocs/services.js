@@ -861,31 +861,92 @@ app.service('SpeciesService', function($http, $q){
 
 })
 
-app.service('AnimalsService', function($q){
+app.service('AnimalsService', function($http, $q){
 	var _species_id=null
 	var _animals=[]
 	//var _exclusive_content=[]; treba implementirati cache
 
+	var registerAnimal = function(animal){
+
+		console.log(animal)
+
+		var post_data = new FormData()
+		post_data.append("name", animal.name)
+		post_data.append("age", animal.age)
+		post_data.append("sex", animal.sex)
+		post_data.append("species_id", animal.species_id)
+		post_data.append("birth_location", animal.birth_location)
+		post_data.append("arrival_date", animal.arrival_date)
+		post_data.append("interesting_facts", animal.interesting_facts)
+		post_data.append("photo", animal.photo)
+		post_data.append("action", "add_mammal")
+
+		var post_obj = $http.post("/Database.php", post_data, {
+             transformRequest: angular.identity,
+             headers: {'Content-Type': undefined,'Process-Data': false}
+         })
+
+		post_obj.success(function(data){
+			if(data.error){
+  					alert("Nažalost, došlo je do greške pri registraciji jedinke.");
+  					console.log(data.error)
+  				}
+  				else{
+ 					alert("Jedinka uspješno registrirana!")
+  				}
+  				_animals.splice(0,_animals	.length) //invalidate cache
+		})
+         
+         post_obj.error(function(data){
+            alert("Prijenos slike na poslužitelj nije uspio.");
+         })
+
+         return post_obj;
+
+	}
+
+	var deleteAnimal = function(animal){
+		post_data={
+			"animal_id": animal.animal_id,
+			"action": "remove_mammal"
+		}
+
+		var post_obj = $.post("/Database.php", post_data, function(data) {
+  				if(data.error){
+  					alert("Nažalost, došlo je do greške pri brisanju jedinke.");
+  					console.log(data.error)
+  				}
+  				else{
+ 					alert("Jedinka uspješno obrisana!")
+  				}
+  				_animals.splice(0,_animals.length) //invalidate cache
+		}, "JSON");
+		return post_obj;
+	}
 
 	var updateAnimal = function(animal){
 		var name;
 		if(animal.name) name=animal.name;
 		else if(animal.animal_name) name=animal.animal_name;
 
-		post_data = {
-			"animal_id": animal.animal_id,
-			"species_id": animal.species_id, 
-			"name": name, 
-			"age": animal.age, 
-			"sex": animal.sex, 
-			"birth_location": animal.birth_location, 
-			"arrival_date": animal.arrival_date, 
-			"photo_path": animal.photo_path, 
-			"interesting_facts": animal.interesting_facts,
-			"action": "update_animal"
-		}
+		var post_data = new FormData()
+		post_data.append("animal_id", animal.animal_id)
+		post_data.append("name", name)
+		post_data.append("age", animal.age)
+		post_data.append("sex", animal.sex)
+		post_data.append("photo", animal.photo)
+		post_data.append("birth_location", animal.birth_location)
+		post_data.append("arrival_date", animal.arrival_date)
+		post_data.append("interesting_facts", animal.interesting_facts)
+		post_data.append("action", "update_animal")
 
-		var post_obj = $.post("/Database.php", post_data, function(data) {
+		console.log(animal);
+		var post_obj = $http.post("/Database.php", post_data, {
+             transformRequest: angular.identity,
+             headers: {'Content-Type': undefined,'Process-Data': false}
+         })
+
+		post_obj.success(function(data){
 			if(data.error){
 				alert("Nažalost, došlo je do greške pri ažuriranju jedinke.");
 				console.log(data.error)
@@ -893,8 +954,13 @@ app.service('AnimalsService', function($q){
 			else{
 				alert("Jedinka uspješno ažurirana!")
 			}
-		}, "JSON");
-		return post_obj;
+		})
+         
+         post_obj.error(function(data){
+            alert("Prijenos slike na poslužitelj nije uspio.");
+         })
+
+         return post_obj;
 	}
 
 	var getAnimals = function(species_id){
@@ -904,10 +970,18 @@ app.service('AnimalsService', function($q){
 		}
 
 		if(_animals.length<=0){ //nema u cacheu
-			post_data={
-				"species_id": species_id,
-				"action": "get_animals"
+			if(species_id!=null){
+				post_data={
+					"species_id": species_id,
+					"action": "get_animals"
+				}
 			}
+			else{
+				post_data={
+					"action": "get_animals"
+				}
+			}
+
 
 			var post_obj = $.post("/Database.php", post_data, function(data) {
 	  				if(data.error){
@@ -947,10 +1021,15 @@ app.service('AnimalsService', function($q){
 		return post_obj;
 	}
 
+
+
+
 	return{
 		getAnimals: getAnimals,
 		getExclusiveContent: getExclusiveContent,
-		updateAnimal: updateAnimal
+		updateAnimal: updateAnimal,
+		registerAnimal: registerAnimal,
+		deleteAnimal: deleteAnimal
 	}
 
 })
