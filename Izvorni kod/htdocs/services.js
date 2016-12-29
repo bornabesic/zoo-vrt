@@ -238,34 +238,6 @@ app.service('GuardService', function($http, $q) {
 				})
 	}
 
-    var getGuards = function(){
-    	post_data={
-			"action": "get_users"
-		}
-
-		var post_obj = $.post("/Database.php", post_data, function(data) {
-  				if(data.error){
-  					alert("Nažalost, došlo je do greške pri dohvatu popisa korisnika.");
-  					console.log(data.error)
-  				}
-  				else{
-  				}
-		}, "JSON");
-
-		return $q(function(resolve, reject) {
-					post_obj.then(function(result){
-						var all_users = result;
-						var guards=[];
-
-						for(var i = 0; i < all_users.length; i++){
-							if (all_users.role & 2) guards.push(all_users[i]);
-						}
-
-						resolve(guards);
-					})
-				})
-    }
-
 	var addExclusiveFact = function(animal_id, fact){
 		post_data={
 			"animal_id": animal_id,
@@ -346,7 +318,6 @@ app.service('GuardService', function($http, $q) {
 		assignAnimal: assignAnimal,
 		unassignAnimal: unassignAnimal,
 		getAssignedAnimals: getAssignedAnimals,
-		getGuards: getGuards,
 		addExclusiveFact: addExclusiveFact,
 		addExclusivePhoto: addExclusivePhoto,
 		addExclusiveVideo: addExclusiveVideo

@@ -1327,7 +1327,7 @@
 			$query="DELETE FROM guard_assigned_animals WHERE guard_id=? AND animal_id=?;";
 			$statement=$this->db->prepare($query);
 			if($statement){
-				$statement->bind_param("i", $animal_id);
+				$statement->bind_param("ii", $user_id, $animal_id);
 		     	$statement->execute();
 			}
 			else {
