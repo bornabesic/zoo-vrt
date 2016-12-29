@@ -39,25 +39,6 @@ app.controller("ExploreController", function($scope, $location, SpeciesService, 
 		recommendation=[]
 
 		recommendSpecie(number_of_recommendations, recursion_limit);
-
-		if(recommendation.length<=0){ // ako nemreš nać vrste koje korisnik nije posjetio, napuni nasumično
-
-			var to_go=number_of_recommendations;
-
-			while(to_go>0){
-				var index = Math.floor(Math.random()*species.length);
-				if(!containsSpecies(recommendation, species[index])){
-					recommendation.push(species[index])
-					to_go--;
-				}
-			}
-
-			$scope.recommendTable=createTable(recommendation, number_of_recommendations)
-		}
-
-		if(!$scope.$$phase) {
-			$scope.$apply();
-		}
 	}
 
 	/*  
@@ -65,24 +46,55 @@ app.controller("ExploreController", function($scope, $location, SpeciesService, 
 		- i je broj preostalih vrsta za preporuku,
 		- drugi broj limitira rekurziju na najviše limit poziva (ukoliko se dogodi da ne može nać dovoljno vrsti)
 	*/
-	function recommendSpecie(i, first, limit){
+	function recommendSpecie(i, limit){
 		if(i<=0 || limit<=0){
-			$scope.recommendTable=createTable(recommendation, number_of_recommendations-i)
+
+			if(recommendation.length<=0){ // ako nemreš nać vrste koje korisnik nije posjetio, napuni nasumično
+				var to_go=number_of_recommendations;
+
+				while(to_go>0){
+					var index = Math.floor(Math.random()*species.length);
+					if(!containsSpecies(recommendation, species[index])){
+						recommendation.push(species[index])
+						to_go--;
+					}
+				}
+
+				$scope.recommendTable=createTable(recommendation, number_of_recommendations)
+			}
+			else{
+				$scope.recommendTable=createTable(recommendation, number_of_recommendations-i)
+			}
+
+			if(!$scope.$$phase) {
+				$scope.$apply();
+			}
+			
 			return;
 		}
 
-		var index = Math.floor(Math.random()*species.length);
-		var specie = species[index];
+		var specie=null;
+		var loopLimit=100;
+		while(loopLimit-->0){
+			var index = Math.floor(Math.random()*species.length);
+			var specie = species[index];
+			if(!containsSpecies(recommendation, specie)) break;
+		}
 
-		VisitService.checkVisit(localStorage["user_id"], specie.species_id).then(function(result){
-			if(!result.visited && !containsSpecies(recommendation, specie)){
-				recommendation.push(specie)
-				recommendSpecie(i-1, limit-1)
-			}
-			else{
-				recommendSpecie(i, limit-1)
-			}
-		})
+		if(specie!=null){
+
+			VisitService.checkVisit(localStorage["user_id"], specie.species_id).then(function(result){
+				if(!result.visited){
+					recommendation.push(specie)
+					recommendSpecie(i-1, limit-1)
+				}
+				else{
+					recommendSpecie(i, limit-1)
+				}
+			})
+		}
+
+
 	}
 
 	$scope.filterSpecies = function(){
