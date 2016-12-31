@@ -52,6 +52,17 @@ app.controller("AnimalsController", function($scope, AnimalsService, SpeciesServ
 		})
 	}
 
+	$scope.containsSpecies = function (mammalSpecie, animals){
+		console.log(mammalSpecie);
+		console.log(animals);
+		for (var i = 0; i < animals.length; i++) {
+			if(animals[i].species_id===mammalSpecie.species_id){
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	// Init
 	// dohvati sve razrede
