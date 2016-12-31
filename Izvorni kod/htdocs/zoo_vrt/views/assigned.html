@@ -3,8 +3,6 @@
 
 	.animal-card{
 		font-family: Verdana, Geneva, sans-serif;
-		/*color: #ffae3d !important;
-		text-shadow: -0.5px 0 black, 0 0.5px black, 0.5px 0 black, 0 -0.5px black;*/
 
 		border-radius: 32px 0px 32px 0px;
 		border: 0px solid #000000;
@@ -17,8 +15,6 @@
 		margin-bottom: 10px;
 		background: linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.15));
 		text-align: left;
-
-		/*background: url("/media/ricepaper.png");*/
 	}
 
 	img {
@@ -92,7 +88,7 @@
 
 </style>
 
-<div id="no-animals" ng-if="noAnimals" style="font-size: 20pt; position: relative; top: 50%; transform: translateY(-50%);">
+<div id="no-animals" ng-if="noAnimals" style="font-size: 20pt; position: absolute; left:50%; top: 50%; transform: translate(-50%, -50%);">
 	<label>Nije Vam dodijeljena niti jedna životinja.</label>
 </div>
 
