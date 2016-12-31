@@ -7,7 +7,7 @@
   <ul>
     <div class="row" ng-repeat="guard in guards track by $index">
     <li>
-      <a ng-attr-class="{{selectedGuardID == guard.user_id ? 'btn btn-default' : 'btn btn-danger' }}" href="" ng-click="selectGuard(guard.user_id)">{{guard.username}}</a>
+      <a ng-attr-class="{{selectedGuardID == guard.user_id ? 'btn btn-default' : 'btn btn-primary' }}" href="" ng-click="selectGuard(guard.user_id)">{{guard.username}}</a>
     </li>
     </div>
   </ul>
