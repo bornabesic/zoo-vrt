@@ -14,24 +14,24 @@
 </div>
 
 <div class="col-md-2" style="border-left:1px solid #0066cc;height:500px;">
-  <h4><u>Životinje:</u></h4>
+  <h4><u>Dodijeljene jedinke:</u></h4>
   <ul>
-    <div class="row" ng-repeat="animal in unassigned_animals track by $index">
+    <div class="row" ng-repeat="animal in assigned_animals track by $index"> 
       <li>
-        <b>{{animal.name}}</b>
-        <a class="btn btn-default btn-xs" href="" ng-click="assignAnimal(animal.animal_id)">Zaduži</a>
+        <b>{{animal.animal_name}}</b>
+        <a class="btn btn-danger btn-xs" href="" ng-click="unassignAnimal(animal.animal_id)">Razduži</a>
       </li>
     </div>
   </ul>
 </div>
 
 <div class="col-md-2" style="border-left:1px solid #0066cc;height:500px;">
-  <h4><u>Assignments:</u></h4>
+  <h4><u>Ostale jedinke:</u></h4>
   <ul>
-    <div class="row" ng-repeat="animal in assigned_animals track by $index"> 
+    <div class="row" ng-repeat="animal in unassigned_animals track by $index">
       <li>
-        <b>{{animal.animal_name}}</b>
-        <a class="btn btn-danger btn-xs" href="" ng-click="unassignAnimal(animal.animal_id)">Razduži</a>
+        <b>{{animal.name}}</b>
+        <a class="btn btn-default btn-xs" href="" ng-click="assignAnimal(animal.animal_id)">Zaduži</a>
       </li>
     </div>
   </ul>

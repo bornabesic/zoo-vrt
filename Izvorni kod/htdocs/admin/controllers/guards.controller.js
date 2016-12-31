@@ -74,11 +74,12 @@ app.controller("GuardsController", function($scope, $http, AnimalsService, Guard
 	$scope.selectGuard = function(guard_id){
 		if ($scope.selectedGuardID == guard_id){
 			$scope.selectedGuardID = null;
+			$scope.assigned_animals = [];
+			$scope.unassigned_animals = [];
 		} else {
 			$scope.selectedGuardID = guard_id;
+			$scope.refreshAssignments();
 		}
-	
-		$scope.refreshAssignments();
 
 		if(!$scope.$$phase) {
 			$scope.$apply();
@@ -135,7 +136,6 @@ app.controller("GuardsController", function($scope, $http, AnimalsService, Guard
 
 	//Init
 
-	$scope.refreshAnimals();
 	$scope.refreshGuards();
 
 });
