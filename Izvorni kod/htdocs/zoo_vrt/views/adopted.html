@@ -87,6 +87,13 @@
 </style>
 <link rel="stylesheet" href="/Gallery/css/blueimp-gallery.min.css">
 
+<div id="no-animals" ng-if="noAnimals" style="font-size: 20pt; position: relative; top: 50%; transform: translateY(-50%);">
+	<label>
+		Niste posvojili niti jednu životinju do sada.<br/><br/>
+		<a style="font-size: 15pt;" href="#/explore"><button class="btn btn-primary orange"><span class="glyphicon glyphicon-search"/> Pretraži životinjske vrste</button></a>
+	</label>
+</div>
+
 <div id="animal-card" ng-repeat="animal in animals track by $index">
 	
 		<div id="left-column">

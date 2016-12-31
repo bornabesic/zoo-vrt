@@ -26,14 +26,6 @@
 		top: 0;
 	}
 
-	.orange,
-	.orange:hover,
-	.orange:active,
-	.orange:visited,
-	.orange:focus {
-		background-color: #ffae3d !important;
-	}
-
 	#animal-card{
 		position: relative;
 
@@ -76,7 +68,9 @@
 
 
 </style>
-
+<div id="no-animals" ng-if="noAnimals" style="font-size: 20pt; position: relative; top: 50%; transform: translateY(-50%);">
+	<label>Ova životinjska vrsta nema jedinki za prikaz.</label>
+</div>
 <div id="animal-card" ng-repeat="animal in animals track by $index">
 
 	<div id="left-column">

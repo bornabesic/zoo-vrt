@@ -3,6 +3,7 @@ app.controller("AdoptedController", function($scope, $stateParams, AdoptService,
 
 	//
 	$scope.animals = []
+	$scope.noAnimals=false;
 
 	
 	//functions
@@ -10,6 +11,10 @@ app.controller("AdoptedController", function($scope, $stateParams, AdoptService,
 
 		AdoptService.getAdopted(localStorage['user_id']).then(function(result) {
 			$scope.animals=result;
+
+			if($scope.animals.length<=0){
+				$scope.noAnimals=true;
+			}
 			
 			if(!$scope.$$phase) {
 				$scope.$apply();

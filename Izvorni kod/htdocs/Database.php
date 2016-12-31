@@ -1784,13 +1784,14 @@
 	}
 
 	// ------- OGRAĐENI POZIVI ------------
+	$role=$_SESSION["role"];
 
 	//USERS
-	else if($_POST['action']==="delete_user"){
+	if($_POST['action']==="delete_user"){
 		echo $database->delete_user($_POST['user_id']);
 	}
 	else if($_POST['action']==="update_user"){
-		echo $database->update_user($_POST['username'], $_POST['password'], $_POST['first_last_name'], $_POST['year_of_birth'], $_POST['city'], $_POST['email'], $_POST['role'], $_POST['user_id']);
+		echo $database->update_user($_POST['username'], $_POST['password'], $_POST['first_last_name'], $_POST['year_of_birth'], $_POST['city'], $_POST['email'], $role, $_POST['user_id']);
 	}
 	else if($_POST['action']==="get_users"){
 		echo $database->get_users();

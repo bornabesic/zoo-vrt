@@ -25,7 +25,11 @@ app.controller("StatisticsController", function($q, $scope, $http, SpeciesServic
 			$q.all(promises).then(function () {
 				var tmp = $scope.statistics;
 				for (var i = 0; i < tmp.length ; i++) {
-					tmp[i].percentage = parseFloat(tmp[i].visits*100/total_visit_count).toFixed(2);
+					var percentage;
+					if(total_visit_count==0) percentage = 0
+					else percentage = tmp[i].visits*100/total_visit_count
+
+					tmp[i].percentage=parseFloat(percentage).toFixed(2)
 				}
 
 				// sortiraj vrste po broju posjeta

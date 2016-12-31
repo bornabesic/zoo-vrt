@@ -53,7 +53,11 @@
 
 		text-align: center;
 		vertical-align: middle;
-		text-shadow: 0px -1px 5px black;
+		text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000;
 	}
 
 	#species{
@@ -62,7 +66,12 @@
 
 		font-size:14pt;
 		text-transform: uppercase;
-		text-shadow: 0px 0px 5px green;
+
+		text-shadow:
+		-1px -1px 0 green,
+		1px -1px 0 green,
+		-1px 1px 0 green,
+		1px 1px 0 green;
 	}
 
 	#animals{
@@ -75,14 +84,6 @@
 		font-size: 14pt;
 	}
 
-	.red,
-	.red:hover,
-	.red:active,
-	.red:visited,
-	.red:focus{
-		background-color: #ff4949 !important;
-	}
-
 	.row{
 		position: relative;
 		display: flex;
@@ -90,6 +91,10 @@
 	}
 
 </style>
+
+<div id="no-animals" ng-if="noAnimals" style="font-size: 20pt; position: relative; top: 50%; transform: translateY(-50%);">
+	<label>Nije Vam dodijeljena niti jedna životinja.</label>
+</div>
 
 <div class="row" ng-repeat="species in assigned track by $index">
 	 <div id="species">{{species.species_name}}</div>

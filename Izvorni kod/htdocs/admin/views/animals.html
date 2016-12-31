@@ -29,51 +29,42 @@
 			Mjesto rođenja:<input class="form-control"  ng-model="new_animal.birth_location"/></br>
 			Datum dolaska<textarea class="form-control" ng-model="new_animal.arrival_date"/></br>
 			Zanimljive činjenice:<textarea class="form-control" ng-model="new_animal.interesting_facts"/></br>
-		    <input class="btn btn-success btn-xs" type="submit" value="Dodaj"/>
+		    <input class="btn btn-success btn-xs" type="submit" value="Registracija"/>
 		</form>
 	</div>
 </div>
 
-<div class="col-md-2" style="border-left:1px solid #0066cc;height:500px;">
+<div class="col-md-3" style="border-left:1px solid #0066cc;height:100%;">
 	<h4><u>Jedinke:</u></h4>
 
-	<ul>
-	    <div class="row" ng-repeat="animal in animals track by $index">
+	
+    <div ng-repeat="mammalSpecie in mammalSpecies track by $index" ng-show="containsSpecies(mammalSpecie, animals)">
 	    <!--<div class="col-xs-2">-->
-		<li>
-		    <b>{{animal.name}}</b>
-		    <a class="btn btn-default btn-xs" href="" ng-click="toggleEditAnimal(animal)">Uredi</a>
-		    <a class="btn btn-danger btn-xs" href="" ng-click="deleteAnimal(animal)">Izbriši</a>
-	    	<form id="form_{{animal.animal_id}}" ng-submit="updateAnimal(animal)" style="display: none;">
-	    		Ime jedinke: <input type="text" class="form-control" ng-model="animal.name"/><br/>
-			<!--	<div class="row">
-					<div class="col-md-4">
-						Vrsta:
-						<select ng-model="animal.species_id" >
-				 			<option ng-repeat="specie in mammalSpecies track by $index" ng-value="specie.species_id">{{specie.name}}</option>
-						</select>
-					</div>
-				</div><br> -->
+	    <br><label style="margin-bottom: 10px;"><b>{{mammalSpecie.name}}</b></label>
+	    <ul>
+			<li ng-repeat="animal in animals track by $index" ng-if="animal.species_id===mammalSpecie.species_id">
+			    <b>{{animal.name}}</b>
+			    <a class="btn btn-default btn-xs" href="" ng-click="toggleEditAnimal(animal)">Uredi</a>
+			    <a class="btn btn-danger btn-xs" href="" ng-click="deleteAnimal(animal)">Izbriši</a>
+		    	<form id="form_{{animal.animal_id}}" ng-submit="updateAnimal(animal)" style="display: none;">
+		    		Ime jedinke: <input type="text" class="form-control" ng-model="animal.name"/><br/>
+					Fotografija:<input type="file" file-model="animal.photo" accept="image/*"/><br/>
+					Broj godina:<input class="form-control" ng-model="animal.age"/><br/>
+					Spol:
+					<select ng-model="animal.sex" >
+			 			<option ng-value="M">M</option>
+			 			<option ng-value="Ž">Ž</option>
+					</select><br><br>
+					Mjesto rođenja:<input class="form-control"  ng-model="animal.birth_location"/><br/>
+					Datum dolaska<textarea class="form-control" ng-model="animal.arrival_date"/><br/>
+					Zanimljive činjenice:<textarea class="form-control" ng-model="animal.interesting_facts"/><br/>
+					<input class="btn btn-success btn-xs" type="submit" value="Potvrdi"/>
+		    		<a class="btn btn-default btn-xs" ng-click="toggleEditAnimal(animal)">Odustani</a>
+		    		<hr>
+		    	</form>
 
-				<div >
-					Fotografija:<input type="file" file-model="animal.photo" accept="image/*"/>
-				</div>
-				<br>
-
-				Broj godina:<input class="form-control" ng-model="animal.age"/></br>
-				Spol:
-				<select ng-model="animal.sex" >
-		 			<option ng-value="M">M</option>
-		 			<option ng-value="Ž">Ž</option>
-				</select><br><br>
-				Mjesto rođenja:<input class="form-control"  ng-model="animal.birth_location"/></br>
-				Datum dolaska<textarea class="form-control" ng-model="animal.arrival_date"/></br>
-				Zanimljive činjenice:<textarea class="form-control" ng-model="animal.interesting_facts"/></br>
-				<input class="btn btn-success btn-xs" type="submit" value="Potvrdi"/>
-	    		<a class="btn btn-default btn-xs" ng-click="toggleEditAnimal(animal)">Odustani</a>
-	    		<hr>
-	    	</form>
-
-		</li>
-	</ul>
+			</li>
+		</ul>
+	
+	</div>
 </div>
