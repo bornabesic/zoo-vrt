@@ -23,7 +23,7 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 
 	function isPhotoChosen (species){
 		if(!species.photo){
-			alert("Nije odabrana slika.");
+			alert("Niste odabrali sliku.");
 			return false;
 		}
 		return true;
@@ -47,11 +47,20 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 		return true;
 	}
 
-	$scope.mapInit = function(species){
-		drawMap("karta_"+species.species_id, species)
+	function isMapped(species){
+		if(species.location_x==null || species.location_y==null){
+			alert("Nije označena lokacija nastambe na mapi.");
+			return false
+		}
+		return true;
 	}
 
-	function drawMap(map, species){
+	$scope.mapInit = function(species){
+		var map_id="karta_"+species.species_id;
+		drawMap(map_id, species, true)
+	}
+
+	function drawMap(map, species, location_exists){
 		var img = new Image;
 		img.src = "/media/karta.png";
 
@@ -104,6 +113,20 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 			context.drawImage(img,
 				0,0, img.width, img.height,
 				0,0, canvas.width, canvas.height);
+
+			if(location_exists){
+				context.clearRect(0, 0, canvas.width, canvas.height);
+				context.drawImage(img,
+					0,0, img.width, img.height,
+					0,0, canvas.width, canvas.height);
+				
+			    //crtanje oznake
+				context.beginPath();
+				context.arc(species.location_x, species.location_y, radius, 0, 2 * Math.PI, false);
+				context.fillStyle = 'red';
+				context.fill();
+				context.stroke();
+			}
 		}
 
 		
@@ -126,7 +149,7 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 
 		//provjera dropdowna
 		
-		if(isDropdownChosen($scope.new_species) && isPhotoChosen($scope.new_species)){
+		if(isDropdownChosen($scope.new_species) && isPhotoChosen($scope.new_species) && isMapped($scope.new_species)){
 			var post_obj = SpeciesService.registerSpecies($scope.new_species);
 			post_obj.then(function(result){
 				refreshSpecies()

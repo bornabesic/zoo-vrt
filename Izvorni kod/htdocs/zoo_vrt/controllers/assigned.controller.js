@@ -26,7 +26,7 @@ app.controller("AssignedController", function($scope, GuardService, AnimalsServi
 	}
 	function isExclusiveFactChosen (animal){
 		if(!animal.exclusive_fact){
-			alert("Nije odabran ekskluzivni sadržaj.");
+			alert("Nije upisana ekskluzivna zanimljivost.");
 			return false;
 		}
 		return true;
@@ -34,7 +34,7 @@ app.controller("AssignedController", function($scope, GuardService, AnimalsServi
 
 	function isPhotoChosen (animal){
 		if(!animal.exclusive_photo){
-			alert("Nije odabrana slika.");
+			alert("Nije odabrana ekskluzivna fotografija.");
 			return false;
 		}
 		return true;
@@ -42,7 +42,7 @@ app.controller("AssignedController", function($scope, GuardService, AnimalsServi
 
 	function isVideoChosen (animal){
 		if(!animal.exclusive_video){
-			alert("Nije odabran video.");
+			alert("Nije odabran ekskluzivi video isječak.");
 			return false;
 		}
 		return true;
@@ -54,7 +54,6 @@ app.controller("AssignedController", function($scope, GuardService, AnimalsServi
 
 		if($scope.assigned.length<=0){
 			$scope.noAnimals=true;
-			console.log("nema")
 		}
 
 		if(!$scope.$$phase)

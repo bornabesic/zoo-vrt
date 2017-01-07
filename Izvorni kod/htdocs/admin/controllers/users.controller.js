@@ -49,12 +49,11 @@ app.controller("UsersController", function($scope, $http, UserService){
 
 	$scope.deleteUser = function(user){
 		//izbrisi korisnika iz baze
-		var post_obj = UserService.deleteUser(user.user_id);
-		post_obj.then(function(result){
+		UserService.deleteUser(user.user_id).then(function(result){
+			
 			//izbrisi korisnika iz lokalne liste
-			var i=0;
-			for(; i<$scope.users.length; i++){
-				if($scope.users[i].id===user.id) break;
+			for(var i=0; i<$scope.users.length; i++){
+				if($scope.users[i].user_id===user.user_id) break;
 			}
 			$scope.users.splice(i, 1);
 			if(!$scope.$$phase) {
@@ -81,8 +80,6 @@ app.controller("UsersController", function($scope, $http, UserService){
 		if(user.is_visitor) role+=1;
 		if(user.is_guard) role+=2;
 		if(user.is_admin) role+=4;
-
-		alert(role)
 
 		//azuriraj korisnicke informacije u bazi
 		var post_obj = UserService.updateUser(user.user_id, user.username, user.password, user.first_last_name, user.year_of_birth, user.city, user.email, role);
