@@ -5,6 +5,25 @@ app.controller("AssignedController", function($scope, GuardService, AnimalsServi
 	$scope.assigned=[]
 	$scope.noAnimals=false;
 
+	function isInputChosen (animal){
+		if(animal.animal_name===""){
+			alert("Polje 'Ime' ne smije biti prazno");
+			return false;
+		}
+		if(animal.arrival_date===""){
+			alert("Polje 'Datum dolaska' ne smije biti prazno");
+			return false;
+		}
+		if(animal.birth_location===""){
+			alert("Polje 'Mjesto rođenja' ne smije biti prazno");
+			return false;
+		}
+		if(animal.interesting_facts===""){
+			alert("Polje 'Zanimljivosti' ne smije biti prazno");
+			return false;
+		}		
+		return true;
+	}
 	function isExclusiveFactChosen (animal){
 		if(!animal.exclusive_fact){
 			alert("Nije odabran ekskluzivni sadržaj.");
@@ -84,11 +103,13 @@ app.controller("AssignedController", function($scope, GuardService, AnimalsServi
 	}
 
 	$scope.updateAnimal = function(animal){
-		var post_obj = AnimalsService.updateAnimal(animal);
-		post_obj.then(function(result){
-			if(!result.error) location.reload()
-		})
-		console.log(animal.animal_name + " će ažurirati.")
+		if(isInputChosen(animal)){
+			var post_obj = AnimalsService.updateAnimal(animal);
+			post_obj.then(function(result){
+				if(!result.error) location.reload()
+			})
+			console.log(animal.animal_name + " će ažurirati.")
+		}
 	}
 
 	refreshAssigned()

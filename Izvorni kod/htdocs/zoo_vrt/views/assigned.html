@@ -108,13 +108,13 @@
 			<div id="form_{{animal.animal_id}}" style="display: none; padding: 20px; padding-top:0;">
 		        <hr>
 		        <label class="attribute">Osnovne informacije:</label><br/>
-		    	Ime: <input type="text" maxlength="32" ng-model="animal.animal_name" class="form-control" required/></br/>
+		    	Ime: <input type="text" maxlength="32" ng-model="animal.animal_name" class="form-control"/></br/>
 				Datum dolaska:
 				<!--<textarea class="form-control" ng-model="animal.arrival_date"/>-->
-				<input type="text" class="form-control" ng-model="animal.arrival_date" required/> 
+				<input type="text" class="form-control" ng-model="animal.arrival_date"/> 
 				</br/>
-				Mjesto rođenja:<textarea maxlength="32" class="form-control" ng-model="animal.birth_location"/ required></br/>
-				Zanimljivosti:<textarea class="form-control" ng-model="animal.interesting_facts" required/><br/>
+				Mjesto rođenja:<textarea maxlength="32" class="form-control" ng-model="animal.birth_location"/></br/>
+				Zanimljivosti:<textarea class="form-control" ng-model="animal.interesting_facts"/><br/>
 				<button class="btn btn-primary green" ng-click="updateAnimal(animal)" type="submit"><span class="glyphicon glyphicon-ok"/> Potvrdi</button>
 				<hr>
 				<label class="attribute">Ekskluzivni sadržaj:</label><br/>

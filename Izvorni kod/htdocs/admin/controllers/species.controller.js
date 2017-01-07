@@ -22,7 +22,7 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 	//Functions
 
 	function isPhotoChosen (species){
-		if(!species.photo_path){
+		if(!species.photo){
 			alert("Nije odabrana slika.");
 			return false;
 		}
