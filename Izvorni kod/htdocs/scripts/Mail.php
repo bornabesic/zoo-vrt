@@ -18,7 +18,7 @@
         $html_2="
         Primatelj: ZOO Vrt
         Iznos: 300,00 HRK
-        Broj računa primatelja / IBAN: HR5924020063208059208
+        Broj računa primatelja / IBAN: HR1337020042008059269
 
         ZOO Vrt - grupa Synchronized";
 

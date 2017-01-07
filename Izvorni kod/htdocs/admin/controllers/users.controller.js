@@ -9,7 +9,7 @@ app.controller("UsersController", function($scope, $http, UserService){
 		email: null,
 		city: null,
 		year_of_birth: null,
-		is_visitor: null,
+		is_visitor: true,
 		is_guard: null,
 		is_admin: null
 	}
@@ -27,7 +27,9 @@ app.controller("UsersController", function($scope, $http, UserService){
 				if(role&2) user.is_guard=true;
 				if(role&4) user.is_admin=true;
 			}
-			$scope.$apply();
+			if(!$scope.$$phase) {
+				$scope.$apply();
+			}
 		});
 		//alert($scope.users)
 	}
@@ -55,7 +57,9 @@ app.controller("UsersController", function($scope, $http, UserService){
 				if($scope.users[i].id===user.id) break;
 			}
 			$scope.users.splice(i, 1);
-			$scope.$apply();
+			if(!$scope.$$phase) {
+				$scope.$apply();
+			}
 		})
 
 
@@ -70,9 +74,15 @@ app.controller("UsersController", function($scope, $http, UserService){
 
 	$scope.updateUser = function(user){
 		var role=0;
+
+		/* mora se moći prijaviti */
+		user.is_visitor=true;
+
 		if(user.is_visitor) role+=1;
 		if(user.is_guard) role+=2;
 		if(user.is_admin) role+=4;
+
+		alert(role)
 
 		//azuriraj korisnicke informacije u bazi
 		var post_obj = UserService.updateUser(user.user_id, user.username, user.password, user.first_last_name, user.year_of_birth, user.city, user.email, role);

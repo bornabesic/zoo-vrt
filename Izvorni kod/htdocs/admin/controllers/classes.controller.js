@@ -14,7 +14,9 @@ app.controller("ClassesController", function($scope, $http, HierarchyService){
 		var post_obj = HierarchyService.getClasses();
 		post_obj.then(function(result){
 			$scope.classes=result;
-			$scope.$apply()
+			if(!$scope.$$phase) {
+				$scope.$apply();
+			}
 		})
 	}
 
@@ -54,7 +56,9 @@ app.controller("ClassesController", function($scope, $http, HierarchyService){
 				if($scope.classes[i].class_id===klass.class_id) break;
 			}
 			$scope.classes.splice(i, 1);
-			$scope.$apply();
+			if(!$scope.$$phase) {
+				$scope.$apply();
+			}
 		})
 	}
 	

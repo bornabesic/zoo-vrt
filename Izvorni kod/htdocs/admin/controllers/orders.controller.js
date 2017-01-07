@@ -14,7 +14,9 @@ app.controller("OrdersController", function($scope, $http, HierarchyService){
 		var post_obj = HierarchyService.getClasses();
 		post_obj.then(function(result){
 			$scope.classes=result;
-			$scope.$apply()
+			if(!$scope.$$phase) {
+				$scope.$apply();
+			}
 		})
 	}
 
@@ -23,7 +25,9 @@ app.controller("OrdersController", function($scope, $http, HierarchyService){
 		var post_obj = HierarchyService.getOrders();
 		post_obj.then(function(result){
 			$scope.orders=result;
-			$scope.$apply()
+			if(!$scope.$$phase) {
+				$scope.$apply();
+			}
 		})
 	}
 
