@@ -3,7 +3,7 @@
 <h4><u>Registracija razreda:</u></h4>
 <div class="col-xs-8">
 <form id="form_registration" ng-submit="registerClass()">
-    Ime: <input type="text" class="form-control" ng-model="new_class.name" required/><br/>
+    Ime: <input type="text" maxlength="32" class="form-control" ng-model="new_class.name" required/><br/>
     <input class="btn btn-success btn-xs" type="submit" value="Registracija"/>
 </form>
 </div>
@@ -20,7 +20,7 @@
     <a class="btn btn-danger btn-xs" href="" ng-click="deleteClass(klass)">Izbriši</a>
     <form id="form_{{klass.class_id}}" ng-submit="updateClass(klass)" style="display: none;">
         <hr>
-    	Ime: <input type="text" class="form-control" ng-model="klass.name" required/><br/>
+    	Ime: <input type="text" maxlength="32" class="form-control" ng-model="klass.name" required/><br/>
     	<input class="btn btn-success btn-xs" type="submit" value="Potvrdi"/>
     	<a class="btn btn-default btn-xs" ng-click="toggleEditClass(klass)">Odustani</a>
     	<hr>

@@ -20,6 +20,7 @@
 
 </style>
 
+
 <div id="edit-profile" style="margin:0 auto;width:50%">
 	<div id="title">Uredi profil</div><br/><br/>
 	<div id="form_{{user.user_id}}" >
@@ -35,7 +36,7 @@
 				<tr>
 					<th>Ime i prezime</th>
 					<th>
-						<input type="text" class="form-control form-control-sm"  ng-model="user.first_last_name" required/>
+						<input type="text" maxlength="64" class="form-control form-control-sm"  ng-model="user.first_last_name" />
 					</th>
 				</tr>
 			</thead>
@@ -44,7 +45,7 @@
 				<tr>
 					<th>E-mail</th>
 					<th>
-						<input type="text" class="form-control form-control-sm" ng-model="user.email" required/>
+						<input type="text" maxlength="32" class="form-control form-control-sm" ng-model="user.email" />
 					</th>
 				</tr>
 			</thead>
@@ -53,7 +54,7 @@
 				<tr>
 					<th>Mjesto stanovanja</th>
 					<th>
-						<input type="text" class="form-control form-control-sm" ng-model="user.city" required/>
+						<input type="text" maxlength="32" class="form-control form-control-sm" ng-model="user.city" />
 					</th>
 				</tr>
 			</thead>
@@ -62,7 +63,7 @@
 				<tr>
 					<th>Godina rođenja</th>
 					<th>
-						<input type="number" class="form-control form-control-sm" ng-model="user.year_of_birth" min="1900" max="2017" required/>
+						<input type="number" class="form-control form-control-sm" ng-model="user.year_of_birth" min="1900" max="2017" />
 					</th>
 				</tr>
 			</thead>
@@ -71,7 +72,7 @@
 				<tr>
 					<th>Lozinka</th>
 					<th>
-						<input type="password" class="form-control form-control-sm" ng-model="user.password1" required/>
+						<input type="password" class="form-control form-control-sm" ng-model="user.password1" />
 					</th>
 				</tr>
 			</thead>
@@ -80,7 +81,7 @@
 				<tr>
 					<th>Potvrda lozinke</th>
 					<th>
-						<input type="password" class="form-control form-control-sm" ng-model="user.password2" required/>
+						<input type="password" class="form-control form-control-sm" ng-model="user.password2" />
 					</th>
 				</tr>
 			</thead>

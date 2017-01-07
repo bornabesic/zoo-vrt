@@ -20,6 +20,33 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 	}
 
 	//Functions
+
+	function isPhotoChosen (species){
+		if(!species.photo){
+			alert("Nije odabrana slika.");
+			return false;
+		}
+		return true;
+	}
+
+	function isDropdownChosen (species){
+		if(!species.class_id){
+			alert("Niste odabrali razred.")
+			return false;
+		}
+
+		if(!species.order_id){
+			alert("Niste odabrali red.")
+			return false;
+		}
+
+		if(!species.family_id){
+			alert("Niste odabrali familiju.")
+			return false;
+		}
+		return true;
+	}
+
 	$scope.mapInit = function(species){
 		drawMap("karta_"+species.species_id, species)
 	}
@@ -97,10 +124,14 @@ app.controller("SpeciesController", function($scope, HierarchyService, SpeciesSe
 	$scope.registerSpecies = function(){
 		console.log($scope.new_species.photo)
 
-		var post_obj = SpeciesService.registerSpecies($scope.new_species);
-		post_obj.then(function(result){
-			refreshSpecies()
-		})
+		//provjera dropdowna
+		
+		if(isDropdownChosen($scope.new_species) && isPhotoChosen($scope.new_species)){
+			var post_obj = SpeciesService.registerSpecies($scope.new_species);
+			post_obj.then(function(result){
+				refreshSpecies()
+			})
+		}
 	}
 
 	$scope.deleteSpecies = function(species){

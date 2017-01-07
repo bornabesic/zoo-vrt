@@ -4,7 +4,7 @@
 <h4><u>Registracija reda:</u></h4>
 <div class="col-md-8">
 <form id="form_registration" ng-submit="registerOrder()">
-    Ime: <input type="text" class="form-control" ng-model="new_order.name" required/><br/>
+    Ime: <input type="text" maxlength="32" class="form-control" ng-model="new_order.name" required/><br/>
     Razred: <select ng-model="new_order.parent_class_id">
 	<option ng-repeat="klass in classes track by $index" ng-value="klass.class_id">{{klass.name}}</option>
 	</select><br/><br/>
@@ -24,7 +24,7 @@
     <a class="btn btn-danger btn-xs" href="" ng-click="deleteOrder(order)">Izbriši</a>
     <form id="form_{{order.order_id}}" ng-submit="updateOrder(order)" style="display: none;">
         <hr>
-    	Ime: <input type="text" class="form-control" ng-model="order.name" required/><br/>
+    	Ime: <input type="text" maxlength="32" class="form-control" ng-model="order.name" required/><br/>
     	Razred: <select ng-model="order.parent_class_id">
 		<option ng-repeat="klass in classes" ng-value="klass.class_id">{{klass.name}}</option>
 		</select><br/><br/>

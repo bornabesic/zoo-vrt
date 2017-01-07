@@ -5,6 +5,7 @@ app.controller("LoginController", function($scope, $state, AuthService, UserServ
 	$scope.registration=false
 
 	//Functions
+	
 	$scope.showRegistration = function(){
 		$("#registration").show()
 		$("#submit_button").val("Registriraj se")
@@ -15,6 +16,10 @@ app.controller("LoginController", function($scope, $state, AuthService, UserServ
 
 	$scope.formSubmitted = function(){
 		if($scope.registration){
+			inputNameSurname.required = true;
+			inputYearOfBirth.required = true;
+			inputCity.required = true;
+			inputEmail.required = true;
 			var post_obj = UserService.registerUser($scope.username, $scope.password, $scope.first_last_name, $scope.year_of_birth, $scope.city, $scope.email, 1)
 			post_obj.then(function(result){
 				location.reload()

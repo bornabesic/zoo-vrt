@@ -5,6 +5,49 @@ app.controller("AssignedController", function($scope, GuardService, AnimalsServi
 	$scope.assigned=[]
 	$scope.noAnimals=false;
 
+	function isInputChosen (animal){
+		if(animal.animal_name===""){
+			alert("Polje 'Ime' ne smije biti prazno");
+			return false;
+		}
+		if(animal.arrival_date===""){
+			alert("Polje 'Datum dolaska' ne smije biti prazno");
+			return false;
+		}
+		if(animal.birth_location===""){
+			alert("Polje 'Mjesto rođenja' ne smije biti prazno");
+			return false;
+		}
+		if(animal.interesting_facts===""){
+			alert("Polje 'Zanimljivosti' ne smije biti prazno");
+			return false;
+		}		
+		return true;
+	}
+	function isExclusiveFactChosen (animal){
+		if(!animal.exclusive_fact){
+			alert("Nije odabran ekskluzivni sadržaj.");
+			return false;
+		}
+		return true;
+	}
+
+	function isPhotoChosen (animal){
+		if(!animal.exclusive_photo){
+			alert("Nije odabrana slika.");
+			return false;
+		}
+		return true;
+	}
+
+	function isVideoChosen (animal){
+		if(!animal.exclusive_video){
+			alert("Nije odabran video.");
+			return false;
+		}
+		return true;
+	}	
+
 	var refreshAssigned = function(){
 		GuardService.getAssignedAnimals(ls['user_id']).then(function(result){
 		$scope.assigned=result;
@@ -29,36 +72,44 @@ app.controller("AssignedController", function($scope, GuardService, AnimalsServi
 	}
 
 	$scope.addExclusiveFact = function(animal){
-		GuardService.addExclusiveFact(animal.animal_id, animal.exclusive_fact).then(function(result){
+		if(isExclusiveFactChosen(animal)){
+			GuardService.addExclusiveFact(animal.animal_id, animal.exclusive_fact).then(function(result){
 
-		})
+			})
+		}
 	}
 
 	$scope.addExclusivePhoto = function(animal){
-		GuardService.addExclusivePhoto(animal.animal_id, animal.exclusive_photo).then(function(result){
-			
-		})
+		if(isPhotoChosen(animal)){
+			GuardService.addExclusivePhoto(animal.animal_id, animal.exclusive_photo).then(function(result){
+				
+			})
+		}
 	}
 
 	$scope.addExclusiveVideo = function(animal){
-		console.log(animal.exclusive_video.size)
+		if(isVideoChosen(animal)){
+			console.log(animal.exclusive_video.size)
 
-		if(animal.exclusive_video.size > 33554432){ // ako je video veći od 32 MiB
-			alert("Najveća dopuštena veličina video isječka je 32 MiB.")
-			return
+			if(animal.exclusive_video.size > 33554432){ // ako je video veći od 32 MiB
+				alert("Najveća dopuštena veličina video isječka je 32 MiB.")
+				return
+			}
+		
+			GuardService.addExclusiveVideo(animal.animal_id, animal.exclusive_video).then(function(result){
+				
+			})
 		}
-	
-		GuardService.addExclusiveVideo(animal.animal_id, animal.exclusive_video).then(function(result){
-			
-		})
 	}
 
 	$scope.updateAnimal = function(animal){
-		var post_obj = AnimalsService.updateAnimal(animal);
-		post_obj.then(function(result){
-			if(!result.error) location.reload()
-		})
-		console.log(animal.animal_name + " će ažurirati.")
+		if(isInputChosen(animal)){
+			var post_obj = AnimalsService.updateAnimal(animal);
+			post_obj.then(function(result){
+				if(!result.error) location.reload()
+			})
+			console.log(animal.animal_name + " će ažurirati.")
+		}
 	}
 
 	refreshAssigned()

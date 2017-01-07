@@ -6,11 +6,11 @@
 <h4><u>Registracija korisnika:</u></h4>
 <div class="col-xs-8">
 <form id="form_registration" ng-submit="registerUser()">
-    Korisničko ime: <input type="text" class="form-control" ng-model="new_user.username" required/><br/>
+    Korisničko ime: <input type="text" maxlength="32" class="form-control" ng-model="new_user.username" required/><br/>
     Lozinka: <input type="password" class="form-control" ng-model="new_user.password" required/><br/>
-    Ime i prezime: <input type="text" class="form-control" ng-model="new_user.first_last_name" required/><br/>
-    E-mail: <input type="text" class="form-control" ng-model="new_user.email" required/><br/>
-    Mjesto stanovanja: <input type="text" class="form-control" ng-model="new_user.city" required/><br/>
+    Ime i prezime: <input type="text" maxlength="64" class="form-control" ng-model="new_user.first_last_name" required/><br/>
+    E-mail: <input type="text" maxlength="32" class="form-control" ng-model="new_user.email" required/><br/>
+    Mjesto stanovanja: <input type="text" maxlength="32" class="form-control" ng-model="new_user.city" required/><br/>
     Godina rođenja: <input type="number" class="form-control" ng-model="new_user.year_of_birth" min="1900" max="2017" required/><br/>
     Uloge:
     <div class="checkbox">
@@ -33,11 +33,11 @@
     <a class="btn btn-danger btn-xs" href="" ng-click="deleteUser(user)">Izbriši</a>
     <form id="form_{{user.user_id}}" ng-submit="updateUser(user)" style="display: none;">
         <hr>
-    	Korisničko ime: <input type="text" class="form-control" ng-model="user.username" required/><br/>
+    	Korisničko ime: <input type="text" maxlength="32" class="form-control" ng-model="user.username" required/><br/>
     	Lozinka: <input type="password" class="form-control" ng-model="user.password" required/><br/>
-        Ime i prezime: <input type="text" class="form-control" ng-model="user.first_last_name" required/><br/>
-        E-mail: <input type="text" class="form-control" ng-model="user.email" required/><br/>
-    	Mjesto stanovanja: <input type="text" class="form-control" ng-model="user.city" required/><br/>
+        Ime i prezime: <input type="text" maxlength="64" class="form-control" ng-model="user.first_last_name" required/><br/>
+        E-mail: <input type="text" maxlength="32" class="form-control" ng-model="user.email" required/><br/>
+    	Mjesto stanovanja: <input type="text" maxlength="32" class="form-control" ng-model="user.city" required/><br/>
     	Godina rođenja: <input type="number" class="form-control" ng-model="user.year_of_birth" min="1900" max="2017" required/><br/>
         Uloge:
         <div class="checkbox">
