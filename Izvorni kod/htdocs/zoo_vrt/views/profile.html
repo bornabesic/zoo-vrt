@@ -35,7 +35,7 @@
 				<tr>
 					<th>Ime i prezime</th>
 					<th>
-						<input type="text" class="form-control form-control-sm"  ng-model="user.first_last_name" required/>
+						<input type="text" maxlength="64" class="form-control form-control-sm"  ng-model="user.first_last_name" required/>
 					</th>
 				</tr>
 			</thead>
@@ -44,7 +44,7 @@
 				<tr>
 					<th>E-mail</th>
 					<th>
-						<input type="text" class="form-control form-control-sm" ng-model="user.email" required/>
+						<input type="text" maxlength="32" class="form-control form-control-sm" ng-model="user.email" required/>
 					</th>
 				</tr>
 			</thead>
@@ -53,7 +53,7 @@
 				<tr>
 					<th>Mjesto stanovanja</th>
 					<th>
-						<input type="text" class="form-control form-control-sm" ng-model="user.city" required/>
+						<input type="text" maxlength="32" class="form-control form-control-sm" ng-model="user.city" required/>
 					</th>
 				</tr>
 			</thead>

@@ -4,7 +4,7 @@
 <h4><u>Registracija porodice:</u></h4>
 <div class="col-xs-8">
 <form id="form_registration" ng-submit="registerFamily()">
-    Ime: <input type="text" class="form-control" ng-model="new_family.name" required/><br/>
+    Ime: <input type="text" maxlength="32" class="form-control" ng-model="new_family.name" required/><br/>
 	Red: <select ng-model="new_family.parent_order_id">
 	<option ng-repeat="order in orders track by $index" ng-value="order.order_id">{{order.name}}</option>
 	</select>
@@ -25,7 +25,7 @@
     <a class="btn btn-danger btn-xs" href="" ng-click="deleteFamily(family)">Izbriši</a>
     <form id="form_{{family.family_id}}" ng-submit="updateFamily(family)" style="display: none;">
         <hr>
-    	Ime: <input type="text" class="form-control" ng-model="family.name" required/><br/>
+    	Ime: <input type="text" maxlength="32" class="form-control" ng-model="family.name" required/><br/>
 		Red: <select ng-model="family.parent_order_id">
 		<option ng-repeat="order in orders" ng-value="order.order_id">{{order.name}}</option>
 		</select><br/><br/>

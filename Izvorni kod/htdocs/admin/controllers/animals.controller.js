@@ -25,10 +25,38 @@ app.controller("AnimalsController", function($scope, AnimalsService, SpeciesServ
 	}
 
 	// Functions
+
+	function isPhotoChosen (animal){
+			if(!animal.photo){
+			alert("Nije odabrana slika.");
+			return false;
+		}
+		return true;
+	}
+
+	function isSexChosen (animal){
+			if(!animal.sex){
+			alert("Nije odabran spol.");
+			return false;
+		}
+		return true;
+	}
+
+	function isDropdownChosen (animal){
+			if(!animal.species_id){
+			alert("Nije odabrana vrsta jedinke.");
+			return false;
+		}
+		return true;
+	}
+
+
 	$scope.registerAnimal = function(){
-		AnimalsService.registerAnimal($scope.new_animal).then(function(result){
-			location.reload();
-		})
+		if(isDropdownChosen($scope.new_animal) && isSexChosen($scope.new_animal) && isPhotoChosen($scope.new_animal)){
+			AnimalsService.registerAnimal($scope.new_animal).then(function(result){
+				location.reload();
+			})
+		}
 	}
 
 
@@ -53,8 +81,8 @@ app.controller("AnimalsController", function($scope, AnimalsService, SpeciesServ
 	}
 
 	$scope.containsSpecies = function (mammalSpecie, animals){
-		console.log(mammalSpecie);
-		console.log(animals);
+		//console.log(mammalSpecie);
+		//console.log(animals);
 		for (var i = 0; i < animals.length; i++) {
 			if(animals[i].species_id===mammalSpecie.species_id){
 				return true;
