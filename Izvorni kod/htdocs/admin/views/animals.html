@@ -27,7 +27,7 @@
 
 			Broj godina:<input type="number" class="form-control" ng-model="new_animal.age" min="0" required/></br>
 			Mjesto rođenja:<input maxlength="32" class="form-control"  ng-model="new_animal.birth_location" required/></br>
-			Datum dolaska (godina, mjesec, dan):
+			Datum dolaska (godina, mjesec, dan):<br>
 			<select ng-model="new_animal.arrival_year" ng-options="n for n in [] | yearRange">
 			</select>
 			<select ng-model="new_animal.arrival_month" ng-options="n for n in [] | monthRange">
@@ -63,7 +63,7 @@
 			 			<option ng-value="Ž">Ž</option>
 					</select><br><br>
 					Mjesto rođenja:<input maxlength="32" class="form-control"  ng-model="animal.birth_location" required/><br/>
-					Datum dolaska (godina, mjesec, dan):
+					Datum dolaska (godina, mjesec, dan):<br>
 					<select ng-model="animal.arrival_year" ng-options="n for n in [] | yearRange">
 					</select>
 					<select ng-model="animal.arrival_month" ng-options="n for n in [] | monthRange">
