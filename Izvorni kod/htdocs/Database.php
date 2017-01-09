@@ -80,7 +80,23 @@
 		require_once(__DIR__ . "/scripts/UsersDB.php");
 		$database = new UsersDB($db_connection);
 
-		echo $database->update_user($_POST['username'], $_POST['password'], $_POST['first_last_name'], $_POST['year_of_birth'], $_POST['city'], $_POST['email'], $_POST['role'], $_POST['user_id']);
+		$username=null;
+		$password=null;
+		$first_last_name=null;
+		$year_of_birth=null;
+		$city=null;
+		$email=null;
+		$role=null;
+
+		if(isset($_POST['username'])) $username=$_POST['username'];
+		if(isset($_POST['password'])) $password=$_POST['password'];
+		if(isset($_POST['first_last_name'])) $first_last_name=$_POST['first_last_name'];
+		if(isset($_POST['year_of_birth'])) $year_of_birth=$_POST['year_of_birth'];
+		if(isset($_POST['city'])) $city=$_POST['city'];
+		if(isset($_POST['email'])) $email=$_POST['email'];
+		if(isset($_POST['role'])) $role=$_POST['role'];
+
+		echo $database->update_user($username, $password, $first_last_name, $year_of_birth, $city, $email, $role, $_POST["user_id"]);
 	}
 	else if($_POST['action']==="get_users"){
 		require_once(__DIR__ . "/scripts/UsersDB.php");
@@ -201,11 +217,40 @@
 		require_once(__DIR__ . "/scripts/SpeciesDB.php");
 		$database = new SpeciesDB($db_connection);
 
-		mkdir("." . $media_dir, 0700);
-		$photo_path = $media_dir . basename($_FILES["photo"]["name"]);
-		move_uploaded_file($_FILES["photo"]["tmp_name"], "." . $photo_path);
+		$name=null;
+		$family_id=null;
+		$size=null;
+		$nutrition=null;
+		$predators=null;
+		$lifetime=null;
+		$habitat=null;
+		$lifestyle=null;
+		$reproduction=null;
+		$distribution=null;
+		$location_x=null;
+		$location_y=null;
+		$photo_path=null;
 
-		echo $database->update_species($_POST['species_id'], $_POST['name'], $_POST['family_id'], $_POST['size'], $_POST['nutrition'], $_POST['predators'], $_POST['lifetime'], $_POST['habitat'], $_POST['lifestyle'], $_POST['reproduction'], $_POST['distribution'], $_POST['location_x'], $_POST['location_y'], $photo_path);
+		if(isset($_POST['name'])) $name=$_POST["name"];
+		if(isset($_POST['family_id'])) $family_id=$_POST["family_id"];
+		if(isset($_POST['size'])) $size=$_POST["size"];
+		if(isset($_POST['nutrition'])) $nutrition=$_POST["nutrition"];
+		if(isset($_POST['predators'])) $predators=$_POST["predators"];
+		if(isset($_POST['lifetime'])) $lifetime=$_POST["lifetime"];
+		if(isset($_POST['habitat'])) $habitat=$_POST["habitat"];
+		if(isset($_POST['lifestyle'])) $lifestyle=$_POST["lifestyle"];
+		if(isset($_POST['reproduction'])) $reproduction=$_POST["reproduction"];
+		if(isset($_POST['distribution'])) $distribution=$_POST["distribution"];
+		if(isset($_POST['location_x'])) $location_x=$_POST["location_x"];
+		if(isset($_POST['location_y'])) $location_y=$_POST["location_y"];
+
+		if(isset($_FILES["photo"])){
+			mkdir("." . $media_dir, 0700);
+			$photo_path = $media_dir . basename($_FILES["photo"]["name"]);
+			move_uploaded_file($_FILES["photo"]["tmp_name"], "." . $photo_path);
+		}
+
+		echo $database->update_species($name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y, $photo_path, $_POST['species_id']);
 	}
 	else if($_POST['action']==="get_species"){
 		require_once(__DIR__ . "/scripts/SpeciesDB.php");
@@ -238,11 +283,28 @@
 		require_once(__DIR__ . "/scripts/MammalsDB.php");
 		$database = new MammalsDB($db_connection);
 
-		mkdir("." . $media_dir, 0700);
-		$photo_path = $media_dir . basename($_FILES["photo"]["name"]);
-		move_uploaded_file($_FILES["photo"]["tmp_name"], "." . $photo_path);
+		$name=null;
+		$age=null;
+		$sex=null;
+		$birth_location=null;
+		$arrival_date=null;
+		$photo_path=null;
+		$interesting_facts=null;
 
-		echo $database->update_animal($_POST["animal_id"], $_POST["name"], $_POST["age"], $_POST["sex"], $_POST["birth_location"], $_POST["arrival_date"], $photo_path, $_POST["interesting_facts"]);
+		if(isset($_POST["name"])) $name=$_POST["name"];
+		if(isset($_POST["age"])) $age=$_POST["age"];
+		if(isset($_POST["sex"])) $sex=$_POST["sex"];
+		if(isset($_POST["birth_location"])) $birth_location=$_POST["birth_location"];
+		if(isset($_POST["arrival_date"])) $arrival_date=$_POST["arrival_date"];
+		if(isset($_POST["interesting_facts"])) $interesting_facts=$_POST["interesting_facts"];
+
+		if(isset($_FILES["photo"])){
+			mkdir("." . $media_dir, 0700);
+			$photo_path = $media_dir . basename($_FILES["photo"]["name"]);
+			move_uploaded_file($_FILES["photo"]["tmp_name"], "." . $photo_path);
+		}
+
+		echo $database->update_animal($name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts, $_POST["animal_id"]);
 	}
 	else if($_POST['action']==="get_animals"){
 		require_once(__DIR__ . "/scripts/MammalsDB.php");

@@ -103,13 +103,41 @@
 			));
 		}
 
-		function update_animal($animal_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts){
+		function update_animal($name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts, $animal_id){
+			
+			$bind_params=array("name", "age", "sex", "birth_location", "arrival_date", "photo_path", "interesting_facts", "animal_id");
+			$bind_values=array($name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts, $animal_id);
+			$bind_types=array("s", "i", "s", "s", "s", "s", "s", "i");
 
-			$update_query="UPDATE ". DB_NAME . ".mammal_animals SET `name`=?, `age`=?, `sex`=?, `birth_location`=?, `arrival_date`=?, `photo_path`=?, `interesting_facts`=? WHERE `animal_id`=?;";
-			$update_statement=$this->db->prepare($update_query);
+			$query="UPDATE ". DB_NAME . ".mammal_animals SET ";
+
+			$type_string="";
+			for($i=0; $i<count($bind_params); $i++){
+				if($bind_values[$i]!=null){ // povezi sve osim animal_id
+					$type_string.=$bind_types[$i];
+
+					if($i!=count($bind_params)-1)
+						$query.=$bind_params[$i] . "=?,";
+				}
+			}
+			$query = substr($query, 0, -1);
+			$query .= " WHERE `animal_id`=?;";
+
+			$a_params[] = & $type_string;
+			for($i=0; $i<count($bind_params); $i++){
+				if($bind_values[$i]!=null){
+					$a_params[]=& $bind_values[$i];
+				}
+			}
+
+
+
+			//OLD $update_query="UPDATE ". DB_NAME . ".mammal_animals SET `name`=?, `age`=?, `sex`=?, `birth_location`=?, `arrival_date`=?, `photo_path`=?, `interesting_facts`=? WHERE `animal_id`=?;";
+			$update_statement=$this->db->prepare($query);
 
 			if($update_statement){
-				$update_statement->bind_param("sisssssi", $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts, $animal_id);
+				call_user_func_array(array($update_statement, "bind_param"), $a_params);
+				//OLD $update_statement->bind_param("sisssssi", $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts, $animal_id);
 		     	$update_statement->execute();
 			}
 			else {

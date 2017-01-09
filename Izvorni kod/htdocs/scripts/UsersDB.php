@@ -177,13 +177,41 @@
 		function update_user($username, $password, $first_last_name, $year_of_birth, $city, $email, $role, $user_id){
 			require_once(__DIR__ . "/phpass/PasswordHash.php");
 			$hasher = new PasswordHash(8, false);
-			$password_hash = $hasher->HashPassword($password);
+			$password_hash=null;
+			if($password!=null) $password_hash = $hasher->HashPassword($password);
+
+			$bind_params=array("username", "password_hash", "first_last_name", "year_of_birth", "city", "email", "role", "user_id");
+			$bind_values=array($username, $password_hash, $first_last_name, $year_of_birth, $city, $email, $role, $user_id);
+			$bind_types=array("s", "s", "s", "i", "s", "s", "i", "i");
+
+			$query="UPDATE ". DB_NAME . ".users SET ";
+
+			$type_string="";
+			for($i=0; $i<count($bind_params); $i++){
+				if($bind_values[$i]!=null){ // povezi sve osim user_id
+					$type_string.=$bind_types[$i];
+
+					if($i!=count($bind_params)-1)
+						$query.=$bind_params[$i] . "=?,";
+				}
+			}
+			$query = substr($query, 0, -1);
+			$query .= " WHERE `user_id`=?;";
+
+			$a_params[] = & $type_string;
+			for($i=0; $i<count($bind_params); $i++){
+				if($bind_values[$i]!=null){
+					$a_params[]=& $bind_values[$i];
+				}
+			}
+
 
 			// UPDATE USER WITH GIVEN ID
-			$update_query="UPDATE ". DB_NAME . ".users SET `username`=?, `password_hash`=?, `first_last_name`=?, `year_of_birth`=?, `city`=?, `email`=?, `role`=? WHERE `user_id`=?;";
-			$update_statement=$this->db->prepare($update_query);
+			//OLD $update_query="UPDATE ". DB_NAME . ".users SET `username`=?, `password_hash`=?, `first_last_name`=?, `year_of_birth`=?, `city`=?, `email`=?, `role`=? WHERE `user_id`=?;";
+			$update_statement=$this->db->prepare($query);
 			if($update_statement){
-				$update_statement->bind_param("sssissii", $username, $password_hash, $first_last_name, $year_of_birth, $city, $email, $role, $user_id);
+				call_user_func_array(array($update_statement, "bind_param"), $a_params);
+				//OLD $update_statement->bind_param("sssissii", $username, $password_hash, $first_last_name, $year_of_birth, $city, $email, $role, $user_id);
 		     	$update_statement->execute();
 			}
 			else {

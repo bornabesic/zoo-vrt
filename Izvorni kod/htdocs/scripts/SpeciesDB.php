@@ -188,11 +188,39 @@
 			));
 		}
 
-		function update_species($species_id, $name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y, $photo_path){
-			$update_query="UPDATE ". DB_NAME . ".species SET `name`=?, `family_id`=?, `size`=?, `nutrition`=?, `predators`=?, `lifetime`=?, `habitat`=?, `lifestyle`=?, `reproduction`=?, `distribution`=?, `location_x`=?, `location_y`=?, `photo_path`=? WHERE `species_id`=?;";
-			$update_statement=$this->db->prepare($update_query);
+		function update_species($name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y, $photo_path, $species_id){
+			
+			$bind_params=array("name", "family_id", "size", "nutrition", "predators", "lifetime", "habitat", "lifestyle", "reproduction", "distribution", "location_x", "location_y", "photo_path", "species_id");
+			$bind_values=array($name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y, $photo_path, $species_id);
+			$bind_types=array("s", "i", "s", "s", "s", "s", "s", "s", "s", "s", "i", "i", "s", "i");
+
+			$query="UPDATE ". DB_NAME . ".species SET ";
+
+			$type_string="";
+			for($i=0; $i<count($bind_params); $i++){
+				if($bind_values[$i]!=null){ // povezi sve osim species_id
+					$type_string.=$bind_types[$i];
+
+					if($i!=count($bind_params)-1)
+						$query.=$bind_params[$i] . "=?,";
+				}
+			}
+			$query = substr($query, 0, -1);
+			$query .= " WHERE `species_id`=?;";
+
+			$a_params[] = & $type_string;
+			for($i=0; $i<count($bind_params); $i++){
+				if($bind_values[$i]!=null){
+					$a_params[]=& $bind_values[$i];
+				}
+			}
+
+
+			//OLD $update_query="UPDATE ". DB_NAME . ".species SET `name`=?, `family_id`=?, `size`=?, `nutrition`=?, `predators`=?, `lifetime`=?, `habitat`=?, `lifestyle`=?, `reproduction`=?, `distribution`=?, `location_x`=?, `location_y`=?, `photo_path`=? WHERE `species_id`=?;";
+			$update_statement=$this->db->prepare($query);
 			if($update_statement){
-				$update_statement->bind_param("sissssssssiisi", $name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y, $photo_path, $species_id);
+				call_user_func_array(array($update_statement, "bind_param"), $a_params);
+				//OLD $update_statement->bind_param("sissssssssiisi", $name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y, $photo_path, $species_id);
 		     	$update_statement->execute();
 			}
 			else {
