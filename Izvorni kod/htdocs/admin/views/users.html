@@ -11,7 +11,10 @@
     Ime i prezime: <input type="text" maxlength="64" class="form-control" ng-model="new_user.first_last_name" required/><br/>
     E-mail: <input type="text" maxlength="32" class="form-control" ng-model="new_user.email" required/><br/>
     Mjesto stanovanja: <input type="text" maxlength="32" class="form-control" ng-model="new_user.city" required/><br/>
-    Godina rođenja: <input type="number" class="form-control" ng-model="new_user.year_of_birth" min="1900" max="2017" required/><br/>
+    Godina rođenja:
+    <select ng-model="new_user.year_of_birth" ng-options="n for n in [] | yearRange">
+    </select><br><br>
+    <!--<input type="number" class="form-control" ng-model="new_user.year_of_birth" min="1900" max="2017" required/><br/>-->
     Uloge:
     <div class="checkbox">
     <label><input type="checkbox" value="" ng-model="new_user.is_guard">Čuvar</label>
@@ -38,7 +41,10 @@
         Ime i prezime: <input type="text" maxlength="64" class="form-control" ng-model="user.first_last_name" required/><br/>
         E-mail: <input type="text" maxlength="32" class="form-control" ng-model="user.email" required/><br/>
     	Mjesto stanovanja: <input type="text" maxlength="32" class="form-control" ng-model="user.city" required/><br/>
-    	Godina rođenja: <input type="number" class="form-control" ng-model="user.year_of_birth" min="1900" max="2017" required/><br/>
+    	Godina rođenja:
+        <select ng-model="user.year_of_birth" ng-options="n for n in [] | yearRange">
+        </select><br><br>
+        <!--<input type="number" class="form-control" ng-model="user.year_of_birth" min="1900" max="2017" required/><br/>-->
         Uloge:
         <div class="checkbox">
         <label><input type="checkbox" value="" ng-model="user.is_guard">Čuvar</label>
