@@ -109,10 +109,16 @@
 		        <hr>
 		        <label class="attribute">Osnovne informacije:</label><br/>
 		    	Ime: <input type="text" maxlength="32" ng-model="animal.animal_name" class="form-control"/></br/>
-				Datum dolaska:
-				<!--<textarea class="form-control" ng-model="animal.arrival_date"/>-->
-				<input type="text" class="form-control" ng-model="animal.arrival_date"/> 
-				</br/>
+				Datum dolaska (godina, mjesec, dan):
+				<div style="color:black !important;">
+					<select ng-model="animal.arrival_year" ng-options="n for n in [] | yearRange">
+					</select>
+					<select ng-model="animal.arrival_month" ng-options="n for n in [] | monthRange">
+					</select>
+					<select ng-model="animal.arrival_day" ng-options="n for n in [] | dayRange">
+					</select>
+				</div>
+				<br>
 				Mjesto rođenja:<textarea maxlength="32" class="form-control" ng-model="animal.birth_location"/></br/>
 				Zanimljivosti:<textarea class="form-control" ng-model="animal.interesting_facts"/><br/>
 				<button class="btn btn-primary green" ng-click="updateAnimal(animal)" type="submit"><span class="glyphicon glyphicon-ok"/> Potvrdi</button>

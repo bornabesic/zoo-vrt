@@ -841,13 +841,15 @@ app.service('AnimalsService', function($http, $q){
 
 		console.log(animal)
 
+		var arrival_date = animal.arrival_year + "-" + animal.arrival_month + "-" + animal.arrival_day
+
 		var post_data = new FormData()
 		post_data.append("name", animal.name)
 		post_data.append("age", animal.age)
 		post_data.append("sex", animal.sex)
 		post_data.append("species_id", animal.species_id)
 		post_data.append("birth_location", animal.birth_location)
-		post_data.append("arrival_date", animal.arrival_date)
+		post_data.append("arrival_date", arrival_date)
 		post_data.append("interesting_facts", animal.interesting_facts)
 		post_data.append("photo", animal.photo)
 		post_data.append("action", "add_mammal")
@@ -900,6 +902,8 @@ app.service('AnimalsService', function($http, $q){
 		if(animal.name) name=animal.name;
 		else if(animal.animal_name) name=animal.animal_name;
 
+		var arrival_date = animal.arrival_year + "-" + animal.arrival_month + "-" + animal.arrival_day
+
 		var post_data = new FormData()
 		post_data.append("animal_id", animal.animal_id)
 		post_data.append("name", name)
@@ -907,7 +911,7 @@ app.service('AnimalsService', function($http, $q){
 		post_data.append("sex", animal.sex)
 		post_data.append("photo", animal.photo)
 		post_data.append("birth_location", animal.birth_location)
-		post_data.append("arrival_date", animal.arrival_date)
+		post_data.append("arrival_date", arrival_date)
 		post_data.append("interesting_facts", animal.interesting_facts)
 		post_data.append("action", "update_animal")
 

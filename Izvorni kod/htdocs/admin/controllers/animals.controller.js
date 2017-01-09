@@ -20,8 +20,11 @@ app.controller("AnimalsController", function($scope, AnimalsService, SpeciesServ
 		sex: null,
 		photo: null,
 		birth_location: null,
-		arrival_date: null,
+		//arrival_date: null,
 		interesting_facts: null,
+		arrival_year: null,
+		arrival_month: null,
+		arrival_day: null
 	}
 
 	// Functions
@@ -133,13 +136,21 @@ app.controller("AnimalsController", function($scope, AnimalsService, SpeciesServ
 							};
 
 							$scope.mammalSpecies=_mammalSpecies;
-
 							// dohvati jedinke za uređivanje
 							AnimalsService.getAnimals(null).then(function(result){
-								$scope.animals=result;
+								for(var k=0; k<result.length; k++){
+									var animal=result[k];
+									var date_tokens = animal.arrival_date.split("-");
+									animal.arrival_year=date_tokens[0];
+									animal.arrival_month=date_tokens[1];
+									animal.arrival_day=date_tokens[2];
+								}
 
+								$scope.animals=result;
 								if(!$scope.$$phase)
 									$scope.$apply();
+
+								console.log($scope.animals)
 							})
 						})
 					}

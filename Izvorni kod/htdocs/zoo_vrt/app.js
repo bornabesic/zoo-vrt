@@ -150,3 +150,37 @@ app.directive('fileModel', ['$parse', function ($parse) {
     }
    };
 }]);
+
+// ----
+
+app.filter('yearRange', function() {
+  return function(input) {
+  	var currentYear = new Date().getFullYear();
+    min = currentYear-100
+    max = currentYear
+    for (var i=min; i<=max; i++)
+      input.push(i);
+    return input;
+  };
+});
+
+app.filter('monthRange', function() {
+  return function(input) {
+    min = 1
+    max = 12
+    for (var i=min; i<=max; i++)
+      input.push(i);
+    return input;
+  };
+});
+
+app.filter('dayRange', function() {
+  return function(input) {
+  	var currentYear = new Date().getFullYear();
+    min = 1
+    max = 31
+    for (var i=min; i<=max; i++)
+      input.push(i);
+    return input;
+  };
+});

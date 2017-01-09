@@ -27,7 +27,14 @@
 
 			Broj godina:<input type="number" class="form-control" ng-model="new_animal.age" min="0" required/></br>
 			Mjesto rođenja:<input maxlength="32" class="form-control"  ng-model="new_animal.birth_location" required/></br>
-			Datum dolaska<textarea class="form-control" ng-model="new_animal.arrival_date" required/></br>
+			Datum dolaska (godina, mjesec, dan):
+			<select ng-model="new_animal.arrival_year" ng-options="n for n in [] | yearRange">
+			</select>
+			<select ng-model="new_animal.arrival_month" ng-options="n for n in [] | monthRange">
+			</select>
+			<select ng-model="new_animal.arrival_day" ng-options="n for n in [] | dayRange">
+			</select>
+			<br><br>
 			Zanimljive činjenice:<textarea class="form-control" ng-model="new_animal.interesting_facts" required/></br>
 		    <input class="btn btn-success btn-xs" type="submit" value="Registracija" required/>
 		</form>
@@ -56,7 +63,14 @@
 			 			<option ng-value="Ž">Ž</option>
 					</select><br><br>
 					Mjesto rođenja:<input maxlength="32" class="form-control"  ng-model="animal.birth_location" required/><br/>
-					Datum dolaska<textarea class="form-control" ng-model="animal.arrival_date" required/><br/>
+					Datum dolaska (godina, mjesec, dan):
+					<select ng-model="animal.arrival_year" ng-options="n for n in [] | yearRange">
+					</select>
+					<select ng-model="animal.arrival_month" ng-options="n for n in [] | monthRange">
+					</select>
+					<select ng-model="animal.arrival_day" ng-options="n for n in [] | dayRange">
+					</select>
+					<br/><br/>
 					Zanimljive činjenice:<textarea class="form-control" ng-model="animal.interesting_facts" required/><br/>
 					<input class="btn btn-success btn-xs" type="submit" value="Potvrdi"/>
 		    		<a class="btn btn-default btn-xs" ng-click="toggleEditAnimal(animal)">Odustani</a>

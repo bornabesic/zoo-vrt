@@ -50,14 +50,28 @@ app.controller("AssignedController", function($scope, GuardService, AnimalsServi
 
 	var refreshAssigned = function(){
 		GuardService.getAssignedAnimals(ls['user_id']).then(function(result){
-		$scope.assigned=result;
+			var assigned=result
 
-		if($scope.assigned.length<=0){
-			$scope.noAnimals=true;
-		}
+			for(var i=0; i<assigned.length; i++){
+				var assigned_animals=assigned[i].animals
+				for(var j=0; j<assigned_animals.length; j++){
+					var animal=assigned_animals[j]
+					var date_tokens = animal.arrival_date.split("-");
+					animal.arrival_year=date_tokens[0];
+					animal.arrival_month=date_tokens[1];
+					animal.arrival_day=date_tokens[2];
+				}
 
-		if(!$scope.$$phase)
-			$scope.$apply();
+			}
+
+			$scope.assigned=result;
+
+			if($scope.assigned.length<=0){
+				$scope.noAnimals=true;
+			}
+
+			if(!$scope.$$phase)
+				$scope.$apply();
 		})
 	}
 
