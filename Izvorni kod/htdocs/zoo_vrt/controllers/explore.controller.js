@@ -82,6 +82,7 @@ app.controller("ExploreController", function($scope, $location, SpeciesService, 
 			var specie = species[index];
 			if(!containsSpecies(recommendation, specie)) break;
 		}
+		if(containsSpecies(recommendation, specie)) return;
 
 		if(specie!=null){
 
