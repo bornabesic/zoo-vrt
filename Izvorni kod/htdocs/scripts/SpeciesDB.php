@@ -150,7 +150,8 @@
 			}
 
 			$row = $photo_result->fetch_assoc();
-			unlink("." . $row["photo_path"]);
+			
+			if(file_exists($row["photo_path"])) unlink("." . $row["photo_path"]);
 
 
 			//remove species with given ID

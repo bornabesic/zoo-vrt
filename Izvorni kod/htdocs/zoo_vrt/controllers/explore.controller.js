@@ -35,7 +35,7 @@ app.controller("ExploreController", function($scope, $location, SpeciesService, 
 	}
 
 	function recommendSpecies(){
-		var recursion_limit=10;
+		var recursion_limit=100;
 		recommendation=[]
 
 		recommendSpecie(number_of_recommendations, recursion_limit);
@@ -51,16 +51,18 @@ app.controller("ExploreController", function($scope, $location, SpeciesService, 
 
 			if(recommendation.length<=0){ // ako nemreš nać vrste koje korisnik nije posjetio, napuni nasumično
 				var to_go=number_of_recommendations;
+				var loopLimit=100;
 
-				while(to_go>0){
+				while(to_go>0 && loopLimit>0){
 					var index = Math.floor(Math.random()*species.length);
 					if(!containsSpecies(recommendation, species[index])){
 						recommendation.push(species[index])
 						to_go--;
 					}
+					loopLimit--;
 				}
 
-				$scope.recommendTable=createTable(recommendation, number_of_recommendations)
+				$scope.recommendTable=createTable(recommendation, number_of_recommendations-to_go)
 			}
 			else{
 				$scope.recommendTable=createTable(recommendation, number_of_recommendations-i)
