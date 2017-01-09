@@ -19,7 +19,7 @@
     <div class="row" ng-repeat="order in orders track by $index">
     <!--<div class="col-xs-2">-->
   <li>
-    <b>{{order.name}} {{order.parent_class_id}}</b>
+    <b>{{order.name}}</b>
     <a class="btn btn-default btn-xs" href="" ng-click="toggleEditOrder(order)">Uredi</a>
     <a class="btn btn-danger btn-xs" href="" ng-click="deleteOrder(order)">Izbriši</a>
     <form id="form_{{order.order_id}}" ng-submit="updateOrder(order)" style="display: none;">
