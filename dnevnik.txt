@@ -3,3 +3,4 @@
 02.11.2016. - rasprava o raspodjeli posla
 15.11.2016. - crtanje dijagrama klasa, dogovaranje rokova
 06.12.2016. - dogovor dizajna web aplikacije, raspodjela posla po kontrolerima
+04.01.2017. - podjela poslova vezanih uz dokumentaciju te planiranje završnih radnji vezanih uz implementaciju
