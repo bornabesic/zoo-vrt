@@ -10,6 +10,7 @@
 			$this->db=$database;
 		}
 
+		// Metoda za registraciju novog životinjskog reda
 		function add_order($name, $parent_class_id){
 			//ADD ORDER
 			$add_order_query = "INSERT INTO " . DB_NAME . ".orders (`name`, `parent_class_id`) VALUES (?,?);";
@@ -59,6 +60,7 @@
 			));
 		}
 
+		// Metoda za brisanje životinjskog reda
 		function remove_order($order_id){
 			//remove order with given id
 			$delete_query = "DELETE FROM " . DB_NAME . ".orders WHERE order_id=?;";
@@ -95,6 +97,7 @@
 			));
 		}
 
+		// Metoda dohvat svih životinjskih redova
 		function get_orders($parent_class_id){
 			if($parent_class_id>=0) $condition=" WHERE parent_class_id=?";
 			else $condition="";
@@ -131,6 +134,7 @@
 			return json_encode($orders);
 		}
 
+		// Metoda za ažuriranje životinjskog reda
 		function update_order($order_id, $name, $parent_class_id){
 			$update_query="UPDATE ". DB_NAME . ".orders SET `name`=?, `parent_class_id`=? WHERE `order_id`=?;";
 			$update_statement=$this->db->prepare($update_query);

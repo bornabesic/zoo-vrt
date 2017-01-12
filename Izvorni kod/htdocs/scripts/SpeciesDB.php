@@ -10,6 +10,7 @@
 			$this->db=$database;
 		}
 
+		// Metoda za dohvat hijerarhije određene vrste (razred, red, porodica)
 		function get_species_hierarchy($species_id){
 			$this->db->select_db(DB_NAME);
 
@@ -55,6 +56,7 @@
 			));
 		}
 
+		// Metoda za registraciju nove vrste
 		function add_species($name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y, $photo_path){
 			$add_species_query = "INSERT INTO " . DB_NAME . ".species ( `species_id`, `name`, `family_id`, `size`,  `nutrition`, `predators`, `lifetime`, `habitat`, `lifestyle`, `reproduction`, `distribution`, `location_x`, `location_y`, `photo_path`) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 			$add_species_statement = $this->db->prepare($add_species_query);
@@ -127,6 +129,7 @@
 			));
 		}
 		
+		// Metoda za brisanje vrste
 		function remove_species($species_id){
 			//get the photo path so it could be deleted
 			$photo_query = "SELECT * FROM " . DB_NAME . ".species WHERE species_id=?;";
@@ -189,6 +192,7 @@
 			));
 		}
 
+		// Metoda za ažuriranje vrste
 		function update_species($name, $family_id, $size, $nutrition, $predators, $lifetime, $habitat, $lifestyle, $reproduction, $distribution, $location_x, $location_y, $photo_path, $species_id){
 			
 			$bind_params=array("name", "family_id", "size", "nutrition", "predators", "lifetime", "habitat", "lifestyle", "reproduction", "distribution", "location_x", "location_y", "photo_path", "species_id");
@@ -254,6 +258,7 @@
 			));
 		}
 
+		// Metoda za dohvat svih vrsti
 		function get_species($parent_family_id){
 			if($parent_family_id>=0) $condition=" WHERE parent_family_id=?";
 			else $condition="";

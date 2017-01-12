@@ -10,8 +10,7 @@
 			$this->db=$database;
 		}
 
-		/* dob kod jedinke treba promijeniti tako da jedinka ima datum rodenja umjesto izravne dobi i onda se tek racuna dob koju backend vraca prema danasnjem datumu */
-		//MAMMALS - 'mammal' je glup naziv, promijenit cemo u 'animal'
+		// Metoda za registraciju nove jedinke
 		function add_mammal($species_id, $name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts){
 			//ADD MAMMAL
 			$add_mammal_query = "INSERT INTO " . DB_NAME . ".mammal_animals (`species_id`, `name`, `age`, `sex`, `birth_location`, `arrival_date`, `photo_path`, `interesting_facts`) VALUES (?,?,?,?,?,?,?,?);";
@@ -65,6 +64,7 @@
 			));
 		}
 
+		// Metoda za brisanje jedinke
 		function remove_mammal($animal_id){
 			//REMOVE MAMMAL WITH GIVEN ID
 			$delete_query="DELETE FROM ". DB_NAME . ".mammal_animals WHERE animal_id=?;";
@@ -103,6 +103,7 @@
 			));
 		}
 
+		// Metoda za ažuriranje jedinke
 		function update_animal($name, $age, $sex, $birth_location, $arrival_date, $photo_path, $interesting_facts, $animal_id){
 			
 			$bind_params=array("name", "age", "sex", "birth_location", "arrival_date", "photo_path", "interesting_facts", "animal_id");
@@ -170,7 +171,8 @@
 			));
 		}
 
-		function get_animals($species_id){ /* ako je species_id -1 onda treba dohvatiti pravi */
+		// Metoda za dohvat svih jedinki
+		function get_animals($species_id){
 			if($species_id>=0) $condition=" WHERE species_id=?";
 			else $condition="";
 
@@ -204,7 +206,7 @@
 			return json_encode($animals);
 		}
 
-		// koristi li se ova funkcija ?
+		// Metoda za dohvat jedinke po ID-u
 		function get_mammal($animal_id){
 			$query = "SELECT * FROM " . DB_NAME . ".mammal_animals WHERE animal_id=?";
 			$statement = $this->db->prepare($query);

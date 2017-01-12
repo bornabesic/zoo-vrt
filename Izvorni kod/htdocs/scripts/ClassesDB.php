@@ -10,6 +10,7 @@
 			$this->db=$database;
 		}
 
+		// Metoda za registraciju novog životinjskog razreda
 		function add_class($name){
 			//ADD CLASS
 			$add_class_query = "INSERT INTO " . DB_NAME . ".classes (`name`) VALUES (?);";
@@ -58,6 +59,7 @@
 			));
 		}
 
+		// Metoda za dohvat svih životinjskih razreda
 		function get_classes(){
 			$classes_query = "SELECT * FROM " . DB_NAME . ".classes;";
 			$classes_statement = $this->db->prepare($classes_query);
@@ -90,6 +92,7 @@
 			return json_encode($classes);
 		}
 
+		// Metoda za brisanje životinjskog razreda
 		function remove_class($class_id){
 			// REMOVE CLASS WITH GIVEN ID
 			$delete_query="DELETE FROM ". DB_NAME . ".classes WHERE class_id=?;";
@@ -128,6 +131,7 @@
 			));
 		}
 
+		// Metoda za ažuriranje životinjskog razreda
 		function update_class($class_id, $name){
 			$update_query="UPDATE ". DB_NAME . ".classes SET `name`=? WHERE `class_id`=?;";
 			$update_statement=$this->db->prepare($update_query);

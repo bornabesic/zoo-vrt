@@ -10,6 +10,7 @@
 			$this->db=$database;
 		}
 
+		// Metoda za registraciju novog korisnika
 		function register_user($username, $password, $first_last_name, $year_of_birth, $city, $email, $role){
 			require_once(__DIR__ . "/phpass/PasswordHash.php");
 			$hasher = new PasswordHash(8, false);
@@ -82,6 +83,7 @@
 			));
 		}
 
+		// Metoda za brisanje korisnika
 		function delete_user($user_id){
 			// DELETE USER WITH GIVEN ID
 			$delete_query="DELETE FROM ". DB_NAME . ".users WHERE user_id=?;";
@@ -120,6 +122,7 @@
 			));
 		}
 
+		// Metoda za prijavu korisnika
 		function login_user($username, $password){
 			require_once(__DIR__ . "/phpass/PasswordHash.php");
 			$hasher = new PasswordHash(8, false);
@@ -168,12 +171,14 @@
 			}
 		}
 
+		// Metoda za odjavu korisnika
 		function logout_user(){
 			$_SESSION["logged_in"]=false;
 			$_SESSION["role"]=0;
 			return json_encode(array("status" => "Successfully logged out."));
 		}
 
+		// Metoda za ažuriranje korisnika
 		function update_user($username, $password, $first_last_name, $year_of_birth, $city, $email, $role, $user_id){
 			require_once(__DIR__ . "/phpass/PasswordHash.php");
 			$hasher = new PasswordHash(8, false);
@@ -244,6 +249,7 @@
 			));
 		}
 
+		// Metoda za dohvat svih korisnika
 		function get_users(){
 			$users_query = "SELECT * FROM " . DB_NAME . ".users;";
 			$users_statement = $this->db->prepare($users_query);

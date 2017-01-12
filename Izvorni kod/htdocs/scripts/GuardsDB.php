@@ -10,6 +10,7 @@
 			$this->db=$database;
 		}
 
+		// Metoda za pridruživanje jedinke čuvaru
 		function assign_animal($user_id, $animal_id){
 			$this->db->select_db(DB_NAME);
 
@@ -46,6 +47,7 @@
 			return json_encode(array("user_id" => $animal_id, "animal_id" => $animal_id));
 		}
 
+		// Metoda za razduživanje čuvara od jedinke
 		function unassign_animal($user_id, $animal_id){
 			$this->db->select_db(DB_NAME);
 
@@ -87,6 +89,7 @@
 			));
 		}
 
+		// Metoda za dohvat pridruženih jedinki za određenog čuvara
 		function get_assigned_animals($user_id){
 			$this->db->select_db(DB_NAME);
 

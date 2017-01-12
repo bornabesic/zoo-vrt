@@ -10,6 +10,7 @@
 			$this->db=$database;
 		}
 
+		// Metoda za registraciju nove životinjske porodice
 		function add_family($name, $parent_order_id){
 			$add_family_query = "INSERT INTO " . DB_NAME . ".families (`name`, `parent_order_id`) VALUES (?, ?);";
 			$add_family_statement = $this->db->prepare($add_family_query);
@@ -69,6 +70,7 @@
 				));
 		}
 
+		// Metoda za brisanje životinjske porodice
 		function remove_family($family_id){
 			//remove family with given ID
 			$delete_query = "DELETE FROM " . DB_NAME . ".families WHERE family_id=?;";
@@ -105,6 +107,7 @@
 			));
 		}
 
+		// Metoda za dohvat svih životinjskih porodica
 		function get_families($parent_order_id){
 			if($parent_order_id>=0) $condition=" WHERE parent_order_id=?";
 			else $condition="";
@@ -141,6 +144,7 @@
 			return json_encode($families);
 		}
 
+		// Metoda za ažuriranje životinjske porodice
 		function update_family($family_id, $name, $parent_order_id){
 			$update_query="UPDATE ". DB_NAME . ".families SET `name`=?, `parent_order_id`=? WHERE `family_id`=?;";
 			$update_statement=$this->db->prepare($update_query);
