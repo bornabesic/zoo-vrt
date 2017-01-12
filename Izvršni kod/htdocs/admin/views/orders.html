@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<div class="col-md-3">
+<h4><u>Registracija reda:</u></h4>
+<div class="col-md-8">
+<form id="form_registration" ng-submit="registerOrder()">
+    Ime: <input type="text" maxlength="32" class="form-control" ng-model="new_order.name" required/><br/>
+    Razred: <select ng-model="new_order.parent_class_id">
+	<option ng-repeat="klass in classes track by $index" ng-value="klass.class_id">{{klass.name}}</option>
+	</select><br/><br/>
+    <input class="btn btn-success btn-xs" type="submit" value="Registracija"/>
+</form>
+</div>
+</div>
+
+<div class="col-md-2" style="border-left:1px solid #0066cc;height:500px;">
+<h4><u>Redovi:</u></h4>
+<ul>
+    <div class="row" ng-repeat="order in orders track by $index">
+    <!--<div class="col-xs-2">-->
+  <li>
+    <b>{{order.name}}</b>
+    <a class="btn btn-default btn-xs" href="" ng-click="toggleEditOrder(order)">Uredi</a>
+    <a class="btn btn-danger btn-xs" href="" ng-click="deleteOrder(order)">Izbriši</a>
+    <form id="form_{{order.order_id}}" ng-submit="updateOrder(order)" style="display: none;">
+        <hr>
+    	Ime: <input type="text" maxlength="32" class="form-control" ng-model="order.name" required/><br/>
+    	Razred: <select ng-model="order.parent_class_id">
+		<option ng-repeat="klass in classes" ng-value="klass.class_id">{{klass.name}}</option>
+		</select><br/><br/>
+    	<input class="btn btn-success btn-xs" type="submit" value="Potvrdi"/>
+    	<a class="btn btn-default btn-xs" ng-click="toggleEditOrder(order)">Odustani</a>
+    	<hr>
+    </form>
+  </li>
+</div>
+        <!--</div>-->
+</ul>
+ </div>

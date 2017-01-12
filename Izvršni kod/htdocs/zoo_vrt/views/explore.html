@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<style type="text/css">
+
+	.height-box {
+		display: flex;
+		flex-flow: column;
+		position: relative;
+	}
+	
+	.height-box .search {
+		flex: 0 1 auto;
+
+		margin: 0 auto;
+		margin-bottom: 25px;
+		width: 60%;
+	}
+
+	.height-box .cards{
+		margin: 0 auto;
+		flex: 1 1 auto;
+		overflow-y: auto;
+		width: 100%;
+		max-height: 100%;
+	}
+	
+	
+	.card-img {
+		max-width: 100%;
+		max-height: 100%;
+	}
+	
+	/* rezultati */
+	.card {		
+		width: 15vw;
+	}
+	
+	
+	.card.panel-color .panel-heading {
+		height : 4vw;	
+		color: #FFF;
+		font-size: 0.8vw;
+		font-weight: bold;
+		overflow: hidden;
+		word-wrap: break-word;
+	}
+
+	
+	.card.panel-color .panel-body {	
+		height: 10vw;
+		
+		background-color: #fff; /* boja tijela kartice */
+
+	}
+
+	/* preporuka */
+
+	.recommend-card {		
+		width: 10vw;
+	}
+	
+	
+	.recommend-card.panel-color .panel-heading {
+		height : 3vw;	
+		color: #FFF;
+		font-size: 0.6vw;
+		overflow: hidden;
+		word-wrap: break-word;
+	}
+
+	
+	.recommend-card.panel-color .panel-body {	
+		height: 6vw;
+		
+		background-color: #fff; /* boja tijela kartice */
+
+	}	
+
+	td{
+		 padding: 12px;	
+	}
+
+	table{
+		margin: 0 auto;
+		align-self: center;
+	}
+
+	.species-name{
+		display: inline-block;
+		position: relative;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	.btn-circle-lg {
+		width: 50px;
+		height: 50px;
+		padding: 10px 16px;
+		font-size: 18px;
+		line-height: 1.33;
+		border-radius: 25px;
+	}
+
+	#go-to-top{
+		font-size: 30pt;
+		position:fixed;
+		bottom: 5%;
+		right: 20%;
+	}
+
+	.inner-addon { 
+		position: relative; 
+	}
+
+	/* style icon */
+	.inner-addon .glyphicon {
+		position: absolute;
+		padding: 10px;
+		pointer-events: none;
+		color: green;
+		font-size: 15pt;
+
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	/* align icon */
+	.left-addon .glyphicon  { left:  0px;}
+	.right-addon .glyphicon { right: 0px;}
+
+	/* add padding  */
+	.left-addon input  { padding-left:  30px; }
+	.right-addon input { padding-right: 30px; }
+
+</style>
+<div class="height-box">
+	<div class="search container ">
+		<div class="inner-addon right-addon">
+			<i class="glyphicon glyphicon-search"></i>
+			<input id="search-bar" type="text" class="form-control input-lg" placeholder="Unesi ime životinje..." ng-model="search_species" ng-change="filterSpecies()"/>
+		</div>
+	</div>
+	<div class="cards">
+
+		<!--PREPORUKA-->
+		<label ng-if="shouldShowRecommendation()" style="font-size: 15pt;">ZOO Vrt preporučuje:</label>
+		<table ng-if="shouldShowRecommendation()">
+		<tr ng-repeat="recommendRow in recommendTable track by $index">
+				
+			<td ng-repeat="recommendSpecies in recommendRow track by $index" > 
+				<a href="#/species/{{recommendSpecies.species_id}}">
+					<div class="recommend-card panel-color">
+
+						<div class="panel-heading blue" >
+							<div class="species-name">{{recommendSpecies.name}}</div>
+						</div>
+
+						<div class="panel-body">
+							<img class="card-img" src="{{recommendSpecies.photo_path}}"> 
+						</div>
+
+					</div>
+				</a>
+			</td>
+				
+		</tr>
+		</table>
+
+		<hr ng-if="shouldShowRecommendation()">
+
+		<!--PRETRAŽIVANJE-->
+		<table>
+		<tr ng-repeat="row in table track by $index">
+				
+			<td ng-repeat="species in row track by $index" > 
+				<a href="#/species/{{species.species_id}}">
+					<div class="card panel-color">
+
+						<div class="panel-heading orange" >
+							<div class="species-name">{{species.name}}</div>
+						</div>
+
+						<div class="panel-body">
+							<img class="card-img" src="{{species.photo_path}}"> 
+						</div>
+
+					</div>
+				</a>
+			</td>
+				
+		</tr>
+	</table>
+	</div>
+</div>
+
+<div id="go-to-top" ng-if="showTopButton">
+	<button class="btn btn-primary btn-circle-lg brown" ng-click="scrollResultsToTop()"><span class="glyphicon glyphicon-arrow-up"/></button>
+</div>
+

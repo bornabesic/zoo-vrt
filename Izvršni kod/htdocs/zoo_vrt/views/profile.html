@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<style type="text/css">
+
+#edit-profile{
+	font-family: Verdana;
+}
+
+#title{
+	
+	font-size: 20pt;
+	text-align: left;
+	
+	text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000;
+}
+
+</style>
+
+
+<div id="edit-profile" style="margin:0 auto;width:50%">
+	<div id="title">Uredi profil</div><br/><br/>
+	<div id="form_{{user.user_id}}" >
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Korisničko ime</th>
+					<th>{{user.username}}</th>
+				</tr>
+			</thead>
+
+			<thead>
+				<tr>
+					<th>Ime i prezime</th>
+					<th>
+						<input type="text" maxlength="64" class="form-control form-control-sm"  ng-model="user.first_last_name" />
+					</th>
+				</tr>
+			</thead>
+
+			<thead>
+				<tr>
+					<th>E-mail</th>
+					<th>
+						<input type="text" maxlength="32" class="form-control form-control-sm" ng-model="user.email" />
+					</th>
+				</tr>
+			</thead>
+
+			<thead>
+				<tr>
+					<th>Mjesto stanovanja</th>
+					<th>
+						<input type="text" maxlength="32" class="form-control form-control-sm" ng-model="user.city" />
+					</th>
+				</tr>
+			</thead>
+
+			<thead>
+				<tr>
+					<th>Godina rođenja</th>
+					<th>
+						<select class="form-control" ng-model="user.year_of_birth" ng-options="n for n in [] | yearRange">
+						</select>
+						<!--<input type="number" class="form-control form-control-sm" ng-model="user.year_of_birth" min="1900" max="2017" />-->
+					</th>
+				</tr>
+			</thead>
+
+			<thead>
+				<tr>
+					<th>Lozinka</th>
+					<th>
+						<input type="password" class="form-control form-control-sm" ng-model="user.password1" />
+					</th>
+				</tr>
+			</thead>
+
+			<thead>
+				<tr>
+					<th>Potvrda lozinke</th>
+					<th>
+						<input type="password" class="form-control form-control-sm" ng-model="user.password2" />
+					</th>
+				</tr>
+			</thead>
+		</table>
+		<button class="btn btn-primary" type="submit" ng-click="updateUser(user)"><span class="glyphicon glyphicon-ok"/> Potvrdi</button>
+	</div>
+</div>

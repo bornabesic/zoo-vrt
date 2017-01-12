@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html ng-app="ZOOVrt">
+<head>
+	<title>ZOO Vrt</title>
+	<meta charset="UTF-8">
+	
+	
+
+	<link rel="shortcut icon" type="image/png" href="/media/favicon.png"/>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/css/bootstrap-dialog.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/zoo_vrt.css"/>
+	<style type="text/css">
+
+		html, body, #main-ui-view{
+			height: 100% !important;
+			color: white;
+			margin: 0;
+		}
+
+	</style>
+
+	<script type="text/javascript" src="/jquery.js"></script>
+	
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
+
+	<script type="text/javascript" src="/angular.js"></script>
+	<script type="text/javascript" src="/angular-ui-router.js"></script>
+
+	<script type="text/javascript" src="/zoo_vrt/app.js"></script>
+	<script type="text/javascript" src="/services.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/login.controller.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/web.controller.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/map.controller.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/explore.controller.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/adopted.controller.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/species.controller.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/animals.controller.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/profile.controller.js"></script>
+	<script type="text/javascript" src="/zoo_vrt/controllers/assigned.controller.js"></script>
+
+</head>
+
+<body>
+	<div id="main-ui-view" ui-view="main"></div>
+
+	<script src="/Gallery/js/blueimp-gallery.min.js"></script>
+</body>
+</html>

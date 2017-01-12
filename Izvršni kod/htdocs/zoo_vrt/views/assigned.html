@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<style type="text/css">
+
+	.animal-card{
+		font-family: Verdana, Geneva, sans-serif;
+
+		border-radius: 32px 0px 32px 0px;
+		border: 0px solid #000000;
+
+		margin: 0 auto;
+		width: 60%;
+		display: flex;
+		flex-direction: column;
+
+		margin-bottom: 10px;
+		background: linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.15));
+		text-align: left;
+	}
+
+	img {
+		vertical-align: top;
+	}
+
+	#animal-header{
+		cursor: pointer;
+		position: relative;
+
+		width: 100%;
+
+		font-size: 20pt;
+
+		vertical-align: middle;
+		height: 80px;
+		line-height: 80px;
+	}
+
+	#animal-icon{
+
+		position: absolute;
+		top: 0;
+		left: 0;
+
+		height: 100%;
+	}
+
+	#animal-info{
+		height: 100%;
+		width: 100%;
+
+		text-align: center;
+		vertical-align: middle;
+		text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000;
+	}
+
+	#species{
+		font-family: "Arial Black", Gadget, sans-serif;
+		text-align: left;
+
+		font-size:14pt;
+		text-transform: uppercase;
+
+		text-shadow:
+		-1px -1px 0 green,
+		1px -1px 0 green,
+		-1px 1px 0 green,
+		1px 1px 0 green;
+	}
+
+	#animals{
+		float: right;
+		margin: 0 auto;
+		width: 100%;
+	}
+
+	.attribute{
+		font-size: 14pt;
+	}
+
+	.row{
+		position: relative;
+		display: flex;
+		flex-direction: column;
+	}
+
+</style>
+
+<div id="no-animals" ng-if="noAnimals" style="font-size: 20pt; position: absolute; left:50%; top: 50%; transform: translate(-50%, -50%);">
+	<label>Nije Vam dodijeljena niti jedna životinja.</label>
+</div>
+
+<div class="row" ng-repeat="species in assigned track by $index">
+	 <div id="species">{{species.species_name}}</div>
+	 <div id="animals">
+	 	<br/>
+		<div  class="animal-card" ng-repeat="animal in species.animals track by $index">
+			<div id="animal-header" ng-click="toggleEditAnimals(animal)">
+				<div id="animal-icon">
+					<img src="{{animal.photo_path}}" height="100%" style="border-radius: 32px 0px 0px 0px;"/>
+				</div>
+				<div id="animal-info">
+					{{animal.animal_name}}
+				</div>
+			</div>
+			<div id="form_{{animal.animal_id}}" style="display: none; padding: 20px; padding-top:0;">
+		        <hr>
+		        <label class="attribute">Osnovne informacije:</label><br/>
+		    	Ime: <input type="text" maxlength="32" ng-model="animal.animal_name" class="form-control"/></br/>
+				Datum dolaska (godina, mjesec, dan):
+				<div style="color:black !important;">
+					<select ng-model="animal.arrival_year" ng-options="n for n in [] | yearRange">
+					</select>
+					<select ng-model="animal.arrival_month" ng-options="n for n in [] | monthRange">
+					</select>
+					<select ng-model="animal.arrival_day" ng-options="n for n in [] | dayRange">
+					</select>
+				</div>
+				<br>
+				Mjesto rođenja:<textarea maxlength="32" class="form-control" ng-model="animal.birth_location"/></br/>
+				Zanimljivosti:<textarea class="form-control" ng-model="animal.interesting_facts"/><br/>
+				<button class="btn btn-primary green" ng-click="updateAnimal(animal)" type="submit"><span class="glyphicon glyphicon-ok"/> Potvrdi</button>
+				<hr>
+				<label class="attribute">Ekskluzivni sadržaj:</label><br/>
+				Zanimljivost:<textarea class="form-control" ng-model="animal.exclusive_fact"/></br>
+				<button class="btn btn-primary btn-xs green" ng-click="addExclusiveFact(animal)"><span class="glyphicon glyphicon-plus"/> Dodaj zanimljivost</button>
+				<br/><br/>
+				Fotografija: <input type="file" file-model="animal.exclusive_photo" accept="image/*"/>
+				<br/><button class="btn btn-primary btn-xs green" ng-click="addExclusivePhoto(animal)"><span class="glyphicon glyphicon-plus"/> Dodaj fotografiju</button>
+				<br/><br/>
+				Video isječak (max. 32 MiB): <input type="file" file-model="animal.exclusive_video" accept="video/*"/>
+				<br/><button class="btn btn-primary btn-xs green" ng-click="addExclusiveVideo(animal)"><span class="glyphicon glyphicon-plus"/> Dodaj video isječak</button>
+				<br/>
+					
+			    <button class="btn btn-primary red" ng-click="toggleEditAnimals(animal)" style="float:right;"><span class="glyphicon glyphicon-remove"/> Odustani</button>
+	    	</div>
+		</div>
+		<hr>
+	</div>
+</div>

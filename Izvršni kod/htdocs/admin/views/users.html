@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<!-- -->
+
+<div class="col-md-3">
+<h4><u>Registracija korisnika:</u></h4>
+<div class="col-xs-8">
+<form id="form_registration" ng-submit="registerUser()">
+    Korisničko ime: <input type="text" maxlength="32" class="form-control" ng-model="new_user.username" required/><br/>
+    Lozinka: <input type="password" class="form-control" ng-model="new_user.password" required/><br/>
+    Ime i prezime: <input type="text" maxlength="64" class="form-control" ng-model="new_user.first_last_name" required/><br/>
+    E-mail: <input type="text" maxlength="32" class="form-control" ng-model="new_user.email" required/><br/>
+    Mjesto stanovanja: <input type="text" maxlength="32" class="form-control" ng-model="new_user.city" required/><br/>
+    Godina rođenja:<br>
+    <select ng-model="new_user.year_of_birth" ng-options="n for n in [] | yearRange">
+    </select><br><br>
+    <!--<input type="number" class="form-control" ng-model="new_user.year_of_birth" min="1900" max="2017" required/><br/>-->
+    Uloge:
+    <div class="checkbox">
+    <label><input type="checkbox" value="" ng-model="new_user.is_guard">Čuvar</label>
+    <label><input type="checkbox" value="" ng-model="new_user.is_admin">Administrator</label>
+</div>
+    <input class="btn btn-success btn-xs" type="submit" value="Registracija"/>
+</form>
+</div>
+</div>
+
+<div class="col-md-2" style="border-left:1px solid #0066cc;height:500px;">
+<h4><u>Korisnici:</u></h4>
+<ul>
+    <div class="row" ng-repeat="user in users track by $index">
+    <!--<div class="col-xs-2">-->
+  <li>
+    <b>{{user.username}}</b>
+    <a class="btn btn-default btn-xs" href="" ng-click="toggleEditUser(user)">Uredi</a>
+    <a class="btn btn-danger btn-xs" href="" ng-click="deleteUser(user)">Izbriši</a>
+    <form id="form_{{user.user_id}}" ng-submit="updateUser(user)" style="display: none;">
+        <hr>
+    	Korisničko ime: <input type="text" maxlength="32" class="form-control" ng-model="user.username" required/><br/>
+    	Lozinka: <input type="password" class="form-control" ng-model="user.password" required/><br/>
+        Ime i prezime: <input type="text" maxlength="64" class="form-control" ng-model="user.first_last_name" required/><br/>
+        E-mail: <input type="text" maxlength="32" class="form-control" ng-model="user.email" required/><br/>
+    	Mjesto stanovanja: <input type="text" maxlength="32" class="form-control" ng-model="user.city" required/><br/>
+    	Godina rođenja:<br>
+        <select ng-model="user.year_of_birth" ng-options="n for n in [] | yearRange">
+        </select><br><br>
+        <!--<input type="number" class="form-control" ng-model="user.year_of_birth" min="1900" max="2017" required/><br/>-->
+        Uloge:
+        <div class="checkbox">
+        <label><input type="checkbox" value="" ng-model="user.is_guard">Čuvar</label>
+        <label><input type="checkbox" value="" ng-model="user.is_admin">Administrator</label>
+        </div>
+    	<input class="btn btn-success btn-xs" type="submit" value="Potvrdi"/>
+    	<a class="btn btn-default btn-xs" ng-click="toggleEditUser(user)">Odustani</a>
+    	<hr>
+    </form>
+  </li>
+</div>
+        <!--</div>-->
+</ul>
+ </div>

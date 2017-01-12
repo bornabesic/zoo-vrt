@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<style type="text/css">
+	#left-column{
+		height: 100%;
+		width: 30%;
+		float: left;
+		text-align: center;
+	}
+	#main-info{
+		padding: 15px;
+		height: 100%;
+		width: 70%;
+		float: right;
+
+		font-weight: normal;
+		font-family: Verdana, Geneva, sans-serif;
+	}
+
+	#more{
+		text-decoration: underline;
+	}
+
+	#gallery-button{
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
+	.blue,
+	.blue:hover,
+	.blue:active,
+	.blue:visited,
+	.blue:focus {
+		background-color: #72b6ff !important;
+	}
+
+	#animal-card{
+		position: relative;
+
+		border-radius: 32px 32px 32px 32px;
+		-moz-border-radius: 32px 32px 32px 32px;
+		-webkit-border-radius: 32px 32px 32px 32px;
+		border: 0px solid #000000;
+
+		margin: 0 auto;
+		width: 80%;
+		display: flex;
+		/*height: 500px;*/
+		margin-bottom: 20px;
+		background: linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.15));
+		text-align: left;
+	}
+	
+	.attribute{
+		font-size: 12pt;
+	}
+
+	.blockquote{
+		font-size: 8pt;
+	}
+
+	.animal-img{
+		border-radius: 32px 0px 0px 0px;
+		-moz-border-radius: 32px 0px 0px 0px;
+		-webkit-border-radius: 32px 0px 0px 0px;
+		border: 0px solid #000000;
+	}
+
+	.modal{
+		color: black;
+	}
+
+	.modal-header{
+		background-color: green !important;
+	}
+
+	.gallery_width_wrapper{
+		 width: 80%;
+		 max-height: 20%;
+ 		 /*margin: 0 auto;*/
+	}
+
+	.blueimp-gallery-carousel{
+		box-shadow: none !important;
+	}
+
+</style>
+<link rel="stylesheet" href="/Gallery/css/blueimp-gallery.min.css">
+
+<div id="no-animals" ng-if="noAnimals" style="font-size: 20pt; position: absolute; left:50%; top: 50%; transform: translate(-50%, -50%);">
+	<label>
+		Niste posvojili niti jednu životinju do sada.<br/><br/>
+		<a style="font-size: 15pt;" href="#/explore"><button class="btn btn-primary orange"><span class="glyphicon glyphicon-search"/> Pretraži životinjske vrste</button></a>
+	</label>
+</div>
+
+<div id="animal-card" ng-repeat="animal in animals track by $index">
+	
+		<div id="left-column">
+			
+			<img class="animal-img" src="{{animal.photo_path}}" width="100%"/>
+		</div>
+	<div id="main-info">
+		<div class="row">
+			<div class="col-md-5">
+				<label class="attribute">Ime:</label><br/> {{animal.name}}<br/>
+				<label class="attribute">Datum dolaska:</label><br/> {{animal.arrival_date}}<br/>
+				<label class="attribute">Mjesto rođenja:</label><br/> {{animal.birth_location}}
+			</div>
+
+			<div class="col-md-3">
+				<label class="attribute">Dob:</label> {{animal.age}}<br/>
+				<label class="attribute">Spol:</label> {{animal.sex}}<br/>
+			</div>
+		</div>
+
+		<div id="row"><br/>
+			<label class="attribute">Zanimljivosti:</label>
+			<a href="" id="more" ng-click="toggleFacts(animal)">Više...</a>
+				<br/>
+			
+			<div id="facts_{{animal.animal_id}}" style="display:none;">
+				<blockquote class="blockquote">
+  				- {{animal.interesting_facts}}<br>
+  				<div ng-repeat="ex_facts in animal.exclusive_content.facts track by $index">- {{ex_facts}}</div>
+				</blockquote>
+			</div>
+
+		</div>
+		<!--<div id="gallery-button"><button class="btn btn-primary btn-lg blue" ng-click="toggleGallery(animal)"><span class="glyphicon glyphicon-film"/> Galerija</button></div>-->
+		<div id="gallery_{{animal.animal_id}}">  <!-- ne smije bit style="display:none;" za galeriju-->
+			<br/>
+			<div class="gallery_width_wrapper">
+
+
+				<div id="blueimp_{{animal.animal_id}}" class="blueimp-gallery blueimp-gallery-carousel blueimp-gallery-display blueimp-gallery-playing blueimp-gallery-controls" style="display:block;">
+				    <div class="slides"></div>
+					<a class="prev">‹</a>
+					<a class="next">›</a>
+					<a class="play-pause"></a>
+					<ol class="indicator"></ol>
+				</div>
+			<div/>
+		</div>
+
+
+	</div>
+
+</div>
