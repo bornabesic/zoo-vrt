@@ -2,6 +2,8 @@
 
 app.service('AuthService', function() {
 	var ls = localStorage
+
+	// Metoda koja prijavljuje postojeceg korsnika u sustav
 	var loginUser = function (username, password){
 		post_data={
 			"username": username,
@@ -21,6 +23,7 @@ app.service('AuthService', function() {
 		return post_obj;
 	}
 
+	//Metoda koja provjerava da li je korisnik čuvar ili admin, ako je logiran
 	var checkUserState = function(){
 		post_data={
 			"action": "check_user_state"
@@ -30,6 +33,7 @@ app.service('AuthService', function() {
 		return post_obj;
 	}
 
+	//Metoda za odjavu korisnika iz sustava
 	var logoutUser = function(){
 		post_data={
 			"action": "logout_user"
@@ -54,6 +58,7 @@ app.service('AuthService', function() {
 })
 
 app.service('UserService', function() {
+	//Metoda za regstraciju korisnika sa svim potrebnim podacima
     var registerUser = function (username, password, first_last_name, year_of_birth, city, email, role) {
         
         post_data={
@@ -80,6 +85,7 @@ app.service('UserService', function() {
 		return post_obj;
     }
 
+    //Metoda za prisanje korisnika iz sustava
     var deleteUser = function(user_id){
     	post_data={
 			"user_id": user_id,
@@ -99,6 +105,7 @@ app.service('UserService', function() {
 		return post_obj;
     }
 
+    //Metoda za uređicanje podataka o korisniku
     var updateUser = function(user_id, username, password, first_last_name, year_of_birth, city, email, role){
     	post_data={
     		"user_id": user_id,
@@ -125,6 +132,7 @@ app.service('UserService', function() {
 		return post_obj;
     }
 
+    //Metoda za dohvat svih korisnika iz sustava
     var getUsers = function(){
     	post_data={
 			"action": "get_users"
@@ -154,6 +162,7 @@ app.service('UserService', function() {
 
 app.service('GuardService', function($http, $q) {
 
+	//Metoda za zaduživanje jedinki čuvaru
 	var assignAnimal = function(user_id, animal_id){
 		post_data={
 			"user_id": user_id,
@@ -174,6 +183,7 @@ app.service('GuardService', function($http, $q) {
 		return post_obj;
 	}
 
+	//Metoda za razduživanje jedinki čuvara
 	var unassignAnimal = function(user_id, animal_id){
 		post_data={
 			"user_id": user_id,
@@ -194,6 +204,7 @@ app.service('GuardService', function($http, $q) {
 		return post_obj;
 	}
 
+	//Metoda za dohvat zaduženih jedinki čuvara
 	var getAssignedAnimals = function(user_id){
 		post_data={
 			"user_id": user_id,
@@ -238,6 +249,7 @@ app.service('GuardService', function($http, $q) {
 				})
 	}
 
+	//Metoda za dodavanje ekskluivnih činjenica
 	var addExclusiveFact = function(animal_id, fact){
 		post_data={
 			"animal_id": animal_id,
@@ -258,6 +270,7 @@ app.service('GuardService', function($http, $q) {
 		return post_obj;
 	}
 
+	//Metoda za dodavanje ekskluzivnih fotografija
 	var addExclusivePhoto = function(animal_id, photo){
 		var post_data = new FormData()
 		post_data.append("animal_id", animal_id)
@@ -286,6 +299,7 @@ app.service('GuardService', function($http, $q) {
          return post_obj;
 	}
 
+	//Metoda za oavanje ekskluzivnih video isječaka
 	var addExclusiveVideo = function(animal_id, video){
 		var post_data = new FormData()
 		post_data.append("animal_id", animal_id)
@@ -326,7 +340,8 @@ app.service('GuardService', function($http, $q) {
 })
 
 app.service('HierarchyService', function() {
-	//HIERARCHY
+
+	//Metoda za dohvačanje porodice, reda i razreda vrste
 	var getSpeciesHierarchy = function(species_id){
 		post_data={
 			"species_id": species_id,
@@ -343,7 +358,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	//CLASSES
+	//Metoda za dohvat svih razreda iz sustava
 	var getClasses = function (){
 		post_data={
 			"action": "get_classes"
@@ -363,6 +378,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
+	//Metoda za dodavanje razreda u sustav
 	var registerClass = function (name){
 		post_data={
 			"name": name,
@@ -382,6 +398,8 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
+
+	//Metoda za brisanje razreda is sustava
 	var deleteClass = function (class_id){
 		post_data={
 			"class_id": class_id,
@@ -401,6 +419,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
+	//Metoda za ažuriranje postojećih razreda u sutavu
 	var updateClass = function(class_id, name){
 		post_data={
 			"class_id": class_id,
@@ -421,7 +440,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	//ORDERS
+	//Metoda za dohvat redova iz sustava
 	var getOrders = function(){
 		post_data={
 			"action": "get_orders"
@@ -437,6 +456,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
+	//Metoda za dohvat redova prema roditeljskom razredu
 	var getOrdersByParentClass = function(parent_class_id){
 		post_data={
 			"parent_class_id": parent_class_id,
@@ -453,6 +473,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
+	//Metoda za dodavanje reda u sustav
 	var registerOrder = function(name, parent_class_id){
 		post_data={
 			"name": name,
@@ -473,6 +494,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
+	//Metoda za ažuriranje postjećeg reda u sustavu
 	var updateOrder = function(order_id, name, parent_class_id){
 		post_data={
 			"order_id": order_id,
@@ -494,6 +516,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
+	//Metoda za uklanjanje reda iz sustava
 	var deleteOrder = function(order_id){
 		post_data={
 			"order_id": order_id,
@@ -513,7 +536,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
-	//FAMILIES
+	//Metoda za dohvat svih familija iz sustava
 	var getFamilies = function(){
 		post_data={
 			"action": "get_families"
@@ -529,6 +552,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
+	//Metoda za dohvat familija prema roditeljskom redu
 	var getFamiliesByParentOrder = function(parent_order_id){
 		post_data={
 			"parent_order_id": parent_order_id,
@@ -545,6 +569,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
+	//Metoda za dodavanje familije u sustav
 	var registerFamily = function(name, parent_order_id){
 		post_data={
 			"name": name,
@@ -565,6 +590,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
+	//Metoda za ažuiranje postojeće familije iz sustava
 	var updateFamily = function(family_id, name, parent_order_id){
 		alert(parent_order_id)
 		post_data={
@@ -587,6 +613,7 @@ app.service('HierarchyService', function() {
 		return post_obj;
 	}
 
+	//Metoda za uklanjanje familije iz sustava
 	var deleteFamily = function(family_id){
 		post_data={
 			"family_id": family_id,
@@ -632,6 +659,7 @@ app.service('HierarchyService', function() {
 app.service('SpeciesService', function($http, $q){
 	var _species=[];
 
+	//Metoda za registraciju vrste u sustav
 	var registerSpecies = function(species){
 		/*post_data={
 			"name": species.name,
@@ -702,6 +730,7 @@ app.service('SpeciesService', function($http, $q){
 
 	}
 
+	//Metoda za uklananje vrste iz sustava
 	var deleteSpecies = function(species){
 		post_data={
 			"species_id": species.species_id,
@@ -721,6 +750,7 @@ app.service('SpeciesService', function($http, $q){
 		return post_obj;
 	}
 
+	//Metoda za ažuriranje postojeće vrste u sustavu
 	var updateSpecies = function(species){
 		var post_data = new FormData()
 		post_data.append("species_id", species.species_id)
@@ -765,6 +795,7 @@ app.service('SpeciesService', function($http, $q){
          return post_obj;
 	}
 
+	//Metoda za dohvat svih vrsta iz sustava
 	var getSpecies = function(){
 		if(_species.length<=0){ // nema u cacheu (polje 'species')
 			post_data={
@@ -790,10 +821,7 @@ app.service('SpeciesService', function($http, $q){
 		}
 	}
 
-	var getSpeciesByParentFamily = function(parent_family_id){
-		
-	}
-
+	//Metoda za dohvat vrste prema ID-u
 	var getSpeciesById = function(species_id){
 		
 			if(_species.length<=0){ // ako nije već dohvaćeno u polje 'species', dohvati iz baze
@@ -826,7 +854,6 @@ app.service('SpeciesService', function($http, $q){
 		deleteSpecies: deleteSpecies,
 		updateSpecies: updateSpecies,
 		getSpecies: getSpecies,
-		getSpeciesByParentFamily: getSpeciesByParentFamily,
 		getSpeciesById: getSpeciesById
 	}
 
@@ -837,6 +864,7 @@ app.service('AnimalsService', function($http, $q){
 	var _animals=[]
 	//var _exclusive_content=[]; treba implementirati cache
 
+	//Metoda za dodavanje jedinke u sustav
 	var registerAnimal = function(animal){
 
 		console.log(animal)
@@ -878,6 +906,7 @@ app.service('AnimalsService', function($http, $q){
 
 	}
 
+	//Metoda za uklananje jedinke iz sustava
 	var deleteAnimal = function(animal){
 		post_data={
 			"animal_id": animal.animal_id,
@@ -897,6 +926,7 @@ app.service('AnimalsService', function($http, $q){
 		return post_obj;
 	}
 
+	//Metoda za ažuriranje jedinke iz sustava
 	var updateAnimal = function(animal){
 		var name;
 		if(animal.name) name=animal.name;
@@ -938,6 +968,7 @@ app.service('AnimalsService', function($http, $q){
          return post_obj;
 	}
 
+	//Metoda za dohvat jedinki određene vrste
 	var getAnimals = function(species_id){
 		if(species_id!=_species_id){
 			_animals.splice(0,_animals.length) //invalidate cache
@@ -977,6 +1008,7 @@ app.service('AnimalsService', function($http, $q){
 		}
 	}
 
+	//Metoda za dohvat ekskluzivniog sadržaja određene vrste
 	var getExclusiveContent = function(animal_id){
 		post_data={
 			"animal_id": animal_id,
@@ -1012,6 +1044,7 @@ app.service('AnimalsService', function($http, $q){
 app.service('AdoptService', function($q){
 	var _adopted=[]
 
+	//Metoda za posvojenje jedinke (Korisnik posvaja jedinku)
 	var adopt = function(user_id, animal_id, email, first_last_name, city){
 		post_data={
 			"user_id": user_id,
@@ -1036,6 +1069,7 @@ app.service('AdoptService', function($q){
 		return post_obj;
 	}
 
+	//Metoda za dohvat posvojenih jedinki određenog korisnika
 	var getAdopted = function(user_id){
 		if(_adopted.length<=0){ //nema u cacheu
 			post_data={
@@ -1077,6 +1111,7 @@ app.service('MapService', function(){
 		y: null
 	}
 
+	//Metoda za postavljanje točke na mapi 
 	var setDot = function(x,y){
 		dot.x=x
 		dot.y=y
@@ -1088,6 +1123,7 @@ app.service('MapService', function(){
 		if(mapScope.draw) mapScope.draw()
 	}
 
+	//Metoda koja servisu dojavljuje djelokrug kontrolera za prikaz mape
 	var setScope = function(scope){
 		mapScope=scope
 
@@ -1108,6 +1144,7 @@ app.service('MapService', function(){
 
 app.service('VisitService', function(){
 
+	//Metoda za dodavanje posjeta(određene vrste) u sustav
 	var registerVisit = function(user_id, species_id){
 		post_data={
 			"user_id": user_id,
@@ -1125,6 +1162,7 @@ app.service('VisitService', function(){
 		return post_obj;
 	}
 
+	//Metoda za provjeru dali je oređeni korisik posjetio određenu vrstu
 	var checkVisit = function(user_id, species_id){
 		post_data={
 			"user_id": user_id,
@@ -1142,6 +1180,7 @@ app.service('VisitService', function(){
 		return post_obj;
 	}
 
+	//Metoda koja vraća broj posjeta određenoj vrsti
 	var visitCount = function(species_id) {
 		post_data = {
 			"species_id": species_id,

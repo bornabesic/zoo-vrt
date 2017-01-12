@@ -10,6 +10,7 @@
 			$this->db=$database;
 		}
 
+		// Metoda za registraciju posvojenja ( korisnik posvaja jedinku )
 		function adopt($user_id, $animal_id, $email, $first_last_name, $city){
 			$adopt_query="INSERT INTO ". DB_NAME . ".adoptions (`visitor_id`, `animal_id`) VALUES (?,?);";
 			$adopt_statement = $this->db->prepare($adopt_query);
@@ -38,6 +39,7 @@
 			));
 		}
 
+		// Metoda za dohvat posvojenih jedinki određenog korisnika
 		function get_adopted($user_id){
 			$this->db->select_db(DB_NAME);
 

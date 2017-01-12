@@ -10,6 +10,7 @@
 			$this->db=$database;
 		}
 
+		// Metoda za dodavanje eksluzivne činjenice jedinki
 		function add_exclusive_fact($animal_id, $fact){
 			$this->db->select_db(DB_NAME);
 
@@ -46,6 +47,7 @@
 			return json_encode(array("animal_id" => $animal_id, "fact" => $fact));
 		}
 
+		// Metoda za dodavanje eksluzivne fotografije jedinki
 		function add_exclusive_photo($animal_id, $photo_path){
 			$this->db->select_db(DB_NAME);
 
@@ -82,6 +84,7 @@
 			return json_encode(array("animal_id" => $animal_id, "photo_path" => $photo_path));
 		}
 
+		// Metoda za dodavanje eksluzivnog video isječka jedinki
 		function add_exclusive_video($animal_id, $video_path){
 			$this->db->select_db(DB_NAME);
 
@@ -118,6 +121,7 @@
 			return json_encode(array("animal_id" => $animal_id, "video_path" => $video_path));
 		}
 
+		// Metoda za dohvat eksluzivnog sadržaja određene jedinke
 		function get_exclusive_content($animal_id){
 			$this->db->select_db(DB_NAME);
 

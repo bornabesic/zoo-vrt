@@ -10,6 +10,7 @@
 			$this->db=$database;
 		}
 
+		// Metoda za registraciju posjete korisnika određenoj nastambi
 		function register_visit($user_id, $species_id){
 			//REGISTER USER`S VISIT TO SPECIES
 			$visit_query="INSERT INTO ". DB_NAME . ".visits (`visitor_id`, `species_id`) VALUES (?,?);";
@@ -36,6 +37,7 @@
 			));
 		}
 
+		// Metoda za provjeru posjećenosti korisnika određenoj nastambi
 		function check_visit($user_id, $species_id){
 			//REGISTER USER`S VISIT TO SPECIES
 			$visit_query="SELECT COUNT(DISTINCT visitor_id) AS visited FROM " . DB_NAME . ".visits WHERE visitor_id=? AND species_id=?;";
@@ -64,6 +66,7 @@
 			));
 		}
 
+		// Metoda za dohvat broja posjeta određenoj nastambi
 		function get_visit_count($species_id){
 			//GET COUNT OF SPECIES' VISITS
 			$count_query="SELECT COUNT(*) as count FROM " . DB_NAME . ".visits WHERE species_id=?;";
@@ -95,6 +98,7 @@
 			));
 		}
 
+		// Metoda za preporuku životinjskih vrsti za posjet
 		function recommend_species($current_species_id, $user_id){
 			$recommend_query = "SELECT species_id FROM " . DB_NAME . ".species WHERE species_id NOT IN (SELECT species_id FROM " . DB_NAME . ".visits WHERE user_id= ? ) AND species_id != ? LIMIT " . NUM_RECOMMENDATIONS . ";";
 			$recommend_statement = $this->db->prepare($recommend_query);
